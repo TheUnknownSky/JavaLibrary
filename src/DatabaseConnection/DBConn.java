@@ -6,10 +6,11 @@ import java.sql.SQLException;
 import java.sql.DriverManager;
 
 public class DBConn {
+    // change the value of database_name to the name of your database (the same name you set in testClass.java)
     private String database_name = "testlib1";
     
+    // run the testClass.java file to initiate the database before running the RegistrationGUI.java
     public void initDatabaseAndTables(String db_name) throws SQLException{
-        this.database_name = db_name;
         Connection initConn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", ""); 
         Statement makeDB = initConn.createStatement();
         makeDB.executeUpdate("CREATE DATABASE " + db_name);
