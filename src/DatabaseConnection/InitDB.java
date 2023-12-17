@@ -2,7 +2,7 @@ package DatabaseConnection;
 
 import java.sql.*;
 
-public class testClass {
+public class InitDB {
     public static void main(String[] args) {
         DBConn myDb = new DBConn();
         try {
