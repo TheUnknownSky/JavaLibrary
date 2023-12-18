@@ -1,6 +1,7 @@
 package LibraryGUI;
 
 import Account.Account;
+import Library.Library;
 import javax.swing.JOptionPane;
 
 public class LibraryGUI extends javax.swing.JFrame {
@@ -16,6 +17,13 @@ public class LibraryGUI extends javax.swing.JFrame {
         Account acct = new Account();
         String[] name = acct.getAccountName(id);
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            
+            String[] strings = { "Book 1", "Book 2", "Book 3", "Book 4", "Book 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList2);
     }
     
     /**
@@ -44,12 +52,15 @@ public class LibraryGUI extends javax.swing.JFrame {
         changeEmail = new javax.swing.JMenuItem();
         changePassword = new javax.swing.JMenuItem();
         logOut = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        addGenre = new javax.swing.JMenuItem();
+        deleteGenre = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         registerStudent = new javax.swing.JMenuItem();
         deleteStudent = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Library Management System");
+        setTitle("Library Management System - Books");
 
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -117,6 +128,26 @@ public class LibraryGUI extends javax.swing.JFrame {
         jMenu1.add(logOut);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Books");
+
+        addGenre.setText("Add Genre");
+        addGenre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addGenreActionPerformed(evt);
+            }
+        });
+        jMenu2.add(addGenre);
+
+        deleteGenre.setText("Delete Genre");
+        deleteGenre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteGenreActionPerformed(evt);
+            }
+        });
+        jMenu2.add(deleteGenre);
+
+        jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Student");
 
@@ -186,6 +217,14 @@ public class LibraryGUI extends javax.swing.JFrame {
         new LoginGUI().setVisible(true);
     }//GEN-LAST:event_logOutActionPerformed
 
+    private void addGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreActionPerformed
+        new AddGenreGUI().setVisible(true);
+    }//GEN-LAST:event_addGenreActionPerformed
+
+    private void deleteGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreActionPerformed
+        new DeleteGenreGUI().setVisible(true);
+    }//GEN-LAST:event_deleteGenreActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -223,10 +262,12 @@ public class LibraryGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addGenre;
     private javax.swing.JMenuItem changeEmail;
     private javax.swing.JMenuItem changeName;
     private javax.swing.JMenuItem changePassword;
     private javax.swing.JLabel currentUser;
+    private javax.swing.JMenuItem deleteGenre;
     private javax.swing.JMenuItem deleteStudent;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -236,6 +277,7 @@ public class LibraryGUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JList<String> jList2;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
