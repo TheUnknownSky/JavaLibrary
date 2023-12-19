@@ -144,6 +144,17 @@ public class Account extends DBConn{
             Display.sqlError();
         }
     }
+    public void editPassword(int id, String password){
+        try {
+            PreparedStatement editPassword = conn().prepareStatement("UPDATE lib_accounts SET libacct_pword=? WHERE libacct_id=?");
+            editPassword.setString(1, password);
+            editPassword.setInt(2, id);
+            editPassword.executeUpdate();
+            Display.updateSuccessfulOf("password");
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+    }
     public boolean checkPassword(int id, String password){
         try {
             PreparedStatement checkPassword = conn().prepareStatement("SELECT libacct_pword FROM lib_accounts WHERE libacct_id=?");

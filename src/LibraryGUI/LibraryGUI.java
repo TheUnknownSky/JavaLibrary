@@ -4,12 +4,24 @@ import Account.Account;
 import Library.Library;
 
 public class LibraryGUI extends javax.swing.JFrame {
-    private int libacct_id;
+    private int libacct_id = 1;
     /**
      * Creates new form LibraryGUI
      */
     public LibraryGUI() {
         initComponents();
+        Account acct = new Account();
+        String[] name = acct.getAccountName(libacct_id);
+        currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
+        
+        // 
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            
+            String[] strings = { "Please click refresh the library."};
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList2);
     }
     public LibraryGUI(int id){
         initComponents();
@@ -126,6 +138,11 @@ public class LibraryGUI extends javax.swing.JFrame {
         accountMenu.add(changeEmail);
 
         changePassword.setText("Change Password");
+        changePassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changePasswordActionPerformed(evt);
+            }
+        });
         accountMenu.add(changePassword);
 
         logOut.setText("Log Out");
@@ -231,11 +248,11 @@ public class LibraryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_logOutActionPerformed
 
     private void addGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreActionPerformed
-        new AddGenreGUI().setVisible(true);
+        new Genre_AddGenreGUI().setVisible(true);
     }//GEN-LAST:event_addGenreActionPerformed
 
     private void deleteGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreActionPerformed
-        new DeleteGenreGUI().setVisible(true);
+        new Genre_DeleteGenreGUI().setVisible(true);
     }//GEN-LAST:event_deleteGenreActionPerformed
 
     private void editBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBookActionPerformed
@@ -243,7 +260,7 @@ public class LibraryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_editBookActionPerformed
 
     private void changeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameActionPerformed
-        new ChangeNameGUI(libacct_id).setVisible(true);
+        new Acct_ChangeNameGUI(libacct_id).setVisible(true);
     }//GEN-LAST:event_changeNameActionPerformed
 
     private void restartLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartLibraryActionPerformed
@@ -252,8 +269,12 @@ public class LibraryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_restartLibraryActionPerformed
 
     private void changeEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeEmailActionPerformed
-        new ChangeEmailGUI(libacct_id).setVisible(true);
+        new Acct_ChangeEmailGUI(libacct_id).setVisible(true);
     }//GEN-LAST:event_changeEmailActionPerformed
+
+    private void changePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordActionPerformed
+        new Acct_ChangePasswordGUI(libacct_id).setVisible(true);
+    }//GEN-LAST:event_changePasswordActionPerformed
 
     /**
      * @param args the command line arguments
