@@ -1,10 +1,10 @@
 package Account;
 
-import javax.swing.JOptionPane;
 import DatabaseConnection.DBConn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import Display.Display;
 
 public class Account extends DBConn{
     private String firstname;
@@ -28,22 +28,12 @@ public class Account extends DBConn{
                 insertDetails.executeUpdate();
                 return true;
             } else {
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "Account has been already registered.", 
-                    "Registration failed", 
-                    JOptionPane.ERROR_MESSAGE
-                );
+                Display.accountAlreadyExists();
                 return false;
             }
 
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(
-                    null, 
-                    e, 
-                    "SQL Connection Error", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.sqlError();
             return false;
         }
     }
@@ -56,22 +46,12 @@ public class Account extends DBConn{
             this.password = password;
             boolean access = registerAcctToDB();
             if(access){
-                JOptionPane.showMessageDialog(
-                    null,
-                    "You may now log in your account.",
-                    "Registration Success",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
+                Display.registrationSuccess();
                 return access;
             }
             return access;
         } else {
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "Password and Confirm Password does not match!", 
-                    "Invalid Action", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.passwordAndConfirmPasswordNotMatch();
             return false;
         }
     }
@@ -84,32 +64,17 @@ public class Account extends DBConn{
             ResultSet resultSet = checkAcct.executeQuery();
             return resultSet.next();
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "There is a problem connecting to the database.", 
-                    "SQL Connection Error", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.sqlError();
             return false;
         }
     }
     
     public boolean login(String credential, String password){
         if (checkForAcctFromDB(credential, password)){
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Welcome to Library Managemenet System",
-                    "Login Successful",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            Display.loginSuccess();
             return true;
         } else {
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "Invalid Credentials, please try again.", 
-                    "Invalid Action", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.invalidCredentials();
             return false;
         }
     }
@@ -123,12 +88,7 @@ public class Account extends DBConn{
                 return resultSet.getInt("libacct_id");
             }    
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "There is a problem connecting to the database.", 
-                    "SQL Connection Error", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.sqlError();
         }
         // return lib acct id of the email
         return 69;
@@ -144,13 +104,32 @@ public class Account extends DBConn{
                 acct_name = new String[]{resultSet.getString("libacct_fname"), resultSet.getString("libacct_lname")};
             }
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "There is a problem connecting to the database.", 
-                    "SQL Connection Error", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.sqlError();
         }
         return acct_name;
+    }
+    public void editName(int id, String firstName, String lastName){
+        try {
+            PreparedStatement editName = conn().prepareStatement("UPDATE lib_accounts SET libacct_fname=?, libacct_lname=? WHERE libacct_id=?");
+            editName.setString(1, firstName);
+            editName.setString(2, lastName);
+            editName.setInt(3, id);
+            editName.executeUpdate();
+            Display.nameUpdateSuccessful();
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+    }
+    public boolean checkPassword(int id, String password){
+        try {
+            PreparedStatement checkPassword = conn().prepareStatement("SELECT libacct_pword FROM lib_accounts WHERE libacct_id=?");
+            checkPassword.setInt(1, id);
+            ResultSet resultSet = checkPassword.executeQuery();
+            resultSet.next();
+            return resultSet.getString("libacct_pword").equals(password);
+        } catch (SQLException e){
+            Display.sqlError();
+            return false;
+        }
     }
 }

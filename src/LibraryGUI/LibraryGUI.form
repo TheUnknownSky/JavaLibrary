@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="accountMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Account"/>
           </Properties>
@@ -13,6 +13,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Change Name"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeNameActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="changeEmail">
               <Properties>
@@ -34,7 +37,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="booksMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Books"/>
           </Properties>
@@ -55,9 +58,27 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteGenreActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="addBook">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Add Book"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="editBook">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Edit Book"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editBookActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="deleteBook">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Delete Book"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu3">
+        <Menu class="javax.swing.JMenu" name="studentMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Student"/>
           </Properties>
@@ -104,14 +125,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="462" max="-2" attributes="0"/>
-              <EmptySpace pref="67" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButton5" alignment="1" min="-2" pref="105" max="-2" attributes="0"/>
-                  <Component id="jButton6" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton4" alignment="1" min="-2" pref="105" max="-2" attributes="0"/>
-                  <Component id="jButton3" alignment="1" min="-2" pref="105" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="1" min="-2" pref="105" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="1" min="-2" pref="105" max="-2" attributes="0"/>
+              <EmptySpace pref="66" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="borrowBook" alignment="1" max="32767" attributes="0"/>
+                  <Component id="refreshLibrary" alignment="1" max="32767" attributes="0"/>
+                  <Component id="appointmentsButton" alignment="1" max="32767" attributes="0"/>
+                  <Component id="restartLibrary" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
           </Group>
@@ -130,17 +149,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jButton1" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="refreshLibrary" min="-2" pref="45" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="borrowBook" min="-2" pref="45" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton3" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="appointmentsButton" min="-2" pref="45" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton4" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton5" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton6" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="restartLibrary" min="-2" pref="45" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" min="-2" pref="375" max="-2" attributes="0"/>
               </Group>
@@ -206,33 +221,20 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="refreshLibrary">
       <Properties>
         <Property name="text" type="java.lang.String" value="Refresh"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="borrowBook">
       <Properties>
         <Property name="text" type="java.lang.String" value="Borrow Book"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="appointmentsButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Add Book"/>
+        <Property name="text" type="java.lang.String" value="Appointments"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Edit Book"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton5">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Delete Book"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="currentUser">
       <Properties>
@@ -242,10 +244,13 @@
         <Property name="text" type="java.lang.String" value="Current Library Admin: "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton6">
+    <Component class="javax.swing.JButton" name="restartLibrary">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Appointments"/>
+        <Property name="text" type="java.lang.String" value="Restart Library"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="restartLibraryActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -1,6 +1,6 @@
 package LibraryGUI;
 
-import javax.swing.JOptionPane;
+import Display.Display;
 import Account.Account;
 
 public class RegistrationGUI extends javax.swing.JFrame {
@@ -199,12 +199,7 @@ public class RegistrationGUI extends javax.swing.JFrame {
                 });
             }
         } else {
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "Please fill out the required details.", 
-                    "Insufficient Details", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.insufficientDetails();
         }
     }//GEN-LAST:event_registerButtonActionPerformed
 

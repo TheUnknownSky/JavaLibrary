@@ -2,7 +2,6 @@ package LibraryGUI;
 
 import Account.Account;
 import Library.Library;
-import javax.swing.JOptionPane;
 
 public class LibraryGUI extends javax.swing.JFrame {
     private int libacct_id;
@@ -14,12 +13,15 @@ public class LibraryGUI extends javax.swing.JFrame {
     }
     public LibraryGUI(int id){
         initComponents();
+        this.libacct_id = id;
         Account acct = new Account();
         String[] name = acct.getAccountName(id);
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
+        
+        // 
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
             
-            String[] strings = { "Book 1", "Book 2", "Book 3", "Book 4", "Book 5" };
+            String[] strings = { "Please click refresh the library."};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -39,23 +41,24 @@ public class LibraryGUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        refreshLibrary = new javax.swing.JButton();
+        borrowBook = new javax.swing.JButton();
+        appointmentsButton = new javax.swing.JButton();
         currentUser = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
+        restartLibrary = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        accountMenu = new javax.swing.JMenu();
         changeName = new javax.swing.JMenuItem();
         changeEmail = new javax.swing.JMenuItem();
         changePassword = new javax.swing.JMenuItem();
         logOut = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        booksMenu = new javax.swing.JMenu();
         addGenre = new javax.swing.JMenuItem();
         deleteGenre = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        addBook = new javax.swing.JMenuItem();
+        editBook = new javax.swing.JMenuItem();
+        deleteBook = new javax.swing.JMenuItem();
+        studentMenu = new javax.swing.JMenu();
         registerStudent = new javax.swing.JMenuItem();
         deleteStudent = new javax.swing.JMenuItem();
 
@@ -88,36 +91,37 @@ public class LibraryGUI extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jPanel1);
 
-        jButton1.setText("Refresh");
+        refreshLibrary.setText("Refresh");
 
-        jButton2.setText("Borrow Book");
+        borrowBook.setText("Borrow Book");
 
-        jButton3.setText("Add Book");
-
-        jButton4.setText("Edit Book");
-
-        jButton5.setText("Delete Book");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
+        appointmentsButton.setText("Appointments");
 
         currentUser.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         currentUser.setText("Current Library Admin: ");
 
-        jButton6.setText("Appointments");
+        restartLibrary.setText("Restart Library");
+        restartLibrary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restartLibraryActionPerformed(evt);
+            }
+        });
 
-        jMenu1.setText("Account");
+        accountMenu.setText("Account");
 
         changeName.setText("Change Name");
-        jMenu1.add(changeName);
+        changeName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeNameActionPerformed(evt);
+            }
+        });
+        accountMenu.add(changeName);
 
         changeEmail.setText("Change Email");
-        jMenu1.add(changeEmail);
+        accountMenu.add(changeEmail);
 
         changePassword.setText("Change Password");
-        jMenu1.add(changePassword);
+        accountMenu.add(changePassword);
 
         logOut.setText("Log Out");
         logOut.addActionListener(new java.awt.event.ActionListener() {
@@ -125,11 +129,11 @@ public class LibraryGUI extends javax.swing.JFrame {
                 logOutActionPerformed(evt);
             }
         });
-        jMenu1.add(logOut);
+        accountMenu.add(logOut);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(accountMenu);
 
-        jMenu2.setText("Books");
+        booksMenu.setText("Books");
 
         addGenre.setText("Add Genre");
         addGenre.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +141,7 @@ public class LibraryGUI extends javax.swing.JFrame {
                 addGenreActionPerformed(evt);
             }
         });
-        jMenu2.add(addGenre);
+        booksMenu.add(addGenre);
 
         deleteGenre.setText("Delete Genre");
         deleteGenre.addActionListener(new java.awt.event.ActionListener() {
@@ -145,19 +149,33 @@ public class LibraryGUI extends javax.swing.JFrame {
                 deleteGenreActionPerformed(evt);
             }
         });
-        jMenu2.add(deleteGenre);
+        booksMenu.add(deleteGenre);
 
-        jMenuBar1.add(jMenu2);
+        addBook.setText("Add Book");
+        booksMenu.add(addBook);
 
-        jMenu3.setText("Student");
+        editBook.setText("Edit Book");
+        editBook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBookActionPerformed(evt);
+            }
+        });
+        booksMenu.add(editBook);
+
+        deleteBook.setText("Delete Book");
+        booksMenu.add(deleteBook);
+
+        jMenuBar1.add(booksMenu);
+
+        studentMenu.setText("Student");
 
         registerStudent.setText("Register Student");
-        jMenu3.add(registerStudent);
+        studentMenu.add(registerStudent);
 
         deleteStudent.setText("Delete Student");
-        jMenu3.add(deleteStudent);
+        studentMenu.add(deleteStudent);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(studentMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -168,14 +186,12 @@ public class LibraryGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(borrowBook, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(refreshLibrary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(appointmentsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(restartLibrary, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(53, 53, 53))
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
@@ -190,27 +206,19 @@ public class LibraryGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(refreshLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(borrowBook, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(appointmentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(restartLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
         super.dispose();
@@ -224,6 +232,19 @@ public class LibraryGUI extends javax.swing.JFrame {
     private void deleteGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreActionPerformed
         new DeleteGenreGUI().setVisible(true);
     }//GEN-LAST:event_deleteGenreActionPerformed
+
+    private void editBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBookActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editBookActionPerformed
+
+    private void changeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameActionPerformed
+        new ChangeNameGUI(libacct_id).setVisible(true);
+    }//GEN-LAST:event_changeNameActionPerformed
+
+    private void restartLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartLibraryActionPerformed
+        super.dispose();
+        new LibraryGUI(libacct_id).setVisible(true);
+    }//GEN-LAST:event_restartLibraryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,28 +283,29 @@ public class LibraryGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu accountMenu;
+    private javax.swing.JMenuItem addBook;
     private javax.swing.JMenuItem addGenre;
+    private javax.swing.JButton appointmentsButton;
+    private javax.swing.JMenu booksMenu;
+    private javax.swing.JButton borrowBook;
     private javax.swing.JMenuItem changeEmail;
     private javax.swing.JMenuItem changeName;
     private javax.swing.JMenuItem changePassword;
     private javax.swing.JLabel currentUser;
+    private javax.swing.JMenuItem deleteBook;
     private javax.swing.JMenuItem deleteGenre;
     private javax.swing.JMenuItem deleteStudent;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JMenuItem editBook;
     private javax.swing.JList<String> jList2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuItem logOut;
+    private javax.swing.JButton refreshLibrary;
     private javax.swing.JMenuItem registerStudent;
+    private javax.swing.JButton restartLibrary;
+    private javax.swing.JMenu studentMenu;
     // End of variables declaration//GEN-END:variables
 }
