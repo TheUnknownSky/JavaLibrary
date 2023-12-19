@@ -108,6 +108,19 @@ public class Account extends DBConn{
         }
         return acct_name;
     }
+    public String getEmail (int id){
+        String acct_email = "";
+        try {
+            PreparedStatement getEmail = conn().prepareStatement("SELECT libacct_email FROM lib_accounts WHERE libacct_id=?");
+            getEmail.setInt(1, id);
+            ResultSet resultSet = getEmail.executeQuery();
+            resultSet.next();
+            acct_email = resultSet.getString("libacct_email");
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+        return acct_email;
+    }
     public void editName(int id, String firstName, String lastName){
         try {
             PreparedStatement editName = conn().prepareStatement("UPDATE lib_accounts SET libacct_fname=?, libacct_lname=? WHERE libacct_id=?");
@@ -115,7 +128,18 @@ public class Account extends DBConn{
             editName.setString(2, lastName);
             editName.setInt(3, id);
             editName.executeUpdate();
-            Display.nameUpdateSuccessful();
+            Display.updateSuccessfulOf("name");
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+    }
+    public void editEmail(int id, String email){
+        try {
+            PreparedStatement editEmail = conn().prepareStatement("UPDATE lib_accounts SET libacct_email=? WHERE libacct_id=?");
+            editEmail.setString(1, email);
+            editEmail.setInt(2, id);
+            editEmail.executeUpdate();
+            Display.updateSuccessfulOf("email");
         } catch (SQLException e){
             Display.sqlError();
         }

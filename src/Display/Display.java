@@ -11,10 +11,10 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
-    public static void nameUpdateSuccessful(){
+    public static void updateSuccessfulOf(String word){
         JOptionPane.showMessageDialog(
             null, 
-            "Your name has been successfully updated.", 
+            "Your " + word + " has been successfully updated.", 
             "Update Successful",
             JOptionPane.INFORMATION_MESSAGE
         );

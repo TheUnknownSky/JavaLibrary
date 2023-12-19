@@ -118,6 +118,11 @@ public class LibraryGUI extends javax.swing.JFrame {
         accountMenu.add(changeName);
 
         changeEmail.setText("Change Email");
+        changeEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeEmailActionPerformed(evt);
+            }
+        });
         accountMenu.add(changeEmail);
 
         changePassword.setText("Change Password");
@@ -245,6 +250,10 @@ public class LibraryGUI extends javax.swing.JFrame {
         super.dispose();
         new LibraryGUI(libacct_id).setVisible(true);
     }//GEN-LAST:event_restartLibraryActionPerformed
+
+    private void changeEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeEmailActionPerformed
+        new ChangeEmailGUI(libacct_id).setVisible(true);
+    }//GEN-LAST:event_changeEmailActionPerformed
 
     /**
      * @param args the command line arguments
