@@ -54,4 +54,24 @@ public class Library extends DBConn {
             Display.sqlError();
         }
     }
+    public boolean deleteStudent(String studentNumber){
+        try {
+            PreparedStatement checkStudent = conn().prepareStatement("SELECT * FROM students WHERE student_id=?");
+            checkStudent.setString(1, studentNumber);
+            ResultSet resultSet = checkStudent.executeQuery();
+            if (resultSet.next()){
+                PreparedStatement deleteStudent = conn().prepareStatement("DELETE FROM students WHERE student_id=?");
+                deleteStudent.setString(1, resultSet.getString("student_id"));
+                deleteStudent.executeUpdate();
+                Display.deleteStudentSuccessful(studentNumber, resultSet.getString("student_name"));
+                return true;
+            } else {
+                Display.studentDoesNotExist(studentNumber);
+                return false;
+            }
+        } catch (SQLException e){
+            Display.sqlError();;
+            return false;
+        }
+    }
 }

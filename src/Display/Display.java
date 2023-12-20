@@ -115,4 +115,20 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
+    public static void deleteStudentSuccessful(String id, String name){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Student '" + id + "' (" + name + ") has been deleted.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    public static void studentDoesNotExist(String id){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Student '" + id + "' does not exist.", 
+            "Student Not Found", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
 }
