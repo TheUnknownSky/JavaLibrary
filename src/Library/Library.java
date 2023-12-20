@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import Display.Display;
+import java.util.Arrays;
 
 public class Library extends DBConn {
-    
     public void addGenre(String genre_name){
         try {
             PreparedStatement checkGenreIfExisting = conn().prepareStatement("SELECT bg_id FROM book_genre WHERE bg_name=?");
@@ -25,7 +25,6 @@ public class Library extends DBConn {
             Display.sqlError();
         }
     }
-    
     public void deleteGenre(String genre_name){
         try {
             PreparedStatement checkGenreIfExisting = conn().prepareStatement("SELECT bg_id FROM book_genre WHERE bg_name=?");
@@ -71,6 +70,55 @@ public class Library extends DBConn {
             }
         } catch (SQLException e){
             Display.sqlError();;
+            return false;
+        }
+    }
+    public String[][] getBookGenres(){
+        String[][] genres = new String[2][];
+        String[] genre_names = {};
+        String[] genre_ids = {};
+        try {
+            PreparedStatement getGenres = conn().prepareStatement("SELECT * FROM book_genre");
+            ResultSet resultSet = getGenres.executeQuery();
+            int i = 1;
+            while (resultSet.next()){
+                genre_ids = Arrays.copyOf(genre_ids, i);
+                genre_names = Arrays.copyOf(genre_names, i);
+                genre_ids[genre_ids.length - 1] = Integer.toString(resultSet.getInt("bg_id"));
+                String genre_name = resultSet.getString("bg_name");
+                genre_names[genre_names.length - 1] = genre_name.substring(0, 1).toUpperCase() + genre_name.substring(1);
+                i++;
+            }
+            System.out.println(Arrays.toString(genre_ids));
+            System.out.println(Arrays.toString(genre_names));
+            genres[0] = genre_ids;
+            genres[1] = genre_names;
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+        return genres;
+    }
+    public boolean addBook(String title, String author, int genre, int count){
+        try {
+            PreparedStatement checkBook = conn().prepareStatement("SELECT book_id FROM books WHERE book_title=? AND book_author=?");
+            checkBook.setString(1, title);
+            checkBook.setString(2, author);
+            ResultSet resultSet = checkBook.executeQuery();
+            if (!resultSet.next()){
+                PreparedStatement addBook = conn().prepareStatement("INSERT INTO books (book_title, book_author, book_genre, book_count) VALUES (?, ?, ?, ?)");
+                addBook.setString(1, title);
+                addBook.setString(2, author);
+                addBook.setInt(3, genre);
+                addBook.setInt(4, count);
+                addBook.executeUpdate();
+                Display.bookAddedSuccessfully(title);
+                return true;
+            } else {
+                Display.bookAlreadyExists(title);
+                return false;
+            }
+        } catch (SQLException e){
+            Display.sqlError();
             return false;
         }
     }

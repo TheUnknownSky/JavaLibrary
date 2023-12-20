@@ -131,4 +131,20 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
+    public static void bookAddedSuccessfully(String book){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Book '" + book + "' successfully added.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    public static void bookAlreadyExists(String book){
+        JOptionPane.showMessageDialog(
+            null, 
+            "The book '" + book + "' already exists.", 
+            "Registration failed", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
 }

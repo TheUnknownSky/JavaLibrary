@@ -25,7 +25,7 @@ public class Genre_AddGenreGUI extends javax.swing.JFrame {
         genreToAdd = new javax.swing.JTextField();
         addGenreButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(75, 75, 75));
 
@@ -83,7 +83,7 @@ public class Genre_AddGenreGUI extends javax.swing.JFrame {
     private void addGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreButtonActionPerformed
         Library lib = new Library();
         lib.addGenre(genreToAdd.getText());
-        super.dispose();
+        //super.dispose();
     }//GEN-LAST:event_addGenreButtonActionPerformed
 
     /**
