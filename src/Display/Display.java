@@ -43,7 +43,7 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
-    public static void registrationSuccess(){
+    public static void accountRegistrationSuccess(){
         JOptionPane.showMessageDialog(
             null,
             "You may now log in your account.",
@@ -72,6 +72,46 @@ public class Display {
             null, 
             "Please fill out the required details.", 
             "Insufficient Details", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+    public static void studentRegistrationSuccess(){
+        JOptionPane.showMessageDialog(
+            null,
+            "Student has been registered.",
+            "Registration Success",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    public static void addGenreSuccessful(String genre_name){
+        JOptionPane.showMessageDialog(
+            null, 
+            "The genre '" + genre_name + "' has been added.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    public static void addGenreNotSuccessfu(String genre_name){
+        JOptionPane.showMessageDialog(
+            null, 
+            "The genre '" + genre_name + "' already exists.", 
+            "Update Unsuccessful", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+    public static void deleteGenreSuccessful(String genre_name){
+        JOptionPane.showMessageDialog(
+            null, 
+            "The genre '" + genre_name + "' has been deleted.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    public static void deleteGenreNotSuccessful(String genre_name){
+        JOptionPane.showMessageDialog(
+            null, 
+            "The genre '" + genre_name + "' doesn't exist.", 
+            "Update Unsuccessful", 
             JOptionPane.ERROR_MESSAGE
         );
     }

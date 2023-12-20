@@ -1,4 +1,4 @@
-package Account;
+    package Account;
 
 import DatabaseConnection.DBConn;
 import java.sql.PreparedStatement;
@@ -46,7 +46,7 @@ public class Account extends DBConn{
             this.password = password;
             boolean access = registerAcctToDB();
             if(access){
-                Display.registrationSuccess();
+                Display.accountRegistrationSuccess();
                 return access;
             }
             return access;

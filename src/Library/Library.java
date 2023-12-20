@@ -1,10 +1,10 @@
 package Library;
 
-import javax.swing.JOptionPane;
 import DatabaseConnection.DBConn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import Display.Display;
 
 public class Library extends DBConn {
     
@@ -17,28 +17,12 @@ public class Library extends DBConn {
                 PreparedStatement addGenre = conn().prepareStatement("INSERT INTO book_genre (bg_name) VALUES (?);");
                 addGenre.setString(1, genre_name.toLowerCase());
                 addGenre.executeUpdate();
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "The genre '" + genre_name + "' has been added.", 
-                    "Update Successful", 
-                    JOptionPane.INFORMATION_MESSAGE
-                );
+                Display.addGenreSuccessful(genre_name);
             } else {
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "The genre '" + genre_name + "' already exists.", 
-                    "Update Unsuccessful", 
-                    JOptionPane.ERROR_MESSAGE
-                );
-            }
-            
+                Display.addGenreNotSuccessfu(genre_name);
+            } 
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "There is a problem connecting to the database.", 
-                    "SQL Connection Error", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.sqlError();
         }
     }
     
@@ -51,28 +35,23 @@ public class Library extends DBConn {
                 PreparedStatement deleteGenre = conn().prepareStatement("DELETE FROM book_genre WHERE bg_name=?");
                 deleteGenre.setString(1, genre_name.toLowerCase());
                 deleteGenre.executeUpdate();
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "The genre '" + genre_name + "' has been deleted.", 
-                    "Update Successful", 
-                    JOptionPane.INFORMATION_MESSAGE
-                );
+                Display.deleteGenreSuccessful(genre_name);
             } else {
-                JOptionPane.showMessageDialog(
-                    null, 
-                    "The genre '" + genre_name + "' doesn't exist.", 
-                    "Update Unsuccessful", 
-                    JOptionPane.ERROR_MESSAGE
-                );
+                Display.deleteGenreNotSuccessful(genre_name);
             }
         } catch (SQLException e){
-            JOptionPane.showMessageDialog(
-                    null, 
-                    "There is a problem connecting to the database.", 
-                    "SQL Connection Error", 
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Display.sqlError();
         }
     }
-    
+    public void registerStudent (String studentNumber, String name){
+        try {
+            PreparedStatement regStudent = conn().prepareStatement("INSERT INTO students VALUES (?, ?)");
+            regStudent.setString(1, studentNumber);
+            regStudent.setString(2, name);
+            regStudent.executeUpdate();
+            Display.studentRegistrationSuccess();
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+    }
 }
