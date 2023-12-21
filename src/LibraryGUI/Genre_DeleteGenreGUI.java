@@ -3,12 +3,15 @@ package LibraryGUI;
 import Library.Library;
 
 public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
-
+    private String[][] genres;
     /**
      * Creates new form DeleteGenreGUI
      */
     public Genre_DeleteGenreGUI() {
         initComponents();
+        Library lib = new Library();
+        this.genres = lib.getBookGenres();
+        genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
     }
 
     /**
@@ -22,8 +25,8 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        genreToDelete = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        genreToDelete = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -39,31 +42,33 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
             }
         });
 
+        genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
+                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(jButton1)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -82,7 +87,10 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Library lib = new Library();
-        lib.deleteGenre(genreToDelete.getText());
+        int genreIndex = genreToDelete.getSelectedIndex();
+        int genreId = Integer.parseInt(genres[0][genreIndex]);
+        String genreName = (String) genreToDelete.getSelectedItem();
+        lib.deleteGenre(genreId, genreName);
         super.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -123,7 +131,7 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField genreToDelete;
+    private javax.swing.JComboBox<String> genreToDelete;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

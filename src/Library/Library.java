@@ -25,19 +25,15 @@ public class Library extends DBConn {
             Display.sqlError();
         }
     }
-    public void deleteGenre(String genre_name){
+    public void deleteGenre(int genre_id, String genre_name){
         try {
-            PreparedStatement checkGenreIfExisting = conn().prepareStatement("SELECT bg_id FROM book_genre WHERE bg_name=?");
-            checkGenreIfExisting.setString(1, genre_name.toLowerCase());
-            ResultSet resultSet = checkGenreIfExisting.executeQuery();
-            if(resultSet.next()){
-                PreparedStatement deleteGenre = conn().prepareStatement("DELETE FROM book_genre WHERE bg_name=?");
-                deleteGenre.setString(1, genre_name.toLowerCase());
-                deleteGenre.executeUpdate();
-                Display.deleteGenreSuccessful(genre_name);
-            } else {
-                Display.deleteGenreNotSuccessful(genre_name);
-            }
+            PreparedStatement deleteGenre = conn().prepareStatement("DELETE FROM book_genre WHERE bg_id=?");
+            deleteGenre.setInt(1, genre_id);
+            deleteGenre.executeUpdate();
+            PreparedStatement replaceGenre = conn().prepareStatement("UPDATE books SET book_genre=0 WHERE book_genre=?");
+            replaceGenre.setInt(1, genre_id);
+            replaceGenre.executeUpdate();
+            Display.deleteGenreSuccessful(genre_name);    
         } catch (SQLException e){
             Display.sqlError();
         }

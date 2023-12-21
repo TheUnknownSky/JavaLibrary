@@ -319,7 +319,7 @@ public class LibraryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteStudentActionPerformed
 
     private void addBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookActionPerformed
-        new Books_AddBook().setVisible(true);
+        new Books_AddBookGUI().setVisible(true);
     }//GEN-LAST:event_addBookActionPerformed
 
     /**

@@ -3,12 +3,12 @@ package LibraryGUI;
 import Display.Display;
 import Library.Library;
 
-public class Books_AddBook extends javax.swing.JFrame {
+public class Books_AddBookGUI extends javax.swing.JFrame {
     private String[][] genres;
     /**
      * Creates new form Books_AddBook
      */
-    public Books_AddBook() {
+    public Books_AddBookGUI() {
         initComponents();
         Library lib = new Library();
         this.genres = lib.getBookGenres();
@@ -155,20 +155,21 @@ public class Books_AddBook extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Books_AddBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Books_AddBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Books_AddBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Books_AddBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Books_AddBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Books_AddBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Books_AddBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Books_AddBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Books_AddBook().setVisible(true);
+                new Books_AddBookGUI().setVisible(true);
             }
         });
     }
