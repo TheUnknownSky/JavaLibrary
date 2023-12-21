@@ -136,7 +136,7 @@ public class Library extends DBConn {
         String[] book_titles = {};
         String[] book_ids = {};
         try {
-            PreparedStatement getBooks = conn().prepareStatement("SELECT book_id, book_title, book_author FROM books");
+            PreparedStatement getBooks = conn().prepareStatement("SELECT book_id, book_title, book_author FROM books ORDER by book_title");
             ResultSet resultSet = getBooks.executeQuery();
             for(int i = 1; resultSet.next(); i++){
                 book_ids = Arrays.copyOf(book_ids, i);
@@ -152,10 +152,32 @@ public class Library extends DBConn {
         }
         return books;
     }
+    public String[] searchBookList(String toSearch){
+        String[] book_titles = {};
+        try {
+            PreparedStatement searchBooks = conn().prepareStatement("SELECT book_title, book_author, book_count FROM books WHERE book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title");
+            System.out.println("Sike 1");
+            ResultSet resultSet = searchBooks.executeQuery();
+            System.out.println("Query success");
+            for(int i = 1; resultSet.next(); i++){
+                book_titles = Arrays.copyOf(book_titles, i);
+                String book_title = resultSet.getString("book_title") + " (" + resultSet.getString("book_author") + ")";
+                if (resultSet.getInt("book_count") == 0){
+                    book_title = book_title + " - Unavailable";
+                }
+                book_titles[book_titles.length - 1] = book_title;
+                System.out.println(book_title + " is in");
+            }
+            System.out.println(Arrays.toString(book_titles));
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return book_titles;
+    }
     public String[] getBookDetails(int bookId){
         String[] bookDetails = new String[4];
         try {
-            PreparedStatement getDetails = conn().prepareStatement("SELECT book_title, book_author, book_genre, book_count FROM books WHERE book_id=?");
+            PreparedStatement getDetails = conn().prepareStatement("SELECT book_title, book_author, book_genre, book_count FROM books WHERE book_id=? ORDER BY book_title");
             getDetails.setInt(1, bookId);
             ResultSet resultSet = getDetails.executeQuery();
             resultSet.next();
