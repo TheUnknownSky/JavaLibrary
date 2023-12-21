@@ -295,7 +295,7 @@ public class LibraryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteGenreActionPerformed
 
     private void editBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBookActionPerformed
-        // TODO add your handling code here:
+        new Books_EditBookGUI().setVisible(true);
     }//GEN-LAST:event_editBookActionPerformed
 
     private void changeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameActionPerformed

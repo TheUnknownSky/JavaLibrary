@@ -155,4 +155,12 @@ public class Display {
             JOptionPane.INFORMATION_MESSAGE
         );
     }
+    public static void bookUpdatedSuccessfully(String book){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Book '" + book + "' successfully updated.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 }

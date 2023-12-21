@@ -85,8 +85,6 @@ public class Library extends DBConn {
                 genre_names[genre_names.length - 1] = genre_name.substring(0, 1).toUpperCase() + genre_name.substring(1);
                 i++;
             }
-            System.out.println(Arrays.toString(genre_ids));
-            System.out.println(Arrays.toString(genre_names));
             genres[0] = genre_ids;
             genres[1] = genre_names;
         } catch (SQLException e){
@@ -118,7 +116,22 @@ public class Library extends DBConn {
             return false;
         }
     }
-    public String[][] getAllBooks(){
+    public void editBook(int id, String book_title, String book_author, int book_genre, int book_count){
+        try {
+            PreparedStatement editBook = conn().prepareStatement("UPDATE books SET book_title=?, book_author=?, book_genre=?, book_count=? WHERE book_id=?");
+            editBook.setString(1, book_title);
+            editBook.setString(2, book_author);
+            editBook.setInt(3, book_genre);
+            editBook.setInt(4, book_count);
+            editBook.setInt(5, id);
+            editBook.executeUpdate();
+            System.out.println(id + " " + book_title + " " + book_author + " " + book_genre + " " + book_count);
+            Display.bookUpdatedSuccessfully(book_title);
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+    }
+    public String[][] getBookList(){
         String[][] books = new String[2][];
         String[] book_titles = {};
         String[] book_ids = {};
@@ -132,14 +145,28 @@ public class Library extends DBConn {
                 String book_title = resultSet.getString("book_title") + " (" + resultSet.getString("book_author") + ")";
                 book_titles[book_titles.length - 1] = book_title;
             }
-            System.out.println(Arrays.toString(book_ids));
-            System.out.println(Arrays.toString(book_titles));
             books[0] = book_ids;
             books[1] = book_titles;
         } catch (SQLException e){
             Display.sqlError();
         }
         return books;
+    }
+    public String[] getBookDetails(int bookId){
+        String[] bookDetails = new String[4];
+        try {
+            PreparedStatement getDetails = conn().prepareStatement("SELECT book_title, book_author, book_genre, book_count FROM books WHERE book_id=?");
+            getDetails.setInt(1, bookId);
+            ResultSet resultSet = getDetails.executeQuery();
+            resultSet.next();
+            bookDetails[0] = resultSet.getString("book_title");
+            bookDetails[1] = resultSet.getString("book_author");
+            bookDetails[2] = Integer.toString(resultSet.getInt("book_genre"));
+            bookDetails[3] = Integer.toString(resultSet.getInt("book_count"));
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+        return bookDetails;
     }
     public void deleteBook(int book_id, String book_name){
         try {

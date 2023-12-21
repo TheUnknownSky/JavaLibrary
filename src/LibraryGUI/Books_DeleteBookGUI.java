@@ -1,7 +1,6 @@
 package LibraryGUI;
 
 import Library.Library;
-import Display.Display;
 
 public class Books_DeleteBookGUI extends javax.swing.JFrame {
     private String[][] books;
@@ -11,7 +10,7 @@ public class Books_DeleteBookGUI extends javax.swing.JFrame {
     public Books_DeleteBookGUI() {
         initComponents();
         Library lib = new Library();
-        this.books = lib.getAllBooks();
+        this.books = lib.getBookList();
         bookToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(this.books[1]));
     }
 
@@ -94,7 +93,7 @@ public class Books_DeleteBookGUI extends javax.swing.JFrame {
         lib.deleteBook(bookId, bookTitle);
         super.dispose();
     }//GEN-LAST:event_deleteBookButtonActionPerformed
-
+    
     /**
      * @param args the command line arguments
      */

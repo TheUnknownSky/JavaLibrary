@@ -25,7 +25,7 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        deleteGenreButton = new javax.swing.JButton();
         genreToDelete = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -35,10 +35,10 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Delete Genre:");
 
-        jButton1.setText("Delete Genre");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        deleteGenreButton.setText("Delete Genre");
+        deleteGenreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                deleteGenreButtonActionPerformed(evt);
             }
         });
 
@@ -50,7 +50,7 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(100, 100, 100)
-                .addComponent(jButton1)
+                .addComponent(deleteGenreButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(28, Short.MAX_VALUE)
@@ -67,7 +67,7 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addComponent(jButton1)
+                .addComponent(deleteGenreButton)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -85,14 +85,14 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void deleteGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreButtonActionPerformed
         Library lib = new Library();
         int genreIndex = genreToDelete.getSelectedIndex();
         int genreId = Integer.parseInt(genres[0][genreIndex]);
         String genreName = (String) genreToDelete.getSelectedItem();
         lib.deleteGenre(genreId, genreName);
         super.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_deleteGenreButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -131,8 +131,8 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton deleteGenreButton;
     private javax.swing.JComboBox<String> genreToDelete;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
