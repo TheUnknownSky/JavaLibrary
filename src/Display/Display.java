@@ -147,4 +147,12 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
+    public static void deleteBookSuccessful(String book_title){
+        JOptionPane.showMessageDialog(
+            null, 
+            "The book '" + book_title + "' has been deleted.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 }

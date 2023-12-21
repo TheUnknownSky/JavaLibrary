@@ -205,6 +205,11 @@ public class LibraryGUI extends javax.swing.JFrame {
         booksMenu.add(editBook);
 
         deleteBook.setText("Delete Book");
+        deleteBook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBookActionPerformed(evt);
+            }
+        });
         booksMenu.add(deleteBook);
 
         jMenuBar1.add(booksMenu);
@@ -321,6 +326,10 @@ public class LibraryGUI extends javax.swing.JFrame {
     private void addBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookActionPerformed
         new Books_AddBookGUI().setVisible(true);
     }//GEN-LAST:event_addBookActionPerformed
+
+    private void deleteBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBookActionPerformed
+        new Books_DeleteBookGUI().setVisible(true);
+    }//GEN-LAST:event_deleteBookActionPerformed
 
     /**
      * @param args the command line arguments

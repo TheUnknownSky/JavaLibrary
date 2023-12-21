@@ -118,4 +118,38 @@ public class Library extends DBConn {
             return false;
         }
     }
+    public String[][] getAllBooks(){
+        String[][] books = new String[2][];
+        String[] book_titles = {};
+        String[] book_ids = {};
+        try {
+            PreparedStatement getBooks = conn().prepareStatement("SELECT book_id, book_title, book_author FROM books");
+            ResultSet resultSet = getBooks.executeQuery();
+            for(int i = 1; resultSet.next(); i++){
+                book_ids = Arrays.copyOf(book_ids, i);
+                book_titles = Arrays.copyOf(book_titles, i);
+                book_ids[book_ids.length - 1] = Integer.toString(resultSet.getInt("book_id"));
+                String book_title = resultSet.getString("book_title") + " (" + resultSet.getString("book_author") + ")";
+                book_titles[book_titles.length - 1] = book_title;
+            }
+            System.out.println(Arrays.toString(book_ids));
+            System.out.println(Arrays.toString(book_titles));
+            books[0] = book_ids;
+            books[1] = book_titles;
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+        return books;
+    }
+    public void deleteBook(int book_id, String book_name){
+        try {
+            // you cant delete book if it has existing appointment
+            PreparedStatement deleteBook = conn().prepareStatement("DELETE FROM books WHERE book_id=?");
+            deleteBook.setInt(1, book_id);
+            deleteBook.executeUpdate();
+            Display.deleteBookSuccessful(book_name);
+        } catch (SQLException e){
+            Display.sqlError();
+        }
+    }
 }
