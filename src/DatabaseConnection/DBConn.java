@@ -21,7 +21,7 @@ public class DBConn {
         String booksTable = "CREATE TABLE books (`book_id` INT NOT NULL AUTO_INCREMENT , `book_title` VARCHAR(255) NOT NULL , `book_author` VARCHAR(255) NOT NULL , `book_genre` VARCHAR(255) NOT NULL , `book_count` INT NOT NULL , PRIMARY KEY (`book_id`)) ENGINE = InnoDB;";        
         String bookGenreTable = "CREATE TABLE book_genre (`bg_id` INT NOT NULL AUTO_INCREMENT , `bg_name` VARCHAR(100) NOT NULL , PRIMARY KEY (`bg_id`), UNIQUE (`bg_name`)) ENGINE = InnoDB;";
         String studentTable = "CREATE TABLE students (`student_id` VARCHAR(11) NOT NULL , `student_name` VARCHAR(255) NOT NULL , PRIMARY KEY (`student_id`)) ENGINE = InnoDB;";
-        String appointmentTable = "CREATE TABLE appointments (`appt_id` INT NOT NULL AUTO_INCREMENT , `book_id` INT NULL , `student_id` VARCHAR(11) NULL , `appt_date_borrow` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `appt_date_return` DATETIME NOT NULL , PRIMARY KEY (`appt_id`), FOREIGN KEY (`book_id`) REFERENCES books(`book_id`), FOREIGN KEY (`student_id`) REFERENCES students(`student_id`)) ENGINE = InnoDB;";
+        String appointmentTable = "CREATE TABLE appointments (`appt_id` INT NOT NULL AUTO_INCREMENT , `book_id` INT NULL , `student_id` VARCHAR(11) NULL , `appt_date_borrow` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `appt_date_return` DATETIME, PRIMARY KEY (`appt_id`), FOREIGN KEY (`book_id`) REFERENCES books(`book_id`), FOREIGN KEY (`student_id`) REFERENCES students(`student_id`)) ENGINE = InnoDB;";
         Statement makeTable = conn.createStatement();
         makeTable.executeUpdate(accountTable);
         makeTable.executeUpdate(booksTable);

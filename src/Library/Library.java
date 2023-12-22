@@ -49,19 +49,34 @@ public class Library extends DBConn {
             Display.sqlError();
         }
     }
+    public boolean checkStudentIfExisting(String studentNumber){
+        try {
+            PreparedStatement checkStudent = conn().prepareStatement("SELECT * FROM students WHERE student_id=?");
+            checkStudent.setString(1, studentNumber);
+            ResultSet resultSet = checkStudent.executeQuery();
+            if(resultSet.next()){
+                return true;
+            } else {
+                Display.studentDoesNotExist(studentNumber);
+                return false;
+            }
+        } catch (SQLException e){
+            Display.sqlError();
+            return false;
+        }
+    }
     public boolean deleteStudent(String studentNumber){
         try {
             PreparedStatement checkStudent = conn().prepareStatement("SELECT * FROM students WHERE student_id=?");
             checkStudent.setString(1, studentNumber);
             ResultSet resultSet = checkStudent.executeQuery();
-            if (resultSet.next()){
+            if (checkStudentIfExisting(studentNumber)){
                 PreparedStatement deleteStudent = conn().prepareStatement("DELETE FROM students WHERE student_id=?");
                 deleteStudent.setString(1, resultSet.getString("student_id"));
                 deleteStudent.executeUpdate();
                 Display.deleteStudentSuccessful(studentNumber, resultSet.getString("student_name"));
                 return true;
             } else {
-                Display.studentDoesNotExist(studentNumber);
                 return false;
             }
         } catch (SQLException e){
@@ -131,12 +146,18 @@ public class Library extends DBConn {
             Display.sqlError();
         }
     }
-    public String[][] getBookList(){
+    public String[][] getBookList(boolean to_borrow){
         String[][] books = new String[2][];
         String[] book_titles = {};
         String[] book_ids = {};
         try {
-            PreparedStatement getBooks = conn().prepareStatement("SELECT book_id, book_title, book_author FROM books ORDER by book_title");
+            String query;
+            if(to_borrow){
+                query = "SELECT book_id, book_title, book_author FROM books WHERE book_count > 0 ORDER BY book_title";
+            } else {
+                query = "SELECT book_id, book_title, book_author FROM books ORDER by book_title";
+            }
+            PreparedStatement getBooks = conn().prepareStatement(query);
             ResultSet resultSet = getBooks.executeQuery();
             for(int i = 1; resultSet.next(); i++){
                 book_ids = Arrays.copyOf(book_ids, i);
@@ -199,6 +220,63 @@ public class Library extends DBConn {
             Display.deleteBookSuccessful(book_name);
         } catch (SQLException e){
             Display.sqlError();
+        }
+    }
+    public boolean checkIfApptExisting(int bookId, String studentId){
+        try {
+            PreparedStatement checkAppt = conn().prepareStatement("SELECT appt_id FROM appointments WHERE book_id=? AND student_id=?");
+            checkAppt.setInt(1, bookId);
+            checkAppt.setString(2, studentId);
+            ResultSet resultSet = checkAppt.executeQuery();
+            if (resultSet.next()){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e){
+            Display.sqlError();
+            return false;
+        }
+    }
+    public int getBookCount(int bookId){
+        try {
+            PreparedStatement getBookCount = conn().prepareStatement("SELECT book_count FROM books WHERE book_id=?");
+            getBookCount.setInt(1, bookId);
+            ResultSet resultSet = getBookCount.executeQuery();
+            resultSet.next();
+            System.out.println(resultSet.getInt("book_count"));
+            return resultSet.getInt("book_count");
+        } catch (SQLException e){
+            Display.sqlError();
+            System.out.println(e.getMessage());
+            return 0;
+        }
+    }
+    public boolean borrowBook(int bookId, String studentId){
+        try {
+            if (checkStudentIfExisting(studentId)){
+                if(!checkIfApptExisting(bookId, studentId)){
+                    PreparedStatement borrowBook = conn().prepareStatement("INSERT INTO appointments (book_id, student_id, appt_date_borrow) VALUES (?, ?, DEFAULT)");
+                    borrowBook.setInt(1, bookId);
+                    borrowBook.setString(2, studentId);
+                    borrowBook.executeUpdate();
+                    int newBookCount = getBookCount(bookId) - 1;
+                    PreparedStatement replaceBookCount = conn().prepareStatement("UPDATE books SET book_count=? WHERE book_id=?");
+                    replaceBookCount.setInt(1, newBookCount);
+                    replaceBookCount.setInt(2, bookId);
+                    replaceBookCount.executeUpdate();
+                    return true;
+                } else {
+                    Display.apptAlreadyExists();
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (SQLException e){
+            Display.sqlError();
+             System.out.println(e.getMessage());
+            return false;
         }
     }
 }

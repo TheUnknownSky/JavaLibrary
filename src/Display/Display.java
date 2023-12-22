@@ -163,4 +163,20 @@ public class Display {
             JOptionPane.INFORMATION_MESSAGE
         );
     }
+    public static void bookBorrowedSuccessfully(String book){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Book '" + book + "' successfully borrowed.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    public static void apptAlreadyExists(){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Student already borrowed this book.", 
+            "Appointment failed", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
 }

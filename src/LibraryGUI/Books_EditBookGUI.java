@@ -14,7 +14,7 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
     public Books_EditBookGUI() {
         initComponents();
         Library lib = new Library();
-        this.books = lib.getBookList();
+        this.books = lib.getBookList(false);
         bookToEdit.setModel(new javax.swing.DefaultComboBoxModel<>(this.books[1]));
         this.genres = lib.getBookGenres();
         bookGenre.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));

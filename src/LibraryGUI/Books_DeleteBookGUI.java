@@ -10,7 +10,7 @@ public class Books_DeleteBookGUI extends javax.swing.JFrame {
     public Books_DeleteBookGUI() {
         initComponents();
         Library lib = new Library();
-        this.books = lib.getBookList();
+        this.books = lib.getBookList(false);
         bookToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(this.books[1]));
     }
 
