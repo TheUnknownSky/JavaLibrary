@@ -5,11 +5,13 @@ import Library.Library;
 import java.util.Arrays;
 
 public class LibraryGUI extends javax.swing.JFrame {
-    private int libacct_id = 1;
+    private int libacct_id = 1; // must be set with no value in actual use
     private String[] bookList;
     /**
      * Creates new form LibraryGUI
      */
+    
+    // gui initializer for testing (running this file directly)
     public LibraryGUI() {
         initComponents();
         Account acct = new Account();
@@ -24,6 +26,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(listOfBooks);
     }
+    // gui initializer for actual use (to be access from LoginGUI.java
     public LibraryGUI(int id){
         initComponents();
         this.libacct_id = id;

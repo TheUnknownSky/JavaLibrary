@@ -22,7 +22,7 @@ public class Library extends DBConn {
                 Display.addGenreNotSuccessfu(genre_name);
             } 
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public void deleteGenre(int genre_id, String genre_name){
@@ -35,7 +35,7 @@ public class Library extends DBConn {
             replaceGenre.executeUpdate();
             Display.deleteGenreSuccessful(genre_name);    
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public void registerStudent (String studentNumber, String name){
@@ -46,7 +46,7 @@ public class Library extends DBConn {
             regStudent.executeUpdate();
             Display.studentRegistrationSuccess();
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public boolean checkStudentIfExisting(String studentNumber){
@@ -61,7 +61,7 @@ public class Library extends DBConn {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
             return false;
         }
     }
@@ -80,7 +80,7 @@ public class Library extends DBConn {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError();;
+            Display.sqlError(e.getMessage());
             return false;
         }
     }
@@ -103,7 +103,7 @@ public class Library extends DBConn {
             genres[0] = genre_ids;
             genres[1] = genre_names;
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
         return genres;
     }
@@ -127,7 +127,7 @@ public class Library extends DBConn {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
             return false;
         }
     }
@@ -143,7 +143,7 @@ public class Library extends DBConn {
             System.out.println(id + " " + book_title + " " + book_author + " " + book_genre + " " + book_count);
             Display.bookUpdatedSuccessfully(book_title);
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public String[][] getBookList(boolean to_borrow){
@@ -169,7 +169,7 @@ public class Library extends DBConn {
             books[0] = book_ids;
             books[1] = book_titles;
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
         return books;
     }
@@ -177,9 +177,7 @@ public class Library extends DBConn {
         String[] book_titles = {};
         try {
             PreparedStatement searchBooks = conn().prepareStatement("SELECT book_title, book_author, book_count FROM books WHERE book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title");
-            System.out.println("Sike 1");
             ResultSet resultSet = searchBooks.executeQuery();
-            System.out.println("Query success");
             for(int i = 1; resultSet.next(); i++){
                 book_titles = Arrays.copyOf(book_titles, i);
                 String book_title = resultSet.getString("book_title") + " (" + resultSet.getString("book_author") + ")";
@@ -187,11 +185,9 @@ public class Library extends DBConn {
                     book_title = book_title + " - Unavailable";
                 }
                 book_titles[book_titles.length - 1] = book_title;
-                System.out.println(book_title + " is in");
             }
-            System.out.println(Arrays.toString(book_titles));
         } catch (SQLException e){
-            System.out.println(e.getMessage());
+            Display.sqlError(e.getMessage());
         }
         return book_titles;
     }
@@ -207,7 +203,7 @@ public class Library extends DBConn {
             bookDetails[2] = Integer.toString(resultSet.getInt("book_genre"));
             bookDetails[3] = Integer.toString(resultSet.getInt("book_count"));
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
         return bookDetails;
     }
@@ -219,7 +215,7 @@ public class Library extends DBConn {
             deleteBook.executeUpdate();
             Display.deleteBookSuccessful(book_name);
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public boolean checkIfApptExisting(int bookId, String studentId){
@@ -234,22 +230,24 @@ public class Library extends DBConn {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
             return false;
         }
     }
-    public int getBookCount(int bookId){
+    public void reduceBookCount(int bookId){
         try {
             PreparedStatement getBookCount = conn().prepareStatement("SELECT book_count FROM books WHERE book_id=?");
             getBookCount.setInt(1, bookId);
             ResultSet resultSet = getBookCount.executeQuery();
             resultSet.next();
-            System.out.println(resultSet.getInt("book_count"));
-            return resultSet.getInt("book_count");
+            int newBookCount = resultSet.getInt("book_count") - 1;
+            PreparedStatement replaceBookCount = conn().prepareStatement("UPDATE books SET book_count=? WHERE book_id=?");
+            replaceBookCount.setInt(1, newBookCount);
+            replaceBookCount.setInt(2, bookId);
+            replaceBookCount.executeUpdate();
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
             System.out.println(e.getMessage());
-            return 0;
         }
     }
     public boolean borrowBook(int bookId, String studentId){
@@ -260,11 +258,7 @@ public class Library extends DBConn {
                     borrowBook.setInt(1, bookId);
                     borrowBook.setString(2, studentId);
                     borrowBook.executeUpdate();
-                    int newBookCount = getBookCount(bookId) - 1;
-                    PreparedStatement replaceBookCount = conn().prepareStatement("UPDATE books SET book_count=? WHERE book_id=?");
-                    replaceBookCount.setInt(1, newBookCount);
-                    replaceBookCount.setInt(2, bookId);
-                    replaceBookCount.executeUpdate();
+                    reduceBookCount(bookId);
                     return true;
                 } else {
                     Display.apptAlreadyExists();
@@ -274,8 +268,7 @@ public class Library extends DBConn {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError();
-             System.out.println(e.getMessage());
+            Display.sqlError(e.getMessage());
             return false;
         }
     }

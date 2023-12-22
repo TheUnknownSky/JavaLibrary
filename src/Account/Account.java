@@ -31,9 +31,8 @@ public class Account extends DBConn{
                 Display.accountAlreadyExists();
                 return false;
             }
-
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
             return false;
         }
     }
@@ -64,7 +63,7 @@ public class Account extends DBConn{
             ResultSet resultSet = checkAcct.executeQuery();
             return resultSet.next();
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
             return false;
         }
     }
@@ -88,7 +87,7 @@ public class Account extends DBConn{
                 return resultSet.getInt("libacct_id");
             }    
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
         // return lib acct id of the email
         return 69;
@@ -104,7 +103,7 @@ public class Account extends DBConn{
                 acct_name = new String[]{resultSet.getString("libacct_fname"), resultSet.getString("libacct_lname")};
             }
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
         return acct_name;
     }
@@ -117,7 +116,7 @@ public class Account extends DBConn{
             resultSet.next();
             acct_email = resultSet.getString("libacct_email");
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
         return acct_email;
     }
@@ -130,7 +129,7 @@ public class Account extends DBConn{
             editName.executeUpdate();
             Display.updateSuccessfulOf("name");
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public void editEmail(int id, String email){
@@ -141,7 +140,7 @@ public class Account extends DBConn{
             editEmail.executeUpdate();
             Display.updateSuccessfulOf("email");
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public void editPassword(int id, String password){
@@ -152,7 +151,7 @@ public class Account extends DBConn{
             editPassword.executeUpdate();
             Display.updateSuccessfulOf("password");
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
         }
     }
     public boolean checkPassword(int id, String password){
@@ -163,7 +162,7 @@ public class Account extends DBConn{
             resultSet.next();
             return resultSet.getString("libacct_pword").equals(password);
         } catch (SQLException e){
-            Display.sqlError();
+            Display.sqlError(e.getMessage());
             return false;
         }
     }

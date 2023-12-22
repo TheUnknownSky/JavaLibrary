@@ -3,13 +3,23 @@ package Display;
 import javax.swing.JOptionPane;
 
 public class Display {
-    public static void sqlError (){
-        JOptionPane.showMessageDialog(
-            null, 
-            "There is a problem connecting to the database.", 
-            "SQL Connection Error",
-            JOptionPane.ERROR_MESSAGE
-        );
+    public static void sqlError (String message){
+        boolean debugMode = true;
+        if (debugMode){
+            JOptionPane.showMessageDialog(
+                null, 
+                "There is a problem connecting to the database.\n" + message, 
+                "SQL Connection Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        } else {
+            JOptionPane.showMessageDialog(
+                null, 
+                "There is a problem connecting to the database.", 
+                "SQL Connection Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
     public static void updateSuccessfulOf(String word){
         JOptionPane.showMessageDialog(
