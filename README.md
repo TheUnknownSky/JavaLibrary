@@ -12,10 +12,7 @@ Setup your XAMPP
 
 To run the system properly, follow the following instructions:
   1. After downloading/setting up everything, open your Apache Netbeans IDE 19
-  2. Open the project and open Library -> Source Package -> DatabaseConnection -> InitDB.java
-  3. Read the comment (directions) inside the main method of the InitDB class and follow it
-  4. Now open Library -> Source Package -> DatabaseConnection -> DBConn.java
-  5. Read the comment (directions) inside the DBConn class and follow it
-  6. Run the testClass.java (by pressing Shift + F6) to initiate the database itself and the database tables
-  7. Now open Library -> Source Package -> LibraryGUI -> RegistrationGUI.java
-  8. Run the RegistrationGUI.java (by pressing Shift + F6) to start the program
+  2. Open the project and open Library -> Source Package -> DatabaseConnection -> DBConn.java
+  3. Read the comment (directions) inside DBConn class and follow it
+  4. Run the DBConn.java file (by pressing Shift + F6) to initialize the database and its tables
+  5. Run the RegistrationGUI.java (by pressing Shift + F6) to start the program
