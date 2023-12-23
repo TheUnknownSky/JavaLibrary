@@ -189,4 +189,20 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
+    public static void noSelectedAppt(){
+        JOptionPane.showMessageDialog(
+            null, 
+            "You did not selected an appointment to delete.", 
+            "Invalid Action", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+    public static void apptDeleteSuccess(){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Appointment successfully deleted.", 
+            "Update Successful", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
 }

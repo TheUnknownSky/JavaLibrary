@@ -2,7 +2,6 @@ package LibraryGUI;
 
 import Account.Account;
 import Library.Library;
-import java.util.Arrays;
 
 public class LibraryGUI extends javax.swing.JFrame {
     private int libacct_id = 1; // must be set with no value in actual use
@@ -127,6 +126,11 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
 
         appointmentsButton.setText("Appointments");
+        appointmentsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                appointmentsButtonActionPerformed(evt);
+            }
+        });
 
         currentUser.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
         currentUser.setForeground(new java.awt.Color(255, 255, 255));
@@ -388,6 +392,10 @@ public class LibraryGUI extends javax.swing.JFrame {
     private void borrowBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowBookActionPerformed
         new Appt_BorrowBook().setVisible(true);
     }//GEN-LAST:event_borrowBookActionPerformed
+
+    private void appointmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsButtonActionPerformed
+        new Appt_Appointments().setVisible(true);
+    }//GEN-LAST:event_appointmentsButtonActionPerformed
 
     /**
      * @param args the command line arguments

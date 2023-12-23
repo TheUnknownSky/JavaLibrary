@@ -4,7 +4,9 @@ import DatabaseConnection.DBConn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import Display.Display;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 public class Library extends DBConn {
@@ -84,6 +86,18 @@ public class Library extends DBConn {
             return false;
         }
     }
+    public String getStudentName(String student_id){
+        try {
+            PreparedStatement getStuName = conn().prepareStatement("SELECT student_name FROM students WHERE student_id=?");
+            getStuName.setString(1, student_id);
+            ResultSet resultSet = getStuName.executeQuery();
+            resultSet.next();
+            return resultSet.getString("student_name");
+        } catch (SQLException e){
+            Display.sqlError(e.getMessage());
+            return "";
+        }
+    }
     public String[][] getBookGenres(){
         String[][] genres = new String[2][];
         String[] genre_names = {};
@@ -144,6 +158,19 @@ public class Library extends DBConn {
             Display.bookUpdatedSuccessfully(book_title);
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
+        }
+    }
+    public String getBookName (int bookId){
+        try {
+            PreparedStatement getBookName = conn().prepareStatement("SELECT book_title FROM books WHERE book_id=?");
+            getBookName.setInt(1, bookId);
+            ResultSet resultSet = getBookName.executeQuery();
+            resultSet.next();
+            System.out.println(resultSet.getString("book_title"));
+            return resultSet.getString("book_title");
+        } catch (SQLException e){
+            Display.sqlError(e.getMessage());
+            return "";
         }
     }
     public String[][] getBookList(boolean to_borrow){
@@ -267,6 +294,67 @@ public class Library extends DBConn {
             } else {
                 return false;
             }
+        } catch (SQLException e){
+            Display.sqlError(e.getMessage());
+            return false;
+        }
+    }
+    public String[][] getAppointmentsDetails(String orderBy){
+        String[][] appointments = {};
+        try {
+            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
+            ResultSet resultSet = getAppt.executeQuery();
+            for (int i = 1; resultSet.next(); i++){
+                String[] appt = new String[4];
+                appt[0] = getBookName(resultSet.getInt("book_id"));
+                appt[1] = getStudentName(resultSet.getString("student_id"));
+                appt[2] = formatTimestampAsString(resultSet.getTimestamp("appt_date_borrow"));
+                appt[3] = Integer.toString(resultSet.getInt("appt_id"));
+                appointments = Arrays.copyOf(appointments, i);
+                appointments[appointments.length - 1] = appt;
+            }
+            for (int j=0; j < appointments.length; j++){
+                System.out.println(Arrays.toString(appointments[j]));
+            }
+        } catch(SQLException e){
+            Display.sqlError(e.getMessage());
+        }
+        return appointments;
+    }
+    public String[][] getAppointmentsById(String orderBy){
+        String[][] appointments = {};
+        try {
+            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
+            ResultSet resultSet = getAppt.executeQuery();
+            for (int i = 1; resultSet.next(); i++){
+                String[] appt = new String[4];
+                appt[0] = getBookName(resultSet.getInt("book_id"));
+                appt[1] = getStudentName(resultSet.getString("student_id"));
+                appt[2] = formatTimestampAsString(resultSet.getTimestamp("appt_date_borrow"));
+                appt[3] = Integer.toString(resultSet.getInt("appt_id"));
+                appointments = Arrays.copyOf(appointments, i);
+                appointments[appointments.length - 1] = appt;
+            }
+            for (int j=0; j < appointments.length; j++){
+                System.out.println(Arrays.toString(appointments[j]));
+            }
+        } catch(SQLException e){
+            Display.sqlError(e.getMessage());
+        }
+        return appointments;
+    }
+    private static String formatTimestampAsString(Timestamp timestamp) {
+        // Use SimpleDateFormat to format the timestamp as a String
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(timestamp);
+    }
+    public boolean deleteAppointment(int appt_id){
+        try {
+            PreparedStatement deleteAppt = conn().prepareStatement("DELETE FROM appointments WHERE appt_id=?");
+            deleteAppt.setInt(1, appt_id);
+            deleteAppt.executeUpdate();
+            Display.apptDeleteSuccess();
+            return true;
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
             return false;
