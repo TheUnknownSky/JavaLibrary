@@ -360,4 +360,22 @@ public class Library extends DBConn {
             return false;
         }
     }
+    public boolean finishAppointment(int appt_id){
+        try {
+            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM appointments WHERE appt_id=?");
+            getAppt.setInt(1, appt_id);
+            ResultSet resultSet = getAppt.executeQuery();
+            resultSet.next();
+            PreparedStatement setFinAppt = conn().prepareStatement("INSERT INTO finished_appointments (book_id, student_id, appt_date_borrow, appt_date_return) VALUES (?, ?, ?, DEFAULT)");
+            setFinAppt.setInt(1, resultSet.getInt("book_id"));
+            setFinAppt.setString(2, resultSet.getString("student_id"));
+            setFinAppt.setTimestamp(3, resultSet.getTimestamp("appt_date_borrow"));
+            setFinAppt.executeUpdate();
+            deleteAppointment(appt_id);
+            return true;
+        } catch (SQLException e){
+            Display.sqlError(e.getMessage());
+            return false;
+        }
+    }
 }

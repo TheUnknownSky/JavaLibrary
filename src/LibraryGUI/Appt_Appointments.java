@@ -148,7 +148,13 @@ public class Appt_Appointments extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void finishApptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finishApptButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            Library lib = new Library();
+            lib.finishAppointment(Integer.parseInt(appointments[apptTable.getSelectedRow()][3]));
+            initApptTable();
+        } catch (Exception e) {
+            Display.noSelectedAppt();
+        }
     }//GEN-LAST:event_finishApptButtonActionPerformed
 
     private void deleteApptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteApptButtonActionPerformed
