@@ -378,4 +378,27 @@ public class Library extends DBConn {
             return false;
         }
     }
+    public String[][] getFinAppointmentsDetails(String orderBy){
+        String[][] appointments = {};
+        try {
+            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM finished_appointments ORDER BY " + orderBy);
+            ResultSet resultSet = getAppt.executeQuery();
+            for (int i = 1; resultSet.next(); i++){
+                String[] appt = new String[5];
+                appt[0] = getBookName(resultSet.getInt("book_id"));
+                appt[1] = getStudentName(resultSet.getString("student_id"));
+                appt[2] = formatTimestampAsString(resultSet.getTimestamp("appt_date_borrow"));
+                appt[3] = formatTimestampAsString(resultSet.getTimestamp("appt_date_return"));
+                appt[4] = Integer.toString(resultSet.getInt("finappt_id"));
+                appointments = Arrays.copyOf(appointments, i);
+                appointments[appointments.length - 1] = appt;
+            }
+            for (int j=0; j < appointments.length; j++){
+                System.out.println(Arrays.toString(appointments[j]));
+            }
+        } catch(SQLException e){
+            Display.sqlError(e.getMessage());
+        }
+        return appointments;
+    }
 }
