@@ -197,6 +197,14 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
+    public static void noSelectedBookTo(String modify){
+        JOptionPane.showMessageDialog(
+            null, 
+            "You did not selected a book to " + modify + ".", 
+            "Invalid Action", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
     public static void apptDeleteSuccess(){
         JOptionPane.showMessageDialog(
             null, 
@@ -204,5 +212,15 @@ public class Display {
             "Update Successful", 
             JOptionPane.INFORMATION_MESSAGE
         );
+    }
+    public static int confirmBookDelete(){
+        int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "Are you sure to delete this book?",
+                "Delete Book", 
+                0,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        return confirm;
     }
 }

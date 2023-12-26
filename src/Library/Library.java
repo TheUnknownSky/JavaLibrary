@@ -6,21 +6,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import Display.Display;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 public class Library extends DBConn {
     public void addGenre(String genre_name){
         try {
-            PreparedStatement checkGenreIfExisting = conn().prepareStatement("SELECT bg_id FROM book_genre WHERE bg_name=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement checkGenreIfExisting = conn.prepareStatement("SELECT bg_id FROM book_genre WHERE bg_name=?");
             checkGenreIfExisting.setString(1, genre_name.toLowerCase());
             ResultSet resultSet = checkGenreIfExisting.executeQuery();
             if (!resultSet.next()){
-                PreparedStatement addGenre = conn().prepareStatement("INSERT INTO book_genre (bg_name) VALUES (?);");
-                addGenre.setString(1, genre_name.toLowerCase());
-                addGenre.executeUpdate();
+                UpdateSQL("INSERT INTO book_genre (bg_name) VALUES (" + genre_name.toLowerCase() + ")");
                 Display.addGenreSuccessful(genre_name);
+                conn.close();
             } else {
+                conn.close();
                 Display.addGenreNotSuccessfu(genre_name);
             } 
         } catch (SQLException e){
@@ -29,12 +32,8 @@ public class Library extends DBConn {
     }
     public void deleteGenre(int genre_id, String genre_name){
         try {
-            PreparedStatement deleteGenre = conn().prepareStatement("DELETE FROM book_genre WHERE bg_id=?");
-            deleteGenre.setInt(1, genre_id);
-            deleteGenre.executeUpdate();
-            PreparedStatement replaceGenre = conn().prepareStatement("UPDATE books SET book_genre=0 WHERE book_genre=?");
-            replaceGenre.setInt(1, genre_id);
-            replaceGenre.executeUpdate();
+            UpdateSQL("DELETE FROM book_genre WHERE bg_id=" + genre_id);
+            UpdateSQL("UPDATE books SET book_genre=0 WHERE book_genre=" + genre_id);
             Display.deleteGenreSuccessful(genre_name);    
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
@@ -42,10 +41,7 @@ public class Library extends DBConn {
     }
     public void registerStudent (String studentNumber, String name){
         try {
-            PreparedStatement regStudent = conn().prepareStatement("INSERT INTO students VALUES (?, ?)");
-            regStudent.setString(1, studentNumber);
-            regStudent.setString(2, name);
-            regStudent.executeUpdate();
+            UpdateSQL("INSERT INTO students VALUES (" + studentNumber + ", " + name + ")");
             Display.studentRegistrationSuccess();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
@@ -53,13 +49,16 @@ public class Library extends DBConn {
     }
     public boolean checkStudentIfExisting(String studentNumber){
         try {
-            PreparedStatement checkStudent = conn().prepareStatement("SELECT * FROM students WHERE student_id=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement checkStudent = conn.prepareStatement("SELECT * FROM students WHERE student_id=?");
             checkStudent.setString(1, studentNumber);
             ResultSet resultSet = checkStudent.executeQuery();
             if(resultSet.next()){
+                conn.close();
                 return true;
             } else {
                 Display.studentDoesNotExist(studentNumber);
+                conn.close();
                 return false;
             }
         } catch (SQLException e){
@@ -69,16 +68,17 @@ public class Library extends DBConn {
     }
     public boolean deleteStudent(String studentNumber){
         try {
-            PreparedStatement checkStudent = conn().prepareStatement("SELECT * FROM students WHERE student_id=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement checkStudent = conn.prepareStatement("SELECT * FROM students WHERE student_id=?");
             checkStudent.setString(1, studentNumber);
             ResultSet resultSet = checkStudent.executeQuery();
             if (checkStudentIfExisting(studentNumber)){
-                PreparedStatement deleteStudent = conn().prepareStatement("DELETE FROM students WHERE student_id=?");
-                deleteStudent.setString(1, resultSet.getString("student_id"));
-                deleteStudent.executeUpdate();
+                UpdateSQL("DELETE FROM students WHERE student_id=" + resultSet.getString("student_id"));
                 Display.deleteStudentSuccessful(studentNumber, resultSet.getString("student_name"));
+                conn.close();
                 return true;
             } else {
+                conn.close();
                 return false;
             }
         } catch (SQLException e){
@@ -88,11 +88,14 @@ public class Library extends DBConn {
     }
     public String getStudentName(String student_id){
         try {
-            PreparedStatement getStuName = conn().prepareStatement("SELECT student_name FROM students WHERE student_id=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement getStuName = conn.prepareStatement("SELECT student_name FROM students WHERE student_id=?");
             getStuName.setString(1, student_id);
             ResultSet resultSet = getStuName.executeQuery();
             resultSet.next();
-            return resultSet.getString("student_name");
+            String student_name = resultSet.getString("student_name");
+            conn.close();
+            return student_name;
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
             return "";
@@ -103,7 +106,8 @@ public class Library extends DBConn {
         String[] genre_names = {};
         String[] genre_ids = {};
         try {
-            PreparedStatement getGenres = conn().prepareStatement("SELECT * FROM book_genre");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement getGenres = conn.prepareStatement("SELECT * FROM book_genre");
             ResultSet resultSet = getGenres.executeQuery();
             int i = 1;
             while (resultSet.next()){
@@ -116,6 +120,7 @@ public class Library extends DBConn {
             }
             genres[0] = genre_ids;
             genres[1] = genre_names;
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
@@ -123,21 +128,20 @@ public class Library extends DBConn {
     }
     public boolean addBook(String title, String author, int genre, int count){
         try {
-            PreparedStatement checkBook = conn().prepareStatement("SELECT book_id FROM books WHERE book_title=? AND book_author=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement checkBook = conn.prepareStatement("SELECT book_id FROM books WHERE book_title=? AND book_author=?");
             checkBook.setString(1, title);
             checkBook.setString(2, author);
             ResultSet resultSet = checkBook.executeQuery();
             if (!resultSet.next()){
-                PreparedStatement addBook = conn().prepareStatement("INSERT INTO books (book_title, book_author, book_genre, book_count) VALUES (?, ?, ?, ?)");
-                addBook.setString(1, title);
-                addBook.setString(2, author);
-                addBook.setInt(3, genre);
-                addBook.setInt(4, count);
-                addBook.executeUpdate();
+                UpdateSQL("INSERT INTO books (book_title, book_author, book_genre, book_count) "
+                        + "VALUES (" + title + ", " + author + ", " + genre + ", " + count + ")");
                 Display.bookAddedSuccessfully(title);
+                conn.close();
                 return true;
             } else {
                 Display.bookAlreadyExists(title);
+                conn.close();
                 return false;
             }
         } catch (SQLException e){
@@ -147,13 +151,12 @@ public class Library extends DBConn {
     }
     public void editBook(int id, String book_title, String book_author, int book_genre, int book_count){
         try {
-            PreparedStatement editBook = conn().prepareStatement("UPDATE books SET book_title=?, book_author=?, book_genre=?, book_count=? WHERE book_id=?");
-            editBook.setString(1, book_title);
-            editBook.setString(2, book_author);
-            editBook.setInt(3, book_genre);
-            editBook.setInt(4, book_count);
-            editBook.setInt(5, id);
-            editBook.executeUpdate();
+            UpdateSQL("UPDATE books SET "
+                    + "book_title=" + book_title + ", "
+                    + "book_author=" + book_author + ", "
+                    + "book_genre=" + book_genre + ", "
+                    + "book_count=" + book_count 
+                    + " WHERE book_id=" + id);
             System.out.println(id + " " + book_title + " " + book_author + " " + book_genre + " " + book_count);
             Display.bookUpdatedSuccessfully(book_title);
         } catch (SQLException e){
@@ -162,17 +165,22 @@ public class Library extends DBConn {
     }
     public String getBookName (int bookId){
         try {
-            PreparedStatement getBookName = conn().prepareStatement("SELECT book_title FROM books WHERE book_id=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement getBookName = conn.prepareStatement("SELECT book_title FROM books WHERE book_id=?");
             getBookName.setInt(1, bookId);
             ResultSet resultSet = getBookName.executeQuery();
             resultSet.next();
             System.out.println(resultSet.getString("book_title"));
-            return resultSet.getString("book_title");
+            String bookName = resultSet.getString("book_title");
+            conn.close();
+            return bookName;
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
             return "";
         }
     }
+    
+    // will remove soon
     public String[][] getBookList(boolean to_borrow){
         String[][] books = new String[2][];
         String[] book_titles = {};
@@ -200,10 +208,50 @@ public class Library extends DBConn {
         }
         return books;
     }
+    public String[][] getBookListForTable(String toSearch){
+        String[][] booklist = {};
+        try {
+            String query;
+            if (!toSearch.isEmpty()){
+                query = "SELECT * FROM books WHERE book_title LIKE '%" + toSearch + "%' OR "
+                        + "book_author LIKE '%" + toSearch + "%' "
+                        + "ORDER BY book_title ASC";
+            } else {
+                query = "SELECT * FROM books ORDER BY book_title ASC";
+            }
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement returnBookList = conn.prepareStatement(query);
+            ResultSet resultSet = returnBookList.executeQuery();
+            for(int i = 1; resultSet.next(); i++){
+                String[] bookDetails = new String[6]; // title, author, genre, count, availability, id
+                bookDetails[0] = resultSet.getString("book_title");
+                bookDetails[1] = resultSet.getString("book_author");
+                ResultSet genre_name = makeQuery("SELECT bg_name FROM book_genre WHERE bg_id=" + resultSet.getInt("book_genre"));
+                genre_name.next();
+                String genre = genre_name.getString("bg_name");
+                bookDetails[2] = genre.substring(0, 1).toUpperCase() + genre.substring(1);
+                bookDetails[3] = Integer.toString(resultSet.getInt("book_count"));
+                if(resultSet.getInt("book_count") > 0){
+                    bookDetails[4] = "Available";
+                } else {
+                    bookDetails[4] = "Unavailable";;
+                }
+                bookDetails[5] = Integer.toString(resultSet.getInt("book_id"));
+                booklist = Arrays.copyOf(booklist, i);
+                booklist[booklist.length - 1] = bookDetails;
+            }
+            conn.close();
+        } catch (SQLException e){
+            Display.sqlError(e.getMessage());
+        }
+        return booklist;
+    }
+    // will remove soon
     public String[] searchBookList(String toSearch){
         String[] book_titles = {};
         try {
-            PreparedStatement searchBooks = conn().prepareStatement("SELECT book_title, book_author, book_count FROM books WHERE book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement searchBooks = conn.prepareStatement("SELECT book_title, book_author, book_count FROM books WHERE book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title");
             ResultSet resultSet = searchBooks.executeQuery();
             for(int i = 1; resultSet.next(); i++){
                 book_titles = Arrays.copyOf(book_titles, i);
@@ -213,6 +261,7 @@ public class Library extends DBConn {
                 }
                 book_titles[book_titles.length - 1] = book_title;
             }
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
@@ -221,7 +270,8 @@ public class Library extends DBConn {
     public String[] getBookDetails(int bookId){
         String[] bookDetails = new String[4];
         try {
-            PreparedStatement getDetails = conn().prepareStatement("SELECT book_title, book_author, book_genre, book_count FROM books WHERE book_id=? ORDER BY book_title");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement getDetails = conn.prepareStatement("SELECT book_title, book_author, book_genre, book_count FROM books WHERE book_id=? ORDER BY book_title");
             getDetails.setInt(1, bookId);
             ResultSet resultSet = getDetails.executeQuery();
             resultSet.next();
@@ -229,6 +279,7 @@ public class Library extends DBConn {
             bookDetails[1] = resultSet.getString("book_author");
             bookDetails[2] = Integer.toString(resultSet.getInt("book_genre"));
             bookDetails[3] = Integer.toString(resultSet.getInt("book_count"));
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
@@ -237,9 +288,7 @@ public class Library extends DBConn {
     public void deleteBook(int book_id, String book_name){
         try {
             // you cant delete book if it has existing appointment
-            PreparedStatement deleteBook = conn().prepareStatement("DELETE FROM books WHERE book_id=?");
-            deleteBook.setInt(1, book_id);
-            deleteBook.executeUpdate();
+            UpdateSQL("DELETE FROM books WHERE book_id=" + book_id);
             Display.deleteBookSuccessful(book_name);
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
@@ -247,13 +296,16 @@ public class Library extends DBConn {
     }
     public boolean checkIfApptExisting(int bookId, String studentId){
         try {
-            PreparedStatement checkAppt = conn().prepareStatement("SELECT appt_id FROM appointments WHERE book_id=? AND student_id=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement checkAppt = conn.prepareStatement("SELECT appt_id FROM appointments WHERE book_id=? AND student_id=?");
             checkAppt.setInt(1, bookId);
             checkAppt.setString(2, studentId);
             ResultSet resultSet = checkAppt.executeQuery();
             if (resultSet.next()){
+                conn.close();
                 return true;
             } else {
+                conn.close();
                 return false;
             }
         } catch (SQLException e){
@@ -263,15 +315,14 @@ public class Library extends DBConn {
     }
     public void reduceBookCount(int bookId){
         try {
-            PreparedStatement getBookCount = conn().prepareStatement("SELECT book_count FROM books WHERE book_id=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement getBookCount = conn.prepareStatement("SELECT book_count FROM books WHERE book_id=?");
             getBookCount.setInt(1, bookId);
             ResultSet resultSet = getBookCount.executeQuery();
             resultSet.next();
             int newBookCount = resultSet.getInt("book_count") - 1;
-            PreparedStatement replaceBookCount = conn().prepareStatement("UPDATE books SET book_count=? WHERE book_id=?");
-            replaceBookCount.setInt(1, newBookCount);
-            replaceBookCount.setInt(2, bookId);
-            replaceBookCount.executeUpdate();
+            UpdateSQL("UPDATE books SET book_count=" + newBookCount + " WHERE book_id=" + bookId);
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
             System.out.println(e.getMessage());
@@ -281,10 +332,8 @@ public class Library extends DBConn {
         try {
             if (checkStudentIfExisting(studentId)){
                 if(!checkIfApptExisting(bookId, studentId)){
-                    PreparedStatement borrowBook = conn().prepareStatement("INSERT INTO appointments (book_id, student_id, appt_date_borrow) VALUES (?, ?, DEFAULT)");
-                    borrowBook.setInt(1, bookId);
-                    borrowBook.setString(2, studentId);
-                    borrowBook.executeUpdate();
+                    UpdateSQL("INSERT INTO appointments (book_id, student_id, appt_date_borrow) "
+                            + "VALUES (" + bookId + ", " + studentId + ", DEFAULT)");
                     reduceBookCount(bookId);
                     return true;
                 } else {
@@ -302,7 +351,8 @@ public class Library extends DBConn {
     public String[][] getAppointmentsDetails(String orderBy){
         String[][] appointments = {};
         try {
-            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password); 
+            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
             ResultSet resultSet = getAppt.executeQuery();
             for (int i = 1; resultSet.next(); i++){
                 String[] appt = new String[4];
@@ -313,9 +363,10 @@ public class Library extends DBConn {
                 appointments = Arrays.copyOf(appointments, i);
                 appointments[appointments.length - 1] = appt;
             }
-            for (int j=0; j < appointments.length; j++){
+            /* for (int j=0; j < appointments.length; j++){
                 System.out.println(Arrays.toString(appointments[j]));
-            }
+            } */
+            conn.close();
         } catch(SQLException e){
             Display.sqlError(e.getMessage());
         }
@@ -324,7 +375,8 @@ public class Library extends DBConn {
     public String[][] getAppointmentsById(String orderBy){
         String[][] appointments = {};
         try {
-            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password);  
+            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
             ResultSet resultSet = getAppt.executeQuery();
             for (int i = 1; resultSet.next(); i++){
                 String[] appt = new String[4];
@@ -335,9 +387,10 @@ public class Library extends DBConn {
                 appointments = Arrays.copyOf(appointments, i);
                 appointments[appointments.length - 1] = appt;
             }
-            for (int j=0; j < appointments.length; j++){
+            /* for (int j=0; j < appointments.length; j++){
                 System.out.println(Arrays.toString(appointments[j]));
-            }
+            } */
+            conn.close();
         } catch(SQLException e){
             Display.sqlError(e.getMessage());
         }
@@ -350,9 +403,7 @@ public class Library extends DBConn {
     }
     public boolean deleteAppointment(int appt_id){
         try {
-            PreparedStatement deleteAppt = conn().prepareStatement("DELETE FROM appointments WHERE appt_id=?");
-            deleteAppt.setInt(1, appt_id);
-            deleteAppt.executeUpdate();
+            UpdateSQL("DELETE FROM appointments WHERE appt_id=" + appt_id);
             Display.apptDeleteSuccess();
             return true;
         } catch (SQLException e){
@@ -362,16 +413,19 @@ public class Library extends DBConn {
     }
     public boolean finishAppointment(int appt_id){
         try {
-            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM appointments WHERE appt_id=?");
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password);  
+            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM appointments WHERE appt_id=?");
             getAppt.setInt(1, appt_id);
             ResultSet resultSet = getAppt.executeQuery();
             resultSet.next();
             PreparedStatement setFinAppt = conn().prepareStatement("INSERT INTO finished_appointments (book_id, student_id, appt_date_borrow, appt_date_return) VALUES (?, ?, ?, DEFAULT)");
-            setFinAppt.setInt(1, resultSet.getInt("book_id"));
-            setFinAppt.setString(2, resultSet.getString("student_id"));
-            setFinAppt.setTimestamp(3, resultSet.getTimestamp("appt_date_borrow"));
-            setFinAppt.executeUpdate();
+            int book_id = resultSet.getInt("book_id");
+            String student_id = resultSet.getString("student_id");
+            Timestamp appt_date_borrow = resultSet.getTimestamp("appt_date_borrow");
+            UpdateSQL("INSERT INTO finished_appointments (book_id, student_id, appt_date_borrow, appt_date_return) VALUES "
+                    + "(" + book_id + ", " + student_id + ", " + appt_date_borrow + ", DEFAULT)");
             deleteAppointment(appt_id);
+            conn.close();
             return true;
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
@@ -381,7 +435,8 @@ public class Library extends DBConn {
     public String[][] getFinAppointmentsDetails(String orderBy){
         String[][] appointments = {};
         try {
-            PreparedStatement getAppt = conn().prepareStatement("SELECT * FROM finished_appointments ORDER BY " + orderBy);
+            Connection conn = DriverManager.getConnection(this.url, this.user, this.password);  
+            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM finished_appointments ORDER BY " + orderBy);
             ResultSet resultSet = getAppt.executeQuery();
             for (int i = 1; resultSet.next(); i++){
                 String[] appt = new String[5];
@@ -396,6 +451,7 @@ public class Library extends DBConn {
             for (int j=0; j < appointments.length; j++){
                 System.out.println(Arrays.toString(appointments[j]));
             }
+            conn.close();
         } catch(SQLException e){
             Display.sqlError(e.getMessage());
         }

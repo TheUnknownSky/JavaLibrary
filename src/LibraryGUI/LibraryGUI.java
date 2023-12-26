@@ -2,10 +2,12 @@ package LibraryGUI;
 
 import Account.Account;
 import Library.Library;
+import Display.Display;
 
 public class LibraryGUI extends javax.swing.JFrame {
     private int libacct_id = 1; // must be set with no value in actual use
     private String[] bookList;
+    private String[][] bookTable;
     /**
      * Creates new form LibraryGUI
      */
@@ -17,13 +19,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         Library lib = new Library();
         String[] name = acct.getAccountName(libacct_id);
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
-        this.bookList = lib.searchBookList("");
-        listOfBooks.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = bookList;
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(listOfBooks);
+        initBookTable("");
     }
     // gui initializer for actual use (to be access from LoginGUI.java
     public LibraryGUI(int id){
@@ -33,15 +29,20 @@ public class LibraryGUI extends javax.swing.JFrame {
         Library lib = new Library();
         String[] name = acct.getAccountName(id);
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
-        this.bookList = lib.searchBookList("");
-        listOfBooks.setModel(new javax.swing.AbstractListModel<String>() {
-            
-            String[] strings = bookList;
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(listOfBooks);
+        initBookTable("");
     }
+    public void initBookTable(String toSearch){
+        Library lib = new Library();
+        bookTable = lib.getBookListForTable(toSearch);
+        tableOfBooks.setModel(new javax.swing.table.DefaultTableModel(
+            bookTable,
+            new String [] {
+                "Book", "Author", "Genre", "Quantity", "Availability"
+            }
+        ));
+        jScrollPane3.setViewportView(tableOfBooks);
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,8 +56,8 @@ public class LibraryGUI extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        listOfBooks = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableOfBooks = new javax.swing.JTable();
         refreshLibrary = new javax.swing.JButton();
         borrowBook = new javax.swing.JButton();
         appointmentsButton = new javax.swing.JButton();
@@ -64,6 +65,9 @@ public class LibraryGUI extends javax.swing.JFrame {
         restartLibrary = new javax.swing.JButton();
         searchBook = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
+        editBookButton = new javax.swing.JButton();
+        deleteBookButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         accountMenu = new javax.swing.JMenu();
         changeName = new javax.swing.JMenuItem();
@@ -83,34 +87,41 @@ public class LibraryGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Library Management System - Books");
 
-        jPanel3.setBackground(new java.awt.Color(75, 75, 75));
+        jPanel3.setBackground(new java.awt.Color(217, 217, 217));
 
-        listOfBooks.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(listOfBooks);
+        jScrollPane3.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+
+        tableOfBooks.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        tableOfBooks.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Book", "Author", "Genre", "Quantity", "Availability"
+            }
+        ));
+        jScrollPane3.setViewportView(tableOfBooks);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 670, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel1);
 
+        refreshLibrary.setBackground(new java.awt.Color(60, 110, 113));
+        refreshLibrary.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        refreshLibrary.setForeground(new java.awt.Color(255, 255, 255));
         refreshLibrary.setText("Refresh");
         refreshLibrary.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +129,9 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
 
+        borrowBook.setBackground(new java.awt.Color(60, 110, 113));
+        borrowBook.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        borrowBook.setForeground(new java.awt.Color(255, 255, 255));
         borrowBook.setText("Borrow Book");
         borrowBook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +139,9 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
 
+        appointmentsButton.setBackground(new java.awt.Color(60, 110, 113));
+        appointmentsButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        appointmentsButton.setForeground(new java.awt.Color(255, 255, 255));
         appointmentsButton.setText("Appointments");
         appointmentsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,10 +149,13 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
 
-        currentUser.setFont(new java.awt.Font("Bookman Old Style", 1, 18)); // NOI18N
-        currentUser.setForeground(new java.awt.Color(255, 255, 255));
+        currentUser.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
+        currentUser.setForeground(new java.awt.Color(0, 0, 0));
         currentUser.setText("Current Library Admin: ");
 
+        restartLibrary.setBackground(new java.awt.Color(60, 110, 113));
+        restartLibrary.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        restartLibrary.setForeground(new java.awt.Color(255, 255, 255));
         restartLibrary.setText("Restart Library");
         restartLibrary.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,12 +163,40 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
 
+        searchBook.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+
+        searchButton.setBackground(new java.awt.Color(60, 110, 113));
+        searchButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        searchButton.setForeground(new java.awt.Color(255, 255, 255));
         searchButton.setText("Search");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchButtonActionPerformed(evt);
             }
         });
+
+        editBookButton.setBackground(new java.awt.Color(60, 110, 113));
+        editBookButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        editBookButton.setForeground(new java.awt.Color(255, 255, 255));
+        editBookButton.setText("Edit Book");
+        editBookButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBookButtonActionPerformed(evt);
+            }
+        });
+
+        deleteBookButton.setBackground(new java.awt.Color(60, 110, 113));
+        deleteBookButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        deleteBookButton.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBookButton.setText("Delete Book");
+        deleteBookButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBookButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Book Operations:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -158,24 +206,27 @@ public class LibraryGUI extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(currentUser)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(64, 64, 64)
+                                .addGap(54, 54, 54)
+                                .addComponent(searchBook, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(53, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(searchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(borrowBook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(refreshLibrary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(appointmentsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(restartLibrary))
-                                .addContainerGap(64, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(searchBook, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37))))))
+                                    .addComponent(restartLibrary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(editBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(deleteBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(80, 80, 80))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(currentUser)
+                        .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,24 +235,32 @@ public class LibraryGUI extends javax.swing.JFrame {
                 .addComponent(currentUser, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(searchBook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchButton)
-                        .addGap(36, 36, 36)
-                        .addComponent(refreshLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(borrowBook, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(refreshLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(appointmentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(restartLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(borrowBook, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69)
+                        .addComponent(appointmentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(restartLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         accountMenu.setText("Account");
+        accountMenu.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
 
+        changeName.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         changeName.setText("Change Name");
         changeName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,6 +269,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         accountMenu.add(changeName);
 
+        changeEmail.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         changeEmail.setText("Change Email");
         changeEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -218,6 +278,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         accountMenu.add(changeEmail);
 
+        changePassword.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         changePassword.setText("Change Password");
         changePassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,6 +287,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         accountMenu.add(changePassword);
 
+        logOut.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         logOut.setText("Log Out");
         logOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,7 +299,9 @@ public class LibraryGUI extends javax.swing.JFrame {
         jMenuBar1.add(accountMenu);
 
         booksMenu.setText("Books");
+        booksMenu.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
 
+        addGenre.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         addGenre.setText("Add Genre");
         addGenre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -246,6 +310,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         booksMenu.add(addGenre);
 
+        deleteGenre.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         deleteGenre.setText("Delete Genre");
         deleteGenre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -254,6 +319,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         booksMenu.add(deleteGenre);
 
+        addBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         addBook.setText("Add Book");
         addBook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -262,6 +328,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         booksMenu.add(addBook);
 
+        editBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         editBook.setText("Edit Book");
         editBook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -270,6 +337,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         booksMenu.add(editBook);
 
+        deleteBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         deleteBook.setText("Delete Book");
         deleteBook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -281,7 +349,9 @@ public class LibraryGUI extends javax.swing.JFrame {
         jMenuBar1.add(booksMenu);
 
         studentMenu.setText("Student");
+        studentMenu.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
 
+        registerStudent.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         registerStudent.setText("Register Student");
         registerStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -290,6 +360,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         });
         studentMenu.add(registerStudent);
 
+        deleteStudent.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
         deleteStudent.setText("Delete Student");
         deleteStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -318,7 +389,7 @@ public class LibraryGUI extends javax.swing.JFrame {
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
         super.dispose();
-        new LoginGUI().setVisible(true);
+        new LoginGUI1().setVisible(true);
     }//GEN-LAST:event_logOutActionPerformed
 
     private void addGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreActionPerformed
@@ -368,25 +439,13 @@ public class LibraryGUI extends javax.swing.JFrame {
 
     private void refreshLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshLibraryActionPerformed
         Library lib = new Library();
-        this.bookList = lib.searchBookList("");
-        listOfBooks.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = bookList;
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         searchBook.setText("");
-        jScrollPane2.setViewportView(listOfBooks);
+        initBookTable("");
     }//GEN-LAST:event_refreshLibraryActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         Library lib = new Library();
-        this.bookList = lib.searchBookList(searchBook.getText());
-        listOfBooks.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = bookList;
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(listOfBooks);
+        initBookTable(searchBook.getText());
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void borrowBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowBookActionPerformed
@@ -396,6 +455,30 @@ public class LibraryGUI extends javax.swing.JFrame {
     private void appointmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsButtonActionPerformed
         new Appt_Appointments().setVisible(true);
     }//GEN-LAST:event_appointmentsButtonActionPerformed
+
+    private void editBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBookButtonActionPerformed
+        try {
+            int index = tableOfBooks.getSelectedRow();
+            new Books_EditBookGUI(Integer.parseInt(bookTable[index][5])).setVisible(true);
+        } catch (Exception e){
+            Display.noSelectedBookTo("edit");
+        }
+    }//GEN-LAST:event_editBookButtonActionPerformed
+
+    private void deleteBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBookButtonActionPerformed
+        try {
+            int index = tableOfBooks.getSelectedRow();
+            if(Display.confirmBookDelete() == 0){
+                Library lib = new Library();
+                int bookId = Integer.parseInt(bookTable[index][5]);
+                String book_name = bookTable[index][0];
+                System.out.println(bookId + " " + book_name);
+                lib.deleteBook(bookId, book_name);
+            }
+        } catch (Exception e){
+            Display.noSelectedBookTo("delete");
+        }
+    }//GEN-LAST:event_deleteBookButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -445,15 +528,17 @@ public class LibraryGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem changePassword;
     private javax.swing.JLabel currentUser;
     private javax.swing.JMenuItem deleteBook;
+    private javax.swing.JButton deleteBookButton;
     private javax.swing.JMenuItem deleteGenre;
     private javax.swing.JMenuItem deleteStudent;
     private javax.swing.JMenuItem editBook;
+    private javax.swing.JButton editBookButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList<String> listOfBooks;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JMenuItem logOut;
     private javax.swing.JButton refreshLibrary;
     private javax.swing.JMenuItem registerStudent;
@@ -461,5 +546,6 @@ public class LibraryGUI extends javax.swing.JFrame {
     private javax.swing.JTextField searchBook;
     private javax.swing.JButton searchButton;
     private javax.swing.JMenu studentMenu;
+    private javax.swing.JTable tableOfBooks;
     // End of variables declaration//GEN-END:variables
 }

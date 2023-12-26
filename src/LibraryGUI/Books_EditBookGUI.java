@@ -13,12 +13,22 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
      */
     public Books_EditBookGUI() {
         initComponents();
+    }
+    public Books_EditBookGUI(int book_id){
+        initComponents();
+        initDetailsToEdit(book_id);
+    }
+    public void initDetailsToEdit(int book_id){
         Library lib = new Library();
-        this.books = lib.getBookList(false);
-        bookToEdit.setModel(new javax.swing.DefaultComboBoxModel<>(this.books[1]));
+        this.bookId = book_id;
+        this.bookDetails = lib.getBookDetails(this.bookId);
         this.genres = lib.getBookGenres();
         bookGenre.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
-        editBookButton.setEnabled(false);
+        bookName.setText(this.bookDetails[0]);
+        bookAuthor.setText(this.bookDetails[1]);
+        int index = findIndex(genres[0], bookDetails[2]); 
+        bookGenre.setSelectedIndex(index);
+        bookCount.setText(bookDetails[3]);
     }
 
     /**
@@ -40,9 +50,6 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         bookCount = new javax.swing.JTextField();
         editBookButton = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        bookToEdit = new javax.swing.JComboBox<>();
-        selectBookButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -69,18 +76,6 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Select Book:");
-
-        bookToEdit.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        selectBookButton.setText("Select Book");
-        selectBookButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectBookButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -101,34 +96,19 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(bookCount, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel1))
+                        .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(bookName, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(bookToEdit, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(bookName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(55, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(editBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(204, 204, 204))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(selectBookButton)
-                        .addGap(203, 203, 203))))
+                .addComponent(editBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(204, 204, 204))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bookToEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addComponent(selectBookButton)
-                .addGap(37, 37, 37)
+                .addGap(140, 140, 140)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(bookName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -168,19 +148,6 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
         lib.editBook(bookId, bookName.getText(), bookAuthor.getText(), genreId, Integer.parseInt(bookCount.getText()));
         super.dispose();
     }//GEN-LAST:event_editBookButtonActionPerformed
-
-    private void selectBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBookButtonActionPerformed
-        Library lib = new Library();
-        int bookIndex = bookToEdit.getSelectedIndex();
-        this.bookId = Integer.parseInt(books[0][bookIndex]);
-        this.bookDetails = lib.getBookDetails(this.bookId);
-        bookName.setText(this.bookDetails[0]);
-        bookAuthor.setText(this.bookDetails[1]);
-        int index = findIndex(genres[0], bookDetails[2]); 
-        bookGenre.setSelectedIndex(index);
-        bookCount.setText(bookDetails[3]);
-        editBookButton.setEnabled(true);
-    }//GEN-LAST:event_selectBookButtonActionPerformed
 
     private int findIndex(String[] array, String targetValue){
         for (int i = 0; i < array.length; i++){
@@ -230,14 +197,11 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
     private javax.swing.JTextField bookCount;
     private javax.swing.JComboBox<String> bookGenre;
     private javax.swing.JTextField bookName;
-    private javax.swing.JComboBox<String> bookToEdit;
     private javax.swing.JButton editBookButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JButton selectBookButton;
     // End of variables declaration//GEN-END:variables
 }
