@@ -135,7 +135,7 @@ public class Library extends DBConn {
             ResultSet resultSet = checkBook.executeQuery();
             if (!resultSet.next()){
                 UpdateSQL("INSERT INTO books (book_title, book_author, book_genre, book_count) "
-                        + "VALUES (" + title + ", " + author + ", " + genre + ", " + count + ")");
+                        + "VALUES ('" + title + "', '" + author + "', " + genre + ", " + count + ")");
                 Display.bookAddedSuccessfully(title);
                 conn.close();
                 return true;
@@ -152,8 +152,8 @@ public class Library extends DBConn {
     public void editBook(int id, String book_title, String book_author, int book_genre, int book_count){
         try {
             UpdateSQL("UPDATE books SET "
-                    + "book_title=" + book_title + ", "
-                    + "book_author=" + book_author + ", "
+                    + "book_title='" + book_title + "', "
+                    + "book_author='" + book_author + "', "
                     + "book_genre=" + book_genre + ", "
                     + "book_count=" + book_count 
                     + " WHERE book_id=" + id);

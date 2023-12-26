@@ -29,12 +29,17 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
         genreToDelete = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(75, 75, 75));
+        jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Delete Genre:");
 
+        deleteGenreButton.setBackground(new java.awt.Color(60, 110, 113));
+        deleteGenreButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        deleteGenreButton.setForeground(new java.awt.Color(255, 255, 255));
         deleteGenreButton.setText("Delete Genre");
         deleteGenreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -42,6 +47,7 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
             }
         });
 
+        genreToDelete.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -62,11 +68,11 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(deleteGenreButton)
                 .addContainerGap(40, Short.MAX_VALUE))
         );

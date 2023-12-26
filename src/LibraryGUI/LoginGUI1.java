@@ -34,6 +34,7 @@ public class LoginGUI1 extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -54,7 +55,7 @@ public class LoginGUI1 extends javax.swing.JFrame {
         loginButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
         loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Login");
-        loginButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        loginButton.setBorder(null);
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
@@ -65,7 +66,7 @@ public class LoginGUI1 extends javax.swing.JFrame {
         registerButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
         registerButton.setForeground(new java.awt.Color(255, 255, 255));
         registerButton.setText("Register");
-        registerButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        registerButton.setBorder(null);
         registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registerButtonActionPerformed(evt);

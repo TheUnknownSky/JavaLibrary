@@ -47,6 +47,7 @@ public class RegistrationGUI1 extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Account Registration");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -196,7 +197,7 @@ public class RegistrationGUI1 extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 24)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Java App for");
+        jLabel11.setText("Java Application for");
 
         jLabel12.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 24)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -283,7 +284,7 @@ public class RegistrationGUI1 extends javax.swing.JFrame {
                 super.dispose();
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        new LoginGUI().setVisible(true);
+                        new LoginGUI1().setVisible(true);
                     }
                 });
             }
