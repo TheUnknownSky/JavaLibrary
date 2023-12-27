@@ -98,9 +98,9 @@ public class RegistrationGUI extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(53, 53, 53));
         jLabel1.setText("Already have an account? Click this: ");
 
-        loginExistingAcct.setBackground(new java.awt.Color(40, 75, 99));
+        loginExistingAcct.setBackground(new java.awt.Color(56, 193, 114));
         loginExistingAcct.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
-        loginExistingAcct.setForeground(new java.awt.Color(255, 255, 255));
+        loginExistingAcct.setForeground(new java.awt.Color(51, 51, 51));
         loginExistingAcct.setText("Login");
         loginExistingAcct.setBorder(null);
         loginExistingAcct.addActionListener(new java.awt.event.ActionListener() {
@@ -185,29 +185,29 @@ public class RegistrationGUI extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 36)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Library");
+        jLabel8.setText("LIBRARY");
 
         jLabel9.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 36)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Management");
+        jLabel9.setText("MANAGEMENT");
 
         jLabel10.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 36)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("System");
+        jLabel10.setText("SYSTEM");
 
-        jLabel11.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 24)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Yu Gothic UI", 0, 24)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Java Application for");
 
-        jLabel12.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 24)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Yu Gothic UI", 0, 24)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Library Keeping");
 
-        jLabel13.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Made by:");
 
-        jLabel14.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Vonn Harold Mamaril (BSCS-21M1)");
 
@@ -225,7 +225,7 @@ public class RegistrationGUI extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(jLabel10)
                     .addComponent(jLabel14))
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,7 +254,8 @@ public class RegistrationGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

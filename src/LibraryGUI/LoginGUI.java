@@ -62,9 +62,9 @@ public class LoginGUI extends javax.swing.JFrame {
             }
         });
 
-        registerButton.setBackground(new java.awt.Color(40, 75, 99));
+        registerButton.setBackground(new java.awt.Color(56, 193, 114));
         registerButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
-        registerButton.setForeground(new java.awt.Color(255, 255, 255));
+        registerButton.setForeground(new java.awt.Color(51, 51, 51));
         registerButton.setText("Register");
         registerButton.setBorder(null);
         registerButton.addActionListener(new java.awt.event.ActionListener() {
