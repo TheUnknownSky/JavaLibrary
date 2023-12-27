@@ -231,4 +231,12 @@ public class Display {
             JOptionPane.ERROR_MESSAGE
         );
     }
+    public static void bookExistsInAppt(){
+        JOptionPane.showMessageDialog(
+            null, 
+            "This book is currently borrowed", 
+            "Book cannot be deleted", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
 }

@@ -186,7 +186,6 @@ public class Library extends DBConn {
             editBook.setInt(4, book_count);
             editBook.setInt(5, id);
             editBook.executeUpdate();
-            System.out.println(id + " " + book_title + " " + book_author + " " + book_genre + " " + book_count);
             Display.bookUpdatedSuccessfully(book_title);
             conn.close();
         } catch (SQLException e){
@@ -200,7 +199,6 @@ public class Library extends DBConn {
             getBookName.setInt(1, bookId);
             ResultSet resultSet = getBookName.executeQuery();
             resultSet.next();
-            System.out.println(resultSet.getString("book_title"));
             String bookName = resultSet.getString("book_title");
             conn.close();
             return bookName;
@@ -271,10 +269,17 @@ public class Library extends DBConn {
         try {
             // you cant delete book if it has existing appointment
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement deleteBook = conn.prepareStatement("DELETE FROM books WHERE book_id=?");
-            deleteBook.setInt(1, book_id);
-            deleteBook.executeUpdate();
-            Display.deleteBookSuccessful(book_name);
+            PreparedStatement checkBookInAppt = conn.prepareStatement("SELECT book_id FROM appointments WHERE book_id=?");
+            checkBookInAppt.setInt(1, book_id);
+            ResultSet result = checkBookInAppt.executeQuery();
+            if(!result.next()){
+                PreparedStatement deleteBook = conn.prepareStatement("DELETE FROM books WHERE book_id=?");
+                deleteBook.setInt(1, book_id);
+                deleteBook.executeUpdate();
+                Display.deleteBookSuccessful(book_name);
+            } else {
+                Display.bookExistsInAppt();
+            }
             conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
@@ -314,7 +319,6 @@ public class Library extends DBConn {
             conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
-            System.out.println(e.getMessage());
         }
     }
     public void addBookCount(int bookId){
@@ -332,7 +336,6 @@ public class Library extends DBConn {
             conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
-            System.out.println(e.getMessage());
         }
     }
     public boolean borrowBook(int bookId, String studentId){
@@ -374,9 +377,6 @@ public class Library extends DBConn {
                 appointments = Arrays.copyOf(appointments, i);
                 appointments[appointments.length - 1] = appt;
             }
-            /* for (int j=0; j < appointments.length; j++){
-                System.out.println(Arrays.toString(appointments[j]));
-            } */
             conn.close();
         } catch(SQLException e){
             Display.sqlError(e.getMessage());

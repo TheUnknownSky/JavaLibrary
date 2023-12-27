@@ -24,7 +24,7 @@ public class Appt_Appointments extends javax.swing.JFrame {
         apptTable.setModel(new javax.swing.table.DefaultTableModel(
             appointments,
             new String [] {
-                "Borrower", "Book", "Date & Time Borrowed"
+                "Book", "Borrower", "Date & Time Borrowed"
             }
         ) {
             Class[] types = new Class [] {
@@ -69,14 +69,14 @@ public class Appt_Appointments extends javax.swing.JFrame {
                 {"2020-54321", "C++", "2023-12-23 13:15:15"}
             },
             new String [] {
-                "Borrower", "Book", "Date & Time Borrowed"
+                "Book", "Borrower", "Date & Time Borrowed"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

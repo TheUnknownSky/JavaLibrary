@@ -24,7 +24,7 @@ public class Appt_Records extends javax.swing.JFrame {
         finApptTable.setModel(new javax.swing.table.DefaultTableModel(
             finAppointments,
             new String [] {
-                "Borrower", "Book", "Date & Time Borrowed", "Date & Time Returned"
+                "Book", "Borrower", "Date & Time Borrowed", "Date & Time Returned"
             }
         ));
         jScrollPane2.setViewportView(finApptTable);
@@ -59,7 +59,7 @@ public class Appt_Records extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Borrower", "Book", "Date & Time Borrowed", "Date & Time Returned"
+                "Book", "Borrower", "Date & Time Borrowed", "Date & Time Returned"
             }
         ) {
             boolean[] canEdit = new boolean [] {
