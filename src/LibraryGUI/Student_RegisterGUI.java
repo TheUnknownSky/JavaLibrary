@@ -41,7 +41,7 @@ public class Student_RegisterGUI extends javax.swing.JFrame {
         year.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("-");
 
         number.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N

@@ -1,7 +1,6 @@
 package LibraryGUI;
 
 import Library.Library;
-import java.util.Arrays;
 
 public class Books_EditBookGUI extends javax.swing.JFrame {
     private String[][] books;

@@ -223,4 +223,12 @@ public class Display {
         );
         return confirm;
     }
+    public static void studentAlreadyExists(String student_id){
+        JOptionPane.showMessageDialog(
+            null, 
+            "Student '" + student_id + "' already exists", 
+            "Insufficient Details", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
 }

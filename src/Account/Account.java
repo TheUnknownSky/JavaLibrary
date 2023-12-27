@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import Display.Display;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class Account extends DBConn{
     private String firstname;
@@ -14,11 +16,12 @@ public class Account extends DBConn{
 
     private boolean registerAcctToDB(){
         try {
-            PreparedStatement checkEmailIfExisting = conn().prepareStatement("SELECT libacct_email FROM lib_accounts WHERE libacct_email=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement checkEmailIfExisting = conn.prepareStatement("SELECT libacct_email FROM lib_accounts WHERE libacct_email=?");
             checkEmailIfExisting.setString(1, this.email);
             ResultSet resultSet = checkEmailIfExisting.executeQuery();
             if(!resultSet.next()){
-                PreparedStatement insertDetails = conn().prepareStatement(
+                PreparedStatement insertDetails = conn.prepareStatement(
                     "INSERT INTO lib_accounts (libacct_fname, libacct_lname, libacct_email, libacct_pword) VALUES (?,?,?,?)"
                 );
                 insertDetails.setString(1, this.firstname);
@@ -26,6 +29,7 @@ public class Account extends DBConn{
                 insertDetails.setString(3,this.email);
                 insertDetails.setString(4, this.password);
                 insertDetails.executeUpdate();
+                conn.close();
                 return true;
             } else {
                 Display.accountAlreadyExists();
@@ -57,11 +61,14 @@ public class Account extends DBConn{
     
     private boolean checkForAcctFromDB(String email, String password){
         try { 
-            PreparedStatement checkAcct = conn().prepareStatement("SELECT libacct_email, libacct_pword FROM lib_accounts WHERE libacct_email=? AND libacct_pword=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement checkAcct = conn.prepareStatement("SELECT libacct_email, libacct_pword FROM lib_accounts WHERE libacct_email=? AND libacct_pword=?");
             checkAcct.setString(1, email);
             checkAcct.setString(2, password);
             ResultSet resultSet = checkAcct.executeQuery();
-            return resultSet.next();
+            boolean result = resultSet.next();
+            conn.close();
+            return result;
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
             return false;
@@ -80,28 +87,34 @@ public class Account extends DBConn{
     
     public int returnLibacctIdOf (String email){
         try {
-            PreparedStatement getAcctId = conn().prepareStatement("SELECT libacct_id FROM lib_accounts WHERE libacct_email=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement getAcctId = conn.prepareStatement("SELECT libacct_id FROM lib_accounts WHERE libacct_email=?");
             getAcctId.setString(1, email);
             ResultSet resultSet = getAcctId.executeQuery();
             if(resultSet.next()){
-                return resultSet.getInt("libacct_id");
-            }    
+                int id = resultSet.getInt("libacct_id");
+                conn.close();
+                return id;
+            } 
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
         // return lib acct id of the email
-        return 69;
+        return 0;
     }
     
     public String[] getAccountName (int id){
         String[] acct_name = {};
         try {
-            PreparedStatement getAcctName = conn().prepareStatement("SELECT libacct_fname, libacct_lname FROM lib_accounts WHERE libacct_id = ?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement getAcctName = conn.prepareStatement("SELECT libacct_fname, libacct_lname FROM lib_accounts WHERE libacct_id = ?");
             getAcctName.setInt(1, id);
             ResultSet resultSet = getAcctName.executeQuery();
             if(resultSet.next()){
                 acct_name = new String[]{resultSet.getString("libacct_fname"), resultSet.getString("libacct_lname")};
             }
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
@@ -110,11 +123,13 @@ public class Account extends DBConn{
     public String getEmail (int id){
         String acct_email = "";
         try {
-            PreparedStatement getEmail = conn().prepareStatement("SELECT libacct_email FROM lib_accounts WHERE libacct_id=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement getEmail = conn.prepareStatement("SELECT libacct_email FROM lib_accounts WHERE libacct_id=?");
             getEmail.setInt(1, id);
             ResultSet resultSet = getEmail.executeQuery();
             resultSet.next();
             acct_email = resultSet.getString("libacct_email");
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
@@ -122,45 +137,54 @@ public class Account extends DBConn{
     }
     public void editName(int id, String firstName, String lastName){
         try {
-            PreparedStatement editName = conn().prepareStatement("UPDATE lib_accounts SET libacct_fname=?, libacct_lname=? WHERE libacct_id=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement editName = conn.prepareStatement("UPDATE lib_accounts SET libacct_fname=?, libacct_lname=? WHERE libacct_id=?");
             editName.setString(1, firstName);
             editName.setString(2, lastName);
             editName.setInt(3, id);
             editName.executeUpdate();
             Display.updateSuccessfulOf("name");
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
     }
     public void editEmail(int id, String email){
         try {
-            PreparedStatement editEmail = conn().prepareStatement("UPDATE lib_accounts SET libacct_email=? WHERE libacct_id=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement editEmail = conn.prepareStatement("UPDATE lib_accounts SET libacct_email=? WHERE libacct_id=?");
             editEmail.setString(1, email);
             editEmail.setInt(2, id);
             editEmail.executeUpdate();
             Display.updateSuccessfulOf("email");
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
     }
     public void editPassword(int id, String password){
         try {
-            PreparedStatement editPassword = conn().prepareStatement("UPDATE lib_accounts SET libacct_pword=? WHERE libacct_id=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement editPassword = conn.prepareStatement("UPDATE lib_accounts SET libacct_pword=? WHERE libacct_id=?");
             editPassword.setString(1, password);
             editPassword.setInt(2, id);
             editPassword.executeUpdate();
             Display.updateSuccessfulOf("password");
+            conn.close();
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
         }
     }
     public boolean checkPassword(int id, String password){
         try {
-            PreparedStatement checkPassword = conn().prepareStatement("SELECT libacct_pword FROM lib_accounts WHERE libacct_id=?");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement checkPassword = conn.prepareStatement("SELECT libacct_pword FROM lib_accounts WHERE libacct_id=?");
             checkPassword.setInt(1, id);
             ResultSet resultSet = checkPassword.executeQuery();
             resultSet.next();
-            return resultSet.getString("libacct_pword").equals(password);
+            boolean check = resultSet.getString("libacct_pword").equals(password);
+            conn.close();
+            return check;
         } catch (SQLException e){
             Display.sqlError(e.getMessage());
             return false;

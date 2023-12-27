@@ -5,10 +5,16 @@ import Display.Display;
 
 public class Appt_Appointments extends javax.swing.JFrame {
     private String[][] appointments;
+    private int id;
     /**
      * Creates new form Appt_Appointments
      */
     public Appt_Appointments() {
+        initComponents();
+        initApptTable();
+    }
+    public Appt_Appointments(int id) {
+        this.id = id;
         initComponents();
         initApptTable();
     }
@@ -48,11 +54,15 @@ public class Appt_Appointments extends javax.swing.JFrame {
         finishApptButton = new javax.swing.JButton();
         deleteApptButton = new javax.swing.JButton();
         recordsButton = new javax.swing.JButton();
+        libButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Appointments");
+        setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(75, 75, 75));
+        jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
+        apptTable.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         apptTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"2020-54321", "Slime", "2023-12-23 13:11:11"},
@@ -65,12 +75,24 @@ public class Appt_Appointments extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, true, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane3.setViewportView(apptTable);
+        if (apptTable.getColumnModel().getColumnCount() > 0) {
+            apptTable.getColumnModel().getColumn(0).setResizable(false);
+            apptTable.getColumnModel().getColumn(1).setResizable(false);
+            apptTable.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -78,22 +100,22 @@ public class Appt_Appointments extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 461, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
-                    .addContainerGap()))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 439, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 6, Short.MAX_VALUE)))
         );
 
         jScrollPane1.setViewportView(jPanel2);
 
+        finishApptButton.setBackground(new java.awt.Color(60, 110, 113));
+        finishApptButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        finishApptButton.setForeground(new java.awt.Color(255, 255, 255));
         finishApptButton.setText("Finish");
         finishApptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,6 +123,9 @@ public class Appt_Appointments extends javax.swing.JFrame {
             }
         });
 
+        deleteApptButton.setBackground(new java.awt.Color(60, 110, 113));
+        deleteApptButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        deleteApptButton.setForeground(new java.awt.Color(255, 255, 255));
         deleteApptButton.setText("Delete");
         deleteApptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,10 +133,23 @@ public class Appt_Appointments extends javax.swing.JFrame {
             }
         });
 
+        recordsButton.setBackground(new java.awt.Color(60, 110, 113));
+        recordsButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        recordsButton.setForeground(new java.awt.Color(255, 255, 255));
         recordsButton.setText("Records");
         recordsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 recordsButtonActionPerformed(evt);
+            }
+        });
+
+        libButton.setBackground(new java.awt.Color(60, 110, 113));
+        libButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        libButton.setForeground(new java.awt.Color(255, 255, 255));
+        libButton.setText("Library");
+        libButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                libButtonActionPerformed(evt);
             }
         });
 
@@ -121,12 +159,13 @@ public class Appt_Appointments extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(finishApptButton, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                    .addComponent(deleteApptButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(recordsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(deleteApptButton, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                    .addComponent(recordsButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(finishApptButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(libButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(57, 57, 57))
         );
         jPanel1Layout.setVerticalGroup(
@@ -139,7 +178,9 @@ public class Appt_Appointments extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(deleteApptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(recordsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(recordsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(libButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
@@ -180,8 +221,13 @@ public class Appt_Appointments extends javax.swing.JFrame {
 
     private void recordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordsButtonActionPerformed
         super.dispose();
-        new Appt_Records().setVisible(true);
+        new Appt_Records(this.id).setVisible(true);
     }//GEN-LAST:event_recordsButtonActionPerformed
+
+    private void libButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libButtonActionPerformed
+        super.dispose();
+        new LibraryGUI(this.id).setVisible(true);
+    }//GEN-LAST:event_libButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,6 +272,7 @@ public class Appt_Appointments extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton libButton;
     private javax.swing.JButton recordsButton;
     // End of variables declaration//GEN-END:variables
 }

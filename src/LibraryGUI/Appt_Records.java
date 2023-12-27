@@ -5,10 +5,16 @@ import Display.Display;
 
 public class Appt_Records extends javax.swing.JFrame {
     private String[][] finAppointments;
+    private int id;
     /**
      * Creates new form Appt_Records
      */
     public Appt_Records() {
+        initComponents();
+        initApptTable();
+    }
+    public Appt_Records(int id) {
+        this.id = id;
         initComponents();
         initApptTable();
     }
@@ -38,12 +44,16 @@ public class Appt_Records extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         finApptTable = new javax.swing.JTable();
-        backButton = new javax.swing.JButton();
+        apptButton = new javax.swing.JButton();
+        libButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Records");
+        setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(75, 75, 75));
+        jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
+        finApptTable.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         finApptTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -51,16 +61,30 @@ public class Appt_Records extends javax.swing.JFrame {
             new String [] {
                 "Borrower", "Book", "Date & Time Borrowed", "Date & Time Returned"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(finApptTable);
+        if (finApptTable.getColumnModel().getColumnCount() > 0) {
+            finApptTable.getColumnModel().getColumn(0).setResizable(false);
+            finApptTable.getColumnModel().getColumn(1).setResizable(false);
+            finApptTable.getColumnModel().getColumn(2).setResizable(false);
+            finApptTable.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 588, Short.MAX_VALUE)
+            .addGap(0, 711, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -73,10 +97,23 @@ public class Appt_Records extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jPanel2);
 
-        backButton.setText("Back");
-        backButton.addActionListener(new java.awt.event.ActionListener() {
+        apptButton.setBackground(new java.awt.Color(60, 110, 113));
+        apptButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        apptButton.setForeground(new java.awt.Color(255, 255, 255));
+        apptButton.setText("Appointments");
+        apptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backButtonActionPerformed(evt);
+                apptButtonActionPerformed(evt);
+            }
+        });
+
+        libButton.setBackground(new java.awt.Color(60, 110, 113));
+        libButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        libButton.setForeground(new java.awt.Color(255, 255, 255));
+        libButton.setText("Library");
+        libButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                libButtonActionPerformed(evt);
             }
         });
 
@@ -85,19 +122,24 @@ public class Appt_Records extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(backButton)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 723, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(apptButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(libButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(apptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(libButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -115,10 +157,15 @@ public class Appt_Records extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+    private void apptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apptButtonActionPerformed
         super.dispose();
-        new Appt_Appointments().setVisible(true);
-    }//GEN-LAST:event_backButtonActionPerformed
+        new Appt_Appointments(this.id).setVisible(true);
+    }//GEN-LAST:event_apptButtonActionPerformed
+
+    private void libButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libButtonActionPerformed
+        super.dispose();
+        new LibraryGUI(this.id).setVisible(true);
+    }//GEN-LAST:event_libButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,11 +203,12 @@ public class Appt_Records extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton backButton;
+    private javax.swing.JButton apptButton;
     private javax.swing.JTable finApptTable;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton libButton;
     // End of variables declaration//GEN-END:variables
 }
