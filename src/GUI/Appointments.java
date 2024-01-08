@@ -1,19 +1,19 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
-import Display.Display;
+import Display.Popups;
 
-public class Appt_Appointments extends javax.swing.JFrame {
+public class Appointments extends javax.swing.JFrame {
     private String[][] appointments;
     private int id;
     /**
      * Creates new form Appt_Appointments
      */
-    public Appt_Appointments() {
+    public Appointments() {
         initComponents();
         initApptTable();
     }
-    public Appt_Appointments(int id) {
+    public Appointments(int id) {
         this.id = id;
         initComponents();
         initApptTable();
@@ -205,7 +205,7 @@ public class Appt_Appointments extends javax.swing.JFrame {
             lib.finishAppointment(Integer.parseInt(appointments[apptTable.getSelectedRow()][3]));
             initApptTable();
         } catch (Exception e) {
-            Display.noSelectedAppt();
+            Popups.noSelectedAppt();
         }
     }//GEN-LAST:event_finishApptButtonActionPerformed
 
@@ -215,13 +215,13 @@ public class Appt_Appointments extends javax.swing.JFrame {
             lib.deleteAppointment(Integer.parseInt(appointments[apptTable.getSelectedRow()][3]));
             initApptTable();
         } catch (Exception e) {
-            Display.noSelectedAppt();
+            Popups.noSelectedAppt();
         }
     }//GEN-LAST:event_deleteApptButtonActionPerformed
 
     private void recordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordsButtonActionPerformed
         super.dispose();
-        new Appt_Records(this.id).setVisible(true);
+        new Records(this.id).setVisible(true);
     }//GEN-LAST:event_recordsButtonActionPerformed
 
     private void libButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libButtonActionPerformed
@@ -246,20 +246,21 @@ public class Appt_Appointments extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Appt_Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Appt_Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Appt_Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Appt_Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Appointments.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Appt_Appointments().setVisible(true);
+                new Appointments().setVisible(true);
             }
         });
     }

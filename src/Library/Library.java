@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import Display.Display;
+import Display.Popups;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
@@ -15,56 +15,70 @@ public class Library extends DBConn {
     public void addGenre(String genre_name){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement checkGenreIfExisting = conn.prepareStatement("SELECT bg_id FROM book_genre WHERE bg_name=?");
+            PreparedStatement checkGenreIfExisting = conn.prepareStatement("SELECT bg_id, enabled FROM book_genre WHERE bg_name=?");
             checkGenreIfExisting.setString(1, genre_name.toLowerCase());
             ResultSet resultSet = checkGenreIfExisting.executeQuery();
             if (!resultSet.next()){
-                PreparedStatement addGenre = conn.prepareStatement("INSERT INTO book_genre (bg_name) VALUES (?);");
+                PreparedStatement addGenre = conn.prepareStatement("INSERT INTO book_genre (bg_name, enabled) VALUES (?, DEFAULT);");
                 addGenre.setString(1, genre_name.toLowerCase());
                 addGenre.executeUpdate();
-                Display.addGenreSuccessful(genre_name);
+                Popups.addGenreSuccessful(genre_name);
+                conn.close();
+            } else if (resultSet.getInt("enabled") == 0){
+                PreparedStatement enable = conn.prepareStatement("UPDATE book_genre SET enabled=1 WHERE bg_id=?");
+                enable.setInt(1, resultSet.getInt("bg_id"));
+                enable.executeUpdate();
+                Popups.addGenreSuccessful(genre_name);
                 conn.close();
             } else {
                 conn.close();
-                Display.addGenreNotSuccessfu(genre_name);
+                Popups.addGenreNotSuccessfu(genre_name);
             } 
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public void deleteGenre(int genre_id, String genre_name){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement deleteGenre = conn.prepareStatement("DELETE FROM book_genre WHERE bg_id=?");
+            PreparedStatement deleteGenre = conn.prepareStatement("UPDATE book_genre SET enabled=0 WHERE bg_id=?");
             deleteGenre.setInt(1, genre_id);
             deleteGenre.executeUpdate();
-            PreparedStatement replaceGenre = conn.prepareStatement("UPDATE books SET book_genre=0 WHERE book_genre=?");
-            replaceGenre.setInt(1, genre_id);
-            replaceGenre.executeUpdate();
-            Display.deleteGenreSuccessful(genre_name); 
+            Popups.deleteGenreSuccessful(genre_name); 
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public void registerStudent (String studentNumber, String name){
         try {
-            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password);
-            if (!checkStudentIfExisting(studentNumber)){
-                PreparedStatement regStudent = conn.prepareStatement("INSERT INTO students VALUES (?, ?)");
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement checkStudent = conn.prepareStatement("SELECT * FROM students WHERE student_id=?");
+            checkStudent.setString(1, studentNumber);
+            ResultSet resultSet = checkStudent.executeQuery();
+            if (!resultSet.next()){
+                PreparedStatement regStudent = conn.prepareStatement("INSERT INTO students VALUES (?, ?, DEFAULT)");
                 regStudent.setString(1, studentNumber);
                 regStudent.setString(2, name);
                 regStudent.executeUpdate();
-                Display.studentRegistrationSuccess();
+                Popups.studentRegistrationSuccess();
                 conn.close();
-            } else {
-                Display.studentAlreadyExists(studentNumber);
+            } else if (resultSet.getInt("enabled") == 0){
+                PreparedStatement regStudent = conn.prepareStatement("UPDATE students SET student_name=?, enabled=1 WHERE student_id=?");
+                regStudent.setString(1, name);
+                regStudent.setString(2, studentNumber);
+                regStudent.executeUpdate();
+                Popups.studentRegistrationSuccess();
+                conn.close();
+            }
+            else {
+                Popups.studentAlreadyExists(studentNumber);
                 conn.close();
             }
             // checkStudentIfExisting
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public boolean checkStudentIfExisting(String studentNumber){
@@ -81,30 +95,29 @@ public class Library extends DBConn {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
     public boolean deleteStudent(String studentNumber){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement checkStudent = conn.prepareStatement("SELECT * FROM students WHERE student_id=?");
+            PreparedStatement checkStudent = conn.prepareStatement("SELECT * FROM students WHERE student_id=? AND enabled=1");
             checkStudent.setString(1, studentNumber);
             ResultSet resultSet = checkStudent.executeQuery();
-            if (checkStudentIfExisting(studentNumber)){
-                resultSet.next();
-                PreparedStatement deleteStudent = conn.prepareStatement("DELETE FROM students WHERE student_id=?");
+            if (resultSet.next()){
+                PreparedStatement deleteStudent = conn.prepareStatement("UPDATE students SET enabled=0 WHERE student_id=?");
                 deleteStudent.setString(1, resultSet.getString("student_id"));
                 deleteStudent.executeUpdate();
-                Display.deleteStudentSuccessful(studentNumber, resultSet.getString("student_name"));
+                Popups.deleteStudentSuccessful(studentNumber, resultSet.getString("student_name"));
                 return true;
             } else {
-                Display.studentDoesNotExist(studentNumber);
+                Popups.studentDoesNotExist(studentNumber);
                 conn.close();
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
@@ -119,7 +132,7 @@ public class Library extends DBConn {
             conn.close();
             return student_name;
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return "";
         }
     }
@@ -129,7 +142,7 @@ public class Library extends DBConn {
         String[] genre_ids = {};
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement getGenres = conn.prepareStatement("SELECT * FROM book_genre");
+            PreparedStatement getGenres = conn.prepareStatement("SELECT * FROM book_genre WHERE enabled=1");
             ResultSet resultSet = getGenres.executeQuery();
             int i = 1;
             while (resultSet.next()){
@@ -144,34 +157,43 @@ public class Library extends DBConn {
             genres[1] = genre_names;
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return genres;
     }
     public boolean addBook(String title, String author, int genre, int count){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement checkBook = conn.prepareStatement("SELECT book_id FROM books WHERE book_title=? AND book_author=?");
+            PreparedStatement checkBook = conn.prepareStatement("SELECT book_id, enabled FROM books WHERE book_title=? AND book_author=?");
             checkBook.setString(1, title);
             checkBook.setString(2, author);
             ResultSet resultSet = checkBook.executeQuery();
             if (!resultSet.next()){
-                PreparedStatement addBook = conn.prepareStatement("INSERT INTO books (book_title, book_author, book_genre, book_count) VALUES (?, ?, ?, ?)");
+                PreparedStatement addBook = conn.prepareStatement("INSERT INTO books (book_title, book_author, book_genre, book_count, enabled) VALUES (?, ?, ?, ?, DEFAULT)");
                 addBook.setString(1, title);
                 addBook.setString(2, author);
                 addBook.setInt(3, genre);
                 addBook.setInt(4, count);
                 addBook.executeUpdate();
-                Display.bookAddedSuccessfully(title);
+                Popups.bookAddedSuccessfully(title);
+                conn.close();
+                return true;
+            } else if (resultSet.getInt("enabled") == 0) {
+                PreparedStatement enable = conn.prepareStatement("UPDATE books SET book_genre=?, book_count=?, enabled=1 WHERE book_id=?");
+                enable.setInt(1, genre);
+                enable.setInt(2, count);
+                enable.setInt(3, resultSet.getInt("book_id"));
+                enable.executeUpdate();
+                Popups.bookAddedSuccessfully(title);
                 conn.close();
                 return true;
             } else {
-                Display.bookAlreadyExists(title);
+                Popups.bookAlreadyExists(title);
                 conn.close();
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
@@ -186,10 +208,10 @@ public class Library extends DBConn {
             editBook.setInt(4, book_count);
             editBook.setInt(5, id);
             editBook.executeUpdate();
-            Display.bookUpdatedSuccessfully(book_title);
+            Popups.bookUpdatedSuccessfully(book_title);
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public String getBookName (int bookId){
@@ -203,7 +225,7 @@ public class Library extends DBConn {
             conn.close();
             return bookName;
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return "";
         }
     }
@@ -212,11 +234,9 @@ public class Library extends DBConn {
         try {
             String query;
             if (!toSearch.isEmpty()){
-                query = "SELECT * FROM books WHERE book_title LIKE '%" + toSearch + "%' OR "
-                        + "book_author LIKE '%" + toSearch + "%' "
-                        + "ORDER BY book_title ASC";
+                query = "SELECT * FROM books WHERE book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title ASC";
             } else {
-                query = "SELECT * FROM books ORDER BY book_title ASC";
+                query = "SELECT * FROM books WHERE enabled=1 ORDER BY book_title ASC";
             }
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement returnBookList = conn.prepareStatement(query);
@@ -243,7 +263,7 @@ public class Library extends DBConn {
             }
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return booklist;
     }
@@ -261,7 +281,7 @@ public class Library extends DBConn {
             bookDetails[3] = Integer.toString(resultSet.getInt("book_count"));
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return bookDetails;
     }
@@ -273,16 +293,16 @@ public class Library extends DBConn {
             checkBookInAppt.setInt(1, book_id);
             ResultSet result = checkBookInAppt.executeQuery();
             if(!result.next()){
-                PreparedStatement deleteBook = conn.prepareStatement("DELETE FROM books WHERE book_id=?");
+                PreparedStatement deleteBook = conn.prepareStatement("UPDATE books SET enabled=0 WHERE book_id=?");
                 deleteBook.setInt(1, book_id);
                 deleteBook.executeUpdate();
-                Display.deleteBookSuccessful(book_name);
+                Popups.deleteBookSuccessful(book_name);
             } else {
-                Display.bookExistsInAppt();
+                Popups.bookExistsInAppt();
             }
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public boolean checkIfApptExisting(int bookId, String studentId){
@@ -300,7 +320,7 @@ public class Library extends DBConn {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
@@ -318,7 +338,7 @@ public class Library extends DBConn {
             replaceBookCount.executeUpdate();
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public void addBookCount(int bookId){
@@ -335,7 +355,7 @@ public class Library extends DBConn {
             replaceBookCount.executeUpdate();
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public boolean borrowBook(int bookId, String studentId){
@@ -351,14 +371,14 @@ public class Library extends DBConn {
                     conn.close();
                     return true;
                 } else {
-                    Display.apptAlreadyExists();
+                    Popups.apptAlreadyExists();
                     return false;
                 }
             } else {
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
@@ -379,7 +399,7 @@ public class Library extends DBConn {
             }
             conn.close();
         } catch(SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return appointments;
     }
@@ -400,7 +420,7 @@ public class Library extends DBConn {
             }
             conn.close();
         } catch(SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return appointments;
     }
@@ -412,14 +432,32 @@ public class Library extends DBConn {
     public boolean deleteAppointment(int appt_id){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM appointments WHERE appt_id=?");
+            getAppt.setInt(1, appt_id);
+            ResultSet resultSet = getAppt.executeQuery();
+            resultSet.next();
+            System.out.println("1");
+            PreparedStatement setFinAppt = conn.prepareStatement("INSERT INTO finished_appointments (book_id, student_id, appt_date_borrow, appt_date_return, enabled) VALUES (?, ?, ?, DEFAULT, 0)");
+            setFinAppt.setInt(1, resultSet.getInt("book_id"));
+            setFinAppt.setString(2, resultSet.getString("student_id"));
+            setFinAppt.setTimestamp(3, resultSet.getTimestamp("appt_date_borrow"));
+            setFinAppt.executeUpdate();
+            System.out.println("2");
+            PreparedStatement getBookId = conn.prepareStatement("SELECT book_id FROM appointments WHERE appt_id=?");
+            getBookId.setInt(1, appt_id);
+            ResultSet result = getBookId.executeQuery();
+            result.next();
+            System.out.println("3");
+            addBookCount(result.getInt("book_id"));
             PreparedStatement deleteAppt = conn.prepareStatement("DELETE FROM appointments WHERE appt_id=?");
             deleteAppt.setInt(1, appt_id);
             deleteAppt.executeUpdate();
-            Display.apptDeleteSuccess();
+            
+            Popups.apptDeleteSuccess();
             conn.close();
             return true;
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
@@ -430,7 +468,7 @@ public class Library extends DBConn {
             getAppt.setInt(1, appt_id);
             ResultSet resultSet = getAppt.executeQuery();
             resultSet.next();
-            PreparedStatement setFinAppt = conn.prepareStatement("INSERT INTO finished_appointments (book_id, student_id, appt_date_borrow, appt_date_return) VALUES (?, ?, ?, DEFAULT)");
+            PreparedStatement setFinAppt = conn.prepareStatement("INSERT INTO finished_appointments (book_id, student_id, appt_date_borrow, appt_date_return, enabled) VALUES (?, ?, ?, DEFAULT, DEFAULT)");
             setFinAppt.setInt(1, resultSet.getInt("book_id"));
             setFinAppt.setString(2, resultSet.getString("student_id"));
             setFinAppt.setTimestamp(3, resultSet.getTimestamp("appt_date_borrow"));
@@ -440,7 +478,7 @@ public class Library extends DBConn {
             conn.close();
             return true;
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
@@ -448,7 +486,7 @@ public class Library extends DBConn {
         String[][] appointments = {};
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password);  
-            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM finished_appointments ORDER BY " + orderBy);
+            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM finished_appointments WHERE enabled=1 ORDER BY " + orderBy);
             ResultSet resultSet = getAppt.executeQuery();
             for (int i = 1; resultSet.next(); i++){
                 String[] appt = new String[5];
@@ -462,7 +500,7 @@ public class Library extends DBConn {
             }
             conn.close();
         } catch(SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return appointments;
     }

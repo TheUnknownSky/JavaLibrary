@@ -1,4 +1,4 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
 import java.awt.event.ActionEvent;
@@ -6,13 +6,13 @@ import java.awt.event.ActionListener;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import javax.swing.Timer;
-import Display.Display;
+import Display.Popups;
 
-public class Appt_BorrowBook extends javax.swing.JFrame {
+public class BorrowBook extends javax.swing.JFrame {
     private String[][] books;
     private int book_id;
     private String book_title;
-    public Appt_BorrowBook() {
+    public BorrowBook() {
         initComponents();
         // Date and Time 
         Timer timer = new Timer(1000, new ActionListener() {
@@ -23,7 +23,7 @@ public class Appt_BorrowBook extends javax.swing.JFrame {
         });
         timer.start();
     }
-    public Appt_BorrowBook(int book_id, String book_title){
+    public BorrowBook(int book_id, String book_title){
         initComponents();
         this.book_id = book_id;
         this.book_title = book_title;
@@ -161,11 +161,11 @@ public class Appt_BorrowBook extends javax.swing.JFrame {
             Library lib = new Library();
             String studentId = year.getText() + "-" + number.getText();
             if(lib.borrowBook(book_id, studentId)){
-                Display.bookBorrowedSuccessfully(this.book_title);
+                Popups.bookBorrowedSuccessfully(this.book_title);
                 super.dispose();
             }
         } else {
-            Display.insufficientDetails();
+            Popups.insufficientDetails();
         }
     }//GEN-LAST:event_borrowBookButtonActionPerformed
 
@@ -186,20 +186,23 @@ public class Appt_BorrowBook extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Appt_BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Appt_BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Appt_BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Appt_BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BorrowBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Appt_BorrowBook().setVisible(true);
+                new BorrowBook().setVisible(true);
             }
         });
     }

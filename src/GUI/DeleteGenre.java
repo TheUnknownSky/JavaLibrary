@@ -1,14 +1,17 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
 
-public class Genre_AddGenreGUI extends javax.swing.JFrame {
-
+public class DeleteGenre extends javax.swing.JFrame {
+    private String[][] genres;
     /**
-     * Creates new form AddGenreGUI
+     * Creates new form DeleteGenreGUI
      */
-    public Genre_AddGenreGUI() {
+    public DeleteGenre() {
         initComponents();
+        Library lib = new Library();
+        this.genres = lib.getBookGenres();
+        genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
     }
 
     /**
@@ -22,8 +25,8 @@ public class Genre_AddGenreGUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        genreToAdd = new javax.swing.JTextField();
-        addGenreButton = new javax.swing.JButton();
+        deleteGenreButton = new javax.swing.JButton();
+        genreToDelete = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -32,34 +35,35 @@ public class Genre_AddGenreGUI extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Add Genre:");
+        jLabel1.setText("Delete Genre:");
 
-        genreToAdd.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-
-        addGenreButton.setBackground(new java.awt.Color(60, 110, 113));
-        addGenreButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-        addGenreButton.setForeground(new java.awt.Color(255, 255, 255));
-        addGenreButton.setText("Add Genre");
-        addGenreButton.addActionListener(new java.awt.event.ActionListener() {
+        deleteGenreButton.setBackground(new java.awt.Color(60, 110, 113));
+        deleteGenreButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        deleteGenreButton.setForeground(new java.awt.Color(255, 255, 255));
+        deleteGenreButton.setText("Delete Genre");
+        deleteGenreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addGenreButtonActionPerformed(evt);
+                deleteGenreButtonActionPerformed(evt);
             }
         });
+
+        genreToDelete.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(genreToAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(100, 100, 100)
+                .addComponent(deleteGenreButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(106, Short.MAX_VALUE)
-                .addComponent(addGenreButton)
-                .addGap(107, 107, 107))
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -67,9 +71,9 @@ public class Genre_AddGenreGUI extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(genreToAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(addGenreButton)
+                .addComponent(deleteGenreButton)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -87,11 +91,14 @@ public class Genre_AddGenreGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreButtonActionPerformed
+    private void deleteGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreButtonActionPerformed
         Library lib = new Library();
-        lib.addGenre(genreToAdd.getText());
-        //super.dispose();
-    }//GEN-LAST:event_addGenreButtonActionPerformed
+        int genreIndex = genreToDelete.getSelectedIndex();
+        int genreId = Integer.parseInt(genres[0][genreIndex]);
+        String genreName = (String) genreToDelete.getSelectedItem();
+        lib.deleteGenre(genreId, genreName);
+        super.dispose();
+    }//GEN-LAST:event_deleteGenreButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -110,28 +117,30 @@ public class Genre_AddGenreGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Genre_AddGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Genre_AddGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Genre_AddGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Genre_AddGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Genre_AddGenreGUI().setVisible(true);
+                new DeleteGenre().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addGenreButton;
-    private javax.swing.JTextField genreToAdd;
+    private javax.swing.JButton deleteGenreButton;
+    private javax.swing.JComboBox<String> genreToDelete;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

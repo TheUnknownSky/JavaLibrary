@@ -1,14 +1,13 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
-import Display.Display;
 
-public class Student_DeleteGUI extends javax.swing.JFrame {
+public class AddGenre extends javax.swing.JFrame {
 
     /**
-     * Creates new form Student_DeleteGUI
+     * Creates new form AddGenreGUI
      */
-    public Student_DeleteGUI() {
+    public AddGenre() {
         initComponents();
     }
 
@@ -23,34 +22,27 @@ public class Student_DeleteGUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        year = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        number = new javax.swing.JTextField();
-        delete = new javax.swing.JButton();
+        genreToAdd = new javax.swing.JTextField();
+        addGenreButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Student Number:");
+        jLabel1.setText("Add Genre:");
 
-        year.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        genreToAdd.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("-");
-
-        number.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-
-        delete.setBackground(new java.awt.Color(60, 110, 113));
-        delete.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-        delete.setForeground(new java.awt.Color(255, 255, 255));
-        delete.setText("Delete");
-        delete.addActionListener(new java.awt.event.ActionListener() {
+        addGenreButton.setBackground(new java.awt.Color(60, 110, 113));
+        addGenreButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        addGenreButton.setForeground(new java.awt.Color(255, 255, 255));
+        addGenreButton.setText("Add Genre");
+        addGenreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteActionPerformed(evt);
+                addGenreButtonActionPerformed(evt);
             }
         });
 
@@ -59,18 +51,15 @@ public class Student_DeleteGUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(delete)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(number, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addComponent(genreToAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(106, Short.MAX_VALUE)
+                .addComponent(addGenreButton)
+                .addGap(107, 107, 107))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,11 +67,9 @@ public class Student_DeleteGUI extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(genreToAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(delete)
+                .addComponent(addGenreButton)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -100,16 +87,11 @@ public class Student_DeleteGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        if(!(year.getText().isEmpty() || number.getText().isEmpty())){
-            Library lib = new Library();
-            if (lib.deleteStudent(year.getText() + "-" + number.getText())){
-                super.dispose();
-            }
-        } else {
-            Display.insufficientDetails();
-        }
-    }//GEN-LAST:event_deleteActionPerformed
+    private void addGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreButtonActionPerformed
+        Library lib = new Library();
+        lib.addGenre(genreToAdd.getText());
+        //super.dispose();
+    }//GEN-LAST:event_addGenreButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -128,30 +110,31 @@ public class Student_DeleteGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Student_DeleteGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Student_DeleteGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Student_DeleteGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Student_DeleteGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddGenre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Student_DeleteGUI().setVisible(true);
+                new AddGenre().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton delete;
+    private javax.swing.JButton addGenreButton;
+    private javax.swing.JTextField genreToAdd;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField number;
-    private javax.swing.JTextField year;
     // End of variables declaration//GEN-END:variables
 }

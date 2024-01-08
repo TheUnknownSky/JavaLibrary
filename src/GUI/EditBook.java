@@ -1,8 +1,8 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
 
-public class Books_EditBookGUI extends javax.swing.JFrame {
+public class EditBook extends javax.swing.JFrame {
     private String[][] books;
     private String[][] genres;
     private String[] bookDetails;
@@ -10,10 +10,10 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
     /**
      * Creates new form Books_EditBookGUI
      */
-    public Books_EditBookGUI() {
+    public EditBook() {
         initComponents();
     }
-    public Books_EditBookGUI(int book_id){
+    public EditBook(int book_id){
         initComponents();
         initDetailsToEdit(book_id);
     }
@@ -187,20 +187,21 @@ public class Books_EditBookGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Books_EditBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Books_EditBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Books_EditBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Books_EditBookGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditBook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Books_EditBookGUI().setVisible(true);
+                new EditBook().setVisible(true);
             }
         });
     }

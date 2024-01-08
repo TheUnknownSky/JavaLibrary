@@ -4,7 +4,7 @@ import DatabaseConnection.DBConn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import Display.Display;
+import Display.Popups;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -32,11 +32,11 @@ public class Account extends DBConn{
                 conn.close();
                 return true;
             } else {
-                Display.accountAlreadyExists();
+                Popups.accountAlreadyExists();
                 return false;
             }
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
@@ -49,12 +49,12 @@ public class Account extends DBConn{
             this.password = password;
             boolean access = registerAcctToDB();
             if(access){
-                Display.accountRegistrationSuccess();
+                Popups.accountRegistrationSuccess();
                 return access;
             }
             return access;
         } else {
-            Display.passwordAndConfirmPasswordNotMatch();
+            Popups.passwordAndConfirmPasswordNotMatch();
             return false;
         }
     }
@@ -70,17 +70,17 @@ public class Account extends DBConn{
             conn.close();
             return result;
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }
     
     public boolean login(String credential, String password){
         if (checkForAcctFromDB(credential, password)){
-            Display.loginSuccess();
+            Popups.loginSuccess();
             return true;
         } else {
-            Display.invalidCredentials();
+            Popups.invalidCredentials();
             return false;
         }
     }
@@ -98,7 +98,7 @@ public class Account extends DBConn{
             } 
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         // return lib acct id of the email
         return 0;
@@ -116,7 +116,7 @@ public class Account extends DBConn{
             }
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return acct_name;
     }
@@ -131,7 +131,7 @@ public class Account extends DBConn{
             acct_email = resultSet.getString("libacct_email");
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
         return acct_email;
     }
@@ -143,10 +143,10 @@ public class Account extends DBConn{
             editName.setString(2, lastName);
             editName.setInt(3, id);
             editName.executeUpdate();
-            Display.updateSuccessfulOf("name");
+            Popups.updateSuccessfulOf("name");
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public void editEmail(int id, String email){
@@ -156,10 +156,10 @@ public class Account extends DBConn{
             editEmail.setString(1, email);
             editEmail.setInt(2, id);
             editEmail.executeUpdate();
-            Display.updateSuccessfulOf("email");
+            Popups.updateSuccessfulOf("email");
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public void editPassword(int id, String password){
@@ -169,10 +169,10 @@ public class Account extends DBConn{
             editPassword.setString(1, password);
             editPassword.setInt(2, id);
             editPassword.executeUpdate();
-            Display.updateSuccessfulOf("password");
+            Popups.updateSuccessfulOf("password");
             conn.close();
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
         }
     }
     public boolean checkPassword(int id, String password){
@@ -186,7 +186,7 @@ public class Account extends DBConn{
             conn.close();
             return check;
         } catch (SQLException e){
-            Display.sqlError(e.getMessage());
+            Popups.sqlError(e.getMessage());
             return false;
         }
     }

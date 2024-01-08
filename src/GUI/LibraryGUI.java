@@ -1,8 +1,8 @@
-package LibraryGUI;
+package GUI;
 
 import Account.Account;
 import Library.Library;
-import Display.Display;
+import Display.Popups;
 
 public class LibraryGUI extends javax.swing.JFrame {
     private int libacct_id = 1; // must be set with no value in actual use
@@ -21,7 +21,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
         initBookTable("");
     }
-    // gui initializer for actual use (to be access from LoginGUI.java
+    // gui initializer for actual use (to be access from Login.java
     public LibraryGUI(int id){
         initComponents();
         this.libacct_id = id;
@@ -396,35 +396,35 @@ public class LibraryGUI extends javax.swing.JFrame {
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
         super.dispose();
-        new LoginGUI().setVisible(true);
+        new Login().setVisible(true);
     }//GEN-LAST:event_logOutActionPerformed
 
     private void addGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreActionPerformed
-        new Genre_AddGenreGUI().setVisible(true);
+        new AddGenre().setVisible(true);
     }//GEN-LAST:event_addGenreActionPerformed
 
     private void deleteGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreActionPerformed
-        new Genre_DeleteGenreGUI().setVisible(true);
+        new DeleteGenre().setVisible(true);
     }//GEN-LAST:event_deleteGenreActionPerformed
 
     private void changeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameActionPerformed
-        new Acct_ChangeNameGUI(libacct_id).setVisible(true);
+        new ChangeAcctName(libacct_id).setVisible(true);
     }//GEN-LAST:event_changeNameActionPerformed
 
     private void changeEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeEmailActionPerformed
-        new Acct_ChangeEmailGUI(libacct_id).setVisible(true);
+        new ChangeAcctEmail(libacct_id).setVisible(true);
     }//GEN-LAST:event_changeEmailActionPerformed
 
     private void changePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordActionPerformed
-        new Acct_ChangePasswordGUI(libacct_id).setVisible(true);
+        new ChangeAcctPassword(libacct_id).setVisible(true);
     }//GEN-LAST:event_changePasswordActionPerformed
 
     private void registerStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerStudentActionPerformed
-        new Student_RegisterGUI().setVisible(true);
+        new RegisterStudent().setVisible(true);
     }//GEN-LAST:event_registerStudentActionPerformed
 
     private void deleteStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStudentActionPerformed
-        new Student_DeleteGUI().setVisible(true);
+        new DeleteStudent().setVisible(true);
     }//GEN-LAST:event_deleteStudentActionPerformed
 
     private void refreshLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshLibraryActionPerformed
@@ -448,26 +448,26 @@ public class LibraryGUI extends javax.swing.JFrame {
             if(index != -1){
                 int bookId = Integer.parseInt(bookTable[index][5]);
                 String book_name = bookTable[index][0] + " (" + bookTable[index][1] + ")";
-                new Appt_BorrowBook(bookId, book_name).setVisible(true);
+                new BorrowBook(bookId, book_name).setVisible(true);
             } else {
-                Display.noSelectedBookTo("borrow");
+                Popups.noSelectedBookTo("borrow");
             }
         } catch (Exception e){
-            Display.noSelectedBookTo("borrow");
+            Popups.noSelectedBookTo("borrow");
         }
     }//GEN-LAST:event_borrowBookActionPerformed
 
     private void appointmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsButtonActionPerformed
         super.dispose();
-        new Appt_Appointments(this.libacct_id).setVisible(true);
+        new Appointments(this.libacct_id).setVisible(true);
     }//GEN-LAST:event_appointmentsButtonActionPerformed
 
     private void editBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBookButtonActionPerformed
         try {
             int index = tableOfBooks.getSelectedRow();
-            new Books_EditBookGUI(Integer.parseInt(bookTable[index][5])).setVisible(true);
+            new EditBook(Integer.parseInt(bookTable[index][5])).setVisible(true);
         } catch (Exception e){
-            Display.noSelectedBookTo("edit");
+            Popups.noSelectedBookTo("edit");
         }
     }//GEN-LAST:event_editBookButtonActionPerformed
 
@@ -475,7 +475,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         try {
             int index = tableOfBooks.getSelectedRow();
             if(index != -1){
-                if(Display.confirmBookDelete() == 0){
+                if(Popups.confirmBookDelete() == 0){
                     Library lib = new Library();
                     int bookId = Integer.parseInt(bookTable[index][5]);
                     String book_name = bookTable[index][0];
@@ -483,20 +483,20 @@ public class LibraryGUI extends javax.swing.JFrame {
                     lib.deleteBook(bookId, book_name);
                 }
             } else {
-                Display.noSelectedBookTo("delete");
+                Popups.noSelectedBookTo("delete");
             }
         } catch (Exception e){
-            Display.noSelectedBookTo("delete");
+            Popups.noSelectedBookTo("delete");
         }
     }//GEN-LAST:event_deleteBookButtonActionPerformed
 
     private void addBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookButtonActionPerformed
-        new Books_AddBookGUI().setVisible(true);
+        new AddBook().setVisible(true);
     }//GEN-LAST:event_addBookButtonActionPerformed
 
     private void recordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordsButtonActionPerformed
         super.dispose();
-        new Appt_Records(this.libacct_id).setVisible(true);
+        new Records(this.libacct_id).setVisible(true);
     }//GEN-LAST:event_recordsButtonActionPerformed
 
     /**

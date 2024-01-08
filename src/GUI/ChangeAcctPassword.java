@@ -1,17 +1,17 @@
-package LibraryGUI;
+package GUI;
 
-import Display.Display;
+import Display.Popups;
 import Account.Account;
 
-public class Acct_ChangePasswordGUI extends javax.swing.JFrame {
+public class ChangeAcctPassword extends javax.swing.JFrame {
     private int libacct_id;
     /**
      * Creates new form Acct_ChangePasswordGUI
      */
-    public Acct_ChangePasswordGUI() {
+    public ChangeAcctPassword() {
         initComponents();
     }
-    public Acct_ChangePasswordGUI(int id) {
+    public ChangeAcctPassword(int id) {
         initComponents();
         this.libacct_id = id;
     }
@@ -136,13 +136,13 @@ public class Acct_ChangePasswordGUI extends javax.swing.JFrame {
                     acct.editPassword(libacct_id, newPassword.getText());
                     super.dispose();
                 } else {
-                    Display.passwordNotMatch();
+                    Popups.passwordNotMatch();
                 }
             } else {
-                Display.passwordAndConfirmPasswordNotMatch();
+                Popups.passwordAndConfirmPasswordNotMatch();
             }
         } else {
-            Display.insufficientDetails();
+            Popups.insufficientDetails();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -163,20 +163,23 @@ public class Acct_ChangePasswordGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Acct_ChangePasswordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangeAcctPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Acct_ChangePasswordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangeAcctPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Acct_ChangePasswordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangeAcctPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Acct_ChangePasswordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ChangeAcctPassword.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Acct_ChangePasswordGUI().setVisible(true);
+                new ChangeAcctPassword().setVisible(true);
             }
         });
     }

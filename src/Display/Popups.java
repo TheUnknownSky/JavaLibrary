@@ -2,7 +2,7 @@ package Display;
 
 import javax.swing.JOptionPane;
 
-public class Display {
+public class Popups {
     public static void sqlError (String message){
         boolean debugMode = true;
         if (debugMode){

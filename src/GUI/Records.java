@@ -1,19 +1,19 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
-import Display.Display;
+import Display.Popups;
 
-public class Appt_Records extends javax.swing.JFrame {
+public class Records extends javax.swing.JFrame {
     private String[][] finAppointments;
     private int id;
     /**
      * Creates new form Appt_Records
      */
-    public Appt_Records() {
+    public Records() {
         initComponents();
         initApptTable();
     }
-    public Appt_Records(int id) {
+    public Records(int id) {
         this.id = id;
         initComponents();
         initApptTable();
@@ -159,7 +159,7 @@ public class Appt_Records extends javax.swing.JFrame {
 
     private void apptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apptButtonActionPerformed
         super.dispose();
-        new Appt_Appointments(this.id).setVisible(true);
+        new Appointments(this.id).setVisible(true);
     }//GEN-LAST:event_apptButtonActionPerformed
 
     private void libButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libButtonActionPerformed
@@ -184,20 +184,21 @@ public class Appt_Records extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Appt_Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Appt_Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Appt_Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Appt_Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Records.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Appt_Records().setVisible(true);
+                new Records().setVisible(true);
             }
         });
     }

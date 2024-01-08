@@ -1,17 +1,15 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
+import Display.Popups;
 
-public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
-    private String[][] genres;
+public class DeleteStudent extends javax.swing.JFrame {
+
     /**
-     * Creates new form DeleteGenreGUI
+     * Creates new form Student_DeleteGUI
      */
-    public Genre_DeleteGenreGUI() {
+    public DeleteStudent() {
         initComponents();
-        Library lib = new Library();
-        this.genres = lib.getBookGenres();
-        genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
     }
 
     /**
@@ -25,45 +23,54 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        deleteGenreButton = new javax.swing.JButton();
-        genreToDelete = new javax.swing.JComboBox<>();
+        year = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        number = new javax.swing.JTextField();
+        delete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Delete Genre:");
+        jLabel1.setText("Student Number:");
 
-        deleteGenreButton.setBackground(new java.awt.Color(60, 110, 113));
-        deleteGenreButton.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-        deleteGenreButton.setForeground(new java.awt.Color(255, 255, 255));
-        deleteGenreButton.setText("Delete Genre");
-        deleteGenreButton.addActionListener(new java.awt.event.ActionListener() {
+        year.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("-");
+
+        number.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+
+        delete.setBackground(new java.awt.Color(60, 110, 113));
+        delete.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        delete.setForeground(new java.awt.Color(255, 255, 255));
+        delete.setText("Delete");
+        delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteGenreButtonActionPerformed(evt);
+                deleteActionPerformed(evt);
             }
         });
-
-        genreToDelete.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-        genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(deleteGenreButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(delete)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(number, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -71,9 +78,11 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(genreToDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(deleteGenreButton)
+                .addComponent(delete)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -91,14 +100,16 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void deleteGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreButtonActionPerformed
-        Library lib = new Library();
-        int genreIndex = genreToDelete.getSelectedIndex();
-        int genreId = Integer.parseInt(genres[0][genreIndex]);
-        String genreName = (String) genreToDelete.getSelectedItem();
-        lib.deleteGenre(genreId, genreName);
-        super.dispose();
-    }//GEN-LAST:event_deleteGenreButtonActionPerformed
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        if(!(year.getText().isEmpty() || number.getText().isEmpty())){
+            Library lib = new Library();
+            if (lib.deleteStudent(year.getText() + "-" + number.getText())){
+                super.dispose();
+            }
+        } else {
+            Popups.insufficientDetails();
+        }
+    }//GEN-LAST:event_deleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,13 +128,13 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Genre_DeleteGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Genre_DeleteGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Genre_DeleteGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Genre_DeleteGenreGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -131,15 +142,17 @@ public class Genre_DeleteGenreGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Genre_DeleteGenreGUI().setVisible(true);
+                new DeleteStudent().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton deleteGenreButton;
-    private javax.swing.JComboBox<String> genreToDelete;
+    private javax.swing.JButton delete;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField number;
+    private javax.swing.JTextField year;
     // End of variables declaration//GEN-END:variables
 }

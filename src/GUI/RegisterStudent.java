@@ -1,14 +1,14 @@
-package LibraryGUI;
+package GUI;
 
 import Library.Library;
-import Display.Display;
+import Display.Popups;
 
-public class Student_RegisterGUI extends javax.swing.JFrame {
+public class RegisterStudent extends javax.swing.JFrame {
 
     /**
      * Creates new form Student_RegisterGUI
      */
-    public Student_RegisterGUI() {
+    public RegisterStudent() {
         initComponents();
     }
 
@@ -126,7 +126,7 @@ public class Student_RegisterGUI extends javax.swing.JFrame {
             lib.registerStudent(studentNumber, name.getText());
             super.dispose();
         } else {
-            Display.insufficientDetails();
+            Popups.insufficientDetails();
         }
     }//GEN-LAST:event_confirmButtonActionPerformed
 
@@ -147,20 +147,23 @@ public class Student_RegisterGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Student_RegisterGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Student_RegisterGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Student_RegisterGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Student_RegisterGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Student_RegisterGUI().setVisible(true);
+                new RegisterStudent().setVisible(true);
             }
         });
     }
