@@ -29,6 +29,7 @@ public class DeleteGenre extends javax.swing.JFrame {
         genreToDelete = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Delete Genre");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(217, 217, 217));

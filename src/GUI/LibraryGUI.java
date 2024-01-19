@@ -40,7 +40,7 @@ public class LibraryGUI extends javax.swing.JFrame {
                 "Book", "Author", "Genre", "Quantity", "Availability"
             }
         ));
-        jScrollPane3.setViewportView(tableOfBooks);
+        jScrollPane1.setViewportView(tableOfBooks);
     }
     
     
@@ -56,7 +56,6 @@ public class LibraryGUI extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
         tableOfBooks = new javax.swing.JTable();
         refreshLibrary = new javax.swing.JButton();
         borrowBook = new javax.swing.JButton();
@@ -89,8 +88,6 @@ public class LibraryGUI extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(217, 217, 217));
 
-        jScrollPane3.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
-
         tableOfBooks.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         tableOfBooks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -108,14 +105,6 @@ public class LibraryGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(tableOfBooks);
-        if (tableOfBooks.getColumnModel().getColumnCount() > 0) {
-            tableOfBooks.getColumnModel().getColumn(0).setResizable(false);
-            tableOfBooks.getColumnModel().getColumn(1).setResizable(false);
-            tableOfBooks.getColumnModel().getColumn(2).setResizable(false);
-            tableOfBooks.getColumnModel().getColumn(3).setResizable(false);
-            tableOfBooks.getColumnModel().getColumn(4).setResizable(false);
-        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -123,14 +112,28 @@ public class LibraryGUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 670, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(tableOfBooks, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 500, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(tableOfBooks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
+
+        if (tableOfBooks.getColumnModel().getColumnCount() > 0) {
+            tableOfBooks.getColumnModel().getColumn(0).setResizable(false);
+            tableOfBooks.getColumnModel().getColumn(1).setResizable(false);
+            tableOfBooks.getColumnModel().getColumn(2).setResizable(false);
+            tableOfBooks.getColumnModel().getColumn(3).setResizable(false);
+            tableOfBooks.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -448,7 +451,12 @@ public class LibraryGUI extends javax.swing.JFrame {
             if(index != -1){
                 int bookId = Integer.parseInt(bookTable[index][5]);
                 String book_name = bookTable[index][0] + " (" + bookTable[index][1] + ")";
-                new BorrowBook(bookId, book_name).setVisible(true);
+                if (Integer.parseInt(bookTable[index][3]) > 0){
+                    new BorrowBook(bookId, book_name).setVisible(true);
+                } else {
+                    Popups.bookNotAvailable();
+                }
+                
             } else {
                 Popups.noSelectedBookTo("borrow");
             }
@@ -556,7 +564,6 @@ public class LibraryGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JMenuItem logOut;
     private javax.swing.JButton recordsButton;
     private javax.swing.JButton refreshLibrary;

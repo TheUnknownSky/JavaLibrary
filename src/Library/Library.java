@@ -92,6 +92,7 @@ public class Library extends DBConn {
                 return true;
             } else {
                 conn.close();
+                Popups.studentDoesNotExist(studentNumber);
                 return false;
             }
         } catch (SQLException e){
@@ -142,7 +143,7 @@ public class Library extends DBConn {
         String[] genre_ids = {};
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement getGenres = conn.prepareStatement("SELECT * FROM book_genre WHERE enabled=1");
+            PreparedStatement getGenres = conn.prepareStatement("SELECT * FROM book_genre WHERE enabled=1 ORDER BY bg_name");
             ResultSet resultSet = getGenres.executeQuery();
             int i = 1;
             while (resultSet.next()){
@@ -234,7 +235,7 @@ public class Library extends DBConn {
         try {
             String query;
             if (!toSearch.isEmpty()){
-                query = "SELECT * FROM books WHERE book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title ASC";
+                query = "SELECT * FROM books WHERE enabled=1 AND book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title ASC";
             } else {
                 query = "SELECT * FROM books WHERE enabled=1 ORDER BY book_title ASC";
             }
@@ -473,7 +474,6 @@ public class Library extends DBConn {
             setFinAppt.setString(2, resultSet.getString("student_id"));
             setFinAppt.setTimestamp(3, resultSet.getTimestamp("appt_date_borrow"));
             setFinAppt.executeUpdate();
-            addBookCount(resultSet.getInt("book_id"));
             deleteAppointment(appt_id);
             conn.close();
             return true;

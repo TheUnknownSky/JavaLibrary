@@ -26,6 +26,7 @@ public class AddGenre extends javax.swing.JFrame {
         addGenreButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Add Genre");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(217, 217, 217));

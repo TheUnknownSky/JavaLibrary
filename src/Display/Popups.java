@@ -239,4 +239,12 @@ public class Popups {
             JOptionPane.ERROR_MESSAGE
         );
     }
+    public static void bookNotAvailable(){
+        JOptionPane.showMessageDialog(
+            null, 
+            "This book is currently not available", 
+            "Book cannot be borrowed", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
 }

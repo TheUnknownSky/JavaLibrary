@@ -29,6 +29,7 @@ public class DeleteStudent extends javax.swing.JFrame {
         delete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Delete Student");
 
         jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
