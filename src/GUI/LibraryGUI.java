@@ -6,7 +6,6 @@ import Display.Popups;
 
 public class LibraryGUI extends javax.swing.JFrame {
     private int libacct_id = 1; // must be set with no value in actual use
-    private String[] bookList;
     private String[][] bookTable;
     /**
      * Creates new form LibraryGUI
