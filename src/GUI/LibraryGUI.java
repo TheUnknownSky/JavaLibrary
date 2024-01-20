@@ -488,6 +488,7 @@ public class LibraryGUI extends javax.swing.JFrame {
                     String book_name = bookTable[index][0];
                     System.out.println(bookId + " " + book_name);
                     lib.deleteBook(bookId, book_name);
+                    initBookTable("");
                 }
             } else {
                 Popups.noSelectedBookTo("delete");
