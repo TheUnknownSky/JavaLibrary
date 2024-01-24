@@ -1,6 +1,7 @@
 package GUI;
 
 import Account.Account;
+import Models.User;
 import Display.Popups;
 
 public class Login extends javax.swing.JFrame {
@@ -141,10 +142,13 @@ public class Login extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         if(!(email.getText().isEmpty() || password.getText().isEmpty())){
+            User user = new User();
+            user.setEmail(email.getText());
+            user.setPassword(password.getText());
             Account acct = new Account();
-            if(acct.login(email.getText(), password.getText())){
+            if(acct.login(user)){
                 super.dispose();
-                new LibraryGUI(acct.returnLibacctIdOf(email.getText())).setVisible(true);
+                new LibraryGUI(acct.returnLibacctIdOf(user.getEmail())).setVisible(true);
             }
         } else {
             Popups.insufficientDetails();

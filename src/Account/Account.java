@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import Display.Popups;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import Models.User;
 
 public class Account extends DBConn{
     private String firstname;
@@ -41,12 +42,12 @@ public class Account extends DBConn{
         }
     }
             
-    public boolean setAccount(String firstname, String lastname, String email, String password, String confirmPassword){
-        if (password.equals(confirmPassword)){
-            this.firstname = firstname;
-            this.lastname = lastname;
-            this.email = email;
-            this.password = password;
+    public boolean setAccount(User user){
+        if (user.getPassword().equals(user.getConfirmPassword())){
+            this.firstname = user.getFirstname();
+            this.lastname = user.getLastname();
+            this.email = user.getEmail();
+            this.password = user.getPassword();
             boolean access = registerAcctToDB();
             if(access){
                 Popups.accountRegistrationSuccess();
@@ -59,12 +60,12 @@ public class Account extends DBConn{
         }
     }
     
-    private boolean checkForAcctFromDB(String email, String password){
+    private boolean checkForAcctFromDB(User user){
         try { 
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement checkAcct = conn.prepareStatement("SELECT libacct_email, libacct_pword FROM lib_accounts WHERE libacct_email=? AND libacct_pword=?");
-            checkAcct.setString(1, email);
-            checkAcct.setString(2, password);
+            checkAcct.setString(1, user.getEmail());
+            checkAcct.setString(2, user.getPassword());
             ResultSet resultSet = checkAcct.executeQuery();
             boolean result = resultSet.next();
             conn.close();
@@ -75,8 +76,8 @@ public class Account extends DBConn{
         }
     }
     
-    public boolean login(String credential, String password){
-        if (checkForAcctFromDB(credential, password)){
+    public boolean login(User user){
+        if (checkForAcctFromDB(user)){
             Popups.loginSuccess();
             return true;
         } else {

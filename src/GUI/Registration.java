@@ -1,6 +1,7 @@
 package GUI;
 
 import Display.Popups;
+import Models.User;
 import Account.Account;
 
 public class Registration extends javax.swing.JFrame {
@@ -274,14 +275,14 @@ public class Registration extends javax.swing.JFrame {
             password.getText().isEmpty() ||
             confirmPassword.getText().isEmpty()
         )){
+            User user = new User();
+            user.setFirstname(firstname.getText());
+            user.setLastname(lastname.getText());
+            user.setEmail(email.getText());
+            user.setPassword(password.getText());
+            user.setConfirmPassword(confirmPassword.getText());
             Account acct = new Account();
-            if(acct.setAccount(
-            firstname.getText(),
-            lastname.getText(),
-            email.getText(),
-            password.getText(),
-            confirmPassword.getText()
-            )){
+            if(acct.setAccount(user)){
                 super.dispose();
                 new Login().setVisible(true);
             }
