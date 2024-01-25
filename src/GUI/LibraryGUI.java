@@ -4,6 +4,7 @@ import Account.Account;
 import Library.Library;
 import Models.User;
 import Display.Popups;
+import Models.Book;
 
 public class LibraryGUI extends javax.swing.JFrame {
     User c_user = new User();
@@ -486,10 +487,10 @@ public class LibraryGUI extends javax.swing.JFrame {
             if(index != -1){
                 if(Popups.confirmBookDelete() == 0){
                     Library lib = new Library();
-                    int bookId = Integer.parseInt(bookTable[index][5]);
-                    String book_name = bookTable[index][0];
-                    System.out.println(bookId + " " + book_name);
-                    lib.deleteBook(bookId, book_name);
+                    Book book = new Book();
+                    book.setBook_id(Integer.parseInt(bookTable[index][5]));
+                    book.setTitle(bookTable[index][0]);
+                    lib.deleteBook(book);
                     initBookTable("");
                 }
             } else {

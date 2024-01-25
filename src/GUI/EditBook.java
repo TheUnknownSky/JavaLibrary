@@ -1,12 +1,13 @@
 package GUI;
 
 import Library.Library;
+import Models.Book;
 
 public class EditBook extends javax.swing.JFrame {
     private String[][] books;
     private String[][] genres;
     private String[] bookDetails;
-    private int bookId;
+    Book book = new Book();
     /**
      * Creates new form Books_EditBookGUI
      */
@@ -19,8 +20,8 @@ public class EditBook extends javax.swing.JFrame {
     }
     public void initDetailsToEdit(int book_id){
         Library lib = new Library();
-        this.bookId = book_id;
-        this.bookDetails = lib.getBookDetails(this.bookId);
+        book.setBook_id(book_id);
+        this.bookDetails = lib.getBookDetails(book.getBook_id());
         this.genres = lib.getBookGenres();
         bookGenre.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
         bookName.setText(this.bookDetails[0]);
@@ -158,7 +159,12 @@ public class EditBook extends javax.swing.JFrame {
         Library lib = new Library();
         int genreIndex = bookGenre.getSelectedIndex();
         int genreId = Integer.parseInt(genres[0][genreIndex]);
-        lib.editBook(bookId, bookName.getText(), bookAuthor.getText(), genreId, Integer.parseInt(bookCount.getText()));
+        
+        book.setTitle(bookName.getText());
+        book.setAuthor(bookAuthor.getText());
+        book.setGenre_id(Integer.parseInt(genres[0][genreIndex]));
+        book.setQuantity(Integer.parseInt(bookCount.getText()));
+        lib.editBook(book);
         super.dispose();
     }//GEN-LAST:event_editBookButtonActionPerformed
 

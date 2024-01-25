@@ -164,34 +164,34 @@ public class Library extends DBConn {
         }
         return genres;
     }
-    public boolean addBook(String title, String author, int genre, int count){
+    public boolean addBook(Book book){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement checkBook = conn.prepareStatement("SELECT book_id, enabled FROM books WHERE book_title=? AND book_author=?");
-            checkBook.setString(1, title);
-            checkBook.setString(2, author);
+            checkBook.setString(1, book.getTitle());
+            checkBook.setString(2, book.getAuthor());
             ResultSet resultSet = checkBook.executeQuery();
             if (!resultSet.next()){
                 PreparedStatement addBook = conn.prepareStatement("INSERT INTO books (book_title, book_author, book_genre, book_count, enabled) VALUES (?, ?, ?, ?, DEFAULT)");
-                addBook.setString(1, title);
-                addBook.setString(2, author);
-                addBook.setInt(3, genre);
-                addBook.setInt(4, count);
+                addBook.setString(1, book.getTitle());
+                addBook.setString(2, book.getAuthor());
+                addBook.setInt(3, book.getGenre_id());
+                addBook.setInt(4, book.getQuantity());
                 addBook.executeUpdate();
-                Popups.bookAddedSuccessfully(title);
+                Popups.bookAddedSuccessfully(book.getTitle());
                 conn.close();
                 return true;
             } else if (resultSet.getInt("enabled") == 0) {
                 PreparedStatement enable = conn.prepareStatement("UPDATE books SET book_genre=?, book_count=?, enabled=1 WHERE book_id=?");
-                enable.setInt(1, genre);
-                enable.setInt(2, count);
+                enable.setInt(1, book.getGenre_id());
+                enable.setInt(2, book.getQuantity());
                 enable.setInt(3, resultSet.getInt("book_id"));
                 enable.executeUpdate();
-                Popups.bookAddedSuccessfully(title);
+                Popups.bookAddedSuccessfully(book.getTitle());
                 conn.close();
                 return true;
             } else {
-                Popups.bookAlreadyExists(title);
+                Popups.bookAlreadyExists(book.getTitle());
                 conn.close();
                 return false;
             }
@@ -200,18 +200,18 @@ public class Library extends DBConn {
             return false;
         }
     }
-    public void editBook(int id, String book_title, String book_author, int book_genre, int book_count){
+    public void editBook(Book book){
         try {
             
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password);
             PreparedStatement editBook = conn.prepareStatement("UPDATE books SET book_title=?, book_author=?, book_genre=?, book_count=? WHERE book_id=?");
-            editBook.setString(1, book_title);
-            editBook.setString(2, book_author);
-            editBook.setInt(3, book_genre);
-            editBook.setInt(4, book_count);
-            editBook.setInt(5, id);
+            editBook.setString(1, book.getTitle());
+            editBook.setString(2, book.getAuthor());
+            editBook.setInt(3, book.getGenre_id());
+            editBook.setInt(4, book.getQuantity());
+            editBook.setInt(5, book.getBook_id());
             editBook.executeUpdate();
-            Popups.bookUpdatedSuccessfully(book_title);
+            Popups.bookUpdatedSuccessfully(book.getTitle());
             conn.close();
         } catch (SQLException e){
             Popups.sqlError(e.getMessage());
@@ -288,18 +288,18 @@ public class Library extends DBConn {
         }
         return bookDetails;
     }
-    public void deleteBook(int book_id, String book_name){
+    public void deleteBook(Book book){
         try {
             // you cant delete book if it has existing appointment
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement checkBookInAppt = conn.prepareStatement("SELECT book_id FROM appointments WHERE book_id=?");
-            checkBookInAppt.setInt(1, book_id);
+            checkBookInAppt.setInt(1, book.getBook_id());
             ResultSet result = checkBookInAppt.executeQuery();
             if(!result.next()){
                 PreparedStatement deleteBook = conn.prepareStatement("UPDATE books SET enabled=0 WHERE book_id=?");
-                deleteBook.setInt(1, book_id);
+                deleteBook.setInt(1, book.getBook_id());
                 deleteBook.executeUpdate();
-                Popups.deleteBookSuccessful(book_name);
+                Popups.deleteBookSuccessful(book.getTitle());
             } else {
                 Popups.bookExistsInAppt();
             }

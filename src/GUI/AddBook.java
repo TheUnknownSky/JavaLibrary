@@ -2,6 +2,7 @@ package GUI;
 
 import Display.Popups;
 import Library.Library;
+import Models.Book;
 
 public class AddBook extends javax.swing.JFrame {
     private String[][] genres;
@@ -143,9 +144,14 @@ public class AddBook extends javax.swing.JFrame {
     private void addBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookButtonActionPerformed
         if (!(bookName.getText().isEmpty() || bookAuthor.getText().isEmpty() || bookCount.getText().isEmpty())){
             Library lib = new Library();
+            Book book = new Book();
             int genreIndex = bookGenre.getSelectedIndex();
             int genreId = Integer.parseInt(genres[0][genreIndex]);
-            if(lib.addBook(bookName.getText(), bookAuthor.getText(), genreId, Integer.parseInt(bookCount.getText()))){
+            book.setTitle(bookName.getText());
+            book.setAuthor(bookAuthor.getText());
+            book.setGenre_id(genreId);
+            book.setQuantity(Integer.parseInt(bookCount.getText()));
+            if(lib.addBook(book)){
                 super.dispose();
             }
         } else {
