@@ -2,6 +2,7 @@ package GUI;
 
 import Library.Library;
 import Display.Popups;
+import Models.Student;
 
 public class RegisterStudent extends javax.swing.JFrame {
 
@@ -123,8 +124,10 @@ public class RegisterStudent extends javax.swing.JFrame {
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         if (!(year.getText().isEmpty() || number.getText().isEmpty() || name.getText().isEmpty())){
             Library lib = new Library();
-            String studentNumber = year.getText() + "-" + number.getText();
-            lib.registerStudent(studentNumber, name.getText());
+            Student stu = new Student();
+            stu.setStudentId(year.getText() + "-" + number.getText());
+            stu.setStudentName(name.getText());
+            lib.registerStudent(stu);
             super.dispose();
         } else {
             Popups.insufficientDetails();

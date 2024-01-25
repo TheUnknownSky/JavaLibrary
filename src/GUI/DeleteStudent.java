@@ -2,6 +2,7 @@ package GUI;
 
 import Library.Library;
 import Display.Popups;
+import Models.Student;
 
 public class DeleteStudent extends javax.swing.JFrame {
 
@@ -104,7 +105,9 @@ public class DeleteStudent extends javax.swing.JFrame {
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         if(!(year.getText().isEmpty() || number.getText().isEmpty())){
             Library lib = new Library();
-            if (lib.deleteStudent(year.getText() + "-" + number.getText())){
+            Student stu = new Student();
+            stu.setStudentId(year.getText() + "-" + number.getText());
+            if (lib.deleteStudent(stu)){
                 super.dispose();
             }
         } else {

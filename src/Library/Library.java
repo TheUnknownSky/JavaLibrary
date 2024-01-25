@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import Models.Book;
+import Models.Student;
 
 public class Library extends DBConn {
     public void addGenre(Book book){
@@ -51,29 +52,29 @@ public class Library extends DBConn {
             Popups.sqlError(e.getMessage());
         }
     }
-    public void registerStudent (String studentNumber, String name){
+    public void registerStudent (Student stu){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement checkStudent = conn.prepareStatement("SELECT * FROM students WHERE student_id=?");
-            checkStudent.setString(1, studentNumber);
+            checkStudent.setString(1, stu.getStudentId());
             ResultSet resultSet = checkStudent.executeQuery();
             if (!resultSet.next()){
                 PreparedStatement regStudent = conn.prepareStatement("INSERT INTO students VALUES (?, ?, DEFAULT)");
-                regStudent.setString(1, studentNumber);
-                regStudent.setString(2, name);
+                regStudent.setString(1, stu.getStudentId());
+                regStudent.setString(2, stu.getStudentName());
                 regStudent.executeUpdate();
                 Popups.studentRegistrationSuccess();
                 conn.close();
             } else if (resultSet.getInt("enabled") == 0){
                 PreparedStatement regStudent = conn.prepareStatement("UPDATE students SET student_name=?, enabled=1 WHERE student_id=?");
-                regStudent.setString(1, name);
-                regStudent.setString(2, studentNumber);
+                regStudent.setString(1, stu.getStudentName());
+                regStudent.setString(2, stu.getStudentId());
                 regStudent.executeUpdate();
                 Popups.studentRegistrationSuccess();
                 conn.close();
             }
             else {
-                Popups.studentAlreadyExists(studentNumber);
+                Popups.studentAlreadyExists(stu.getStudentId());
                 conn.close();
             }
             // checkStudentIfExisting
@@ -101,20 +102,20 @@ public class Library extends DBConn {
             return false;
         }
     }
-    public boolean deleteStudent(String studentNumber){
+    public boolean deleteStudent(Student stu){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement checkStudent = conn.prepareStatement("SELECT * FROM students WHERE student_id=? AND enabled=1");
-            checkStudent.setString(1, studentNumber);
+            checkStudent.setString(1, stu.getStudentId());
             ResultSet resultSet = checkStudent.executeQuery();
             if (resultSet.next()){
                 PreparedStatement deleteStudent = conn.prepareStatement("UPDATE students SET enabled=0 WHERE student_id=?");
                 deleteStudent.setString(1, resultSet.getString("student_id"));
                 deleteStudent.executeUpdate();
-                Popups.deleteStudentSuccessful(studentNumber, resultSet.getString("student_name"));
+                Popups.deleteStudentSuccessful(stu.getStudentId(), resultSet.getString("student_name"));
                 return true;
             } else {
-                Popups.studentDoesNotExist(studentNumber);
+                Popups.studentDoesNotExist(stu.getStudentId());
                 conn.close();
                 return false;
             }
