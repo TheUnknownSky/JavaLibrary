@@ -2,9 +2,10 @@ package GUI;
 
 import Account.Account;
 import Display.Popups;
+import Models.User;
 
 public class ChangeAcctName extends javax.swing.JFrame {
-    private int libacct_id;
+    User c_user = new User();
     /**
      * Creates new form ChangeNameGUI
      */
@@ -12,11 +13,11 @@ public class ChangeAcctName extends javax.swing.JFrame {
         initComponents();
     }
     
-    public ChangeAcctName(int id) {
+    public ChangeAcctName(User user) {
         initComponents();
-        this.libacct_id = id;
+        c_user = user;
         Account acct = new Account();
-        String[] name = acct.getAccountName(id);
+        String[] name = acct.getAccountName(c_user);
         firstName.setText(name[0]);
         lastName.setText(name[1]);
     }
@@ -133,8 +134,11 @@ public class ChangeAcctName extends javax.swing.JFrame {
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         if (!(firstName.getText().isEmpty() || lastName.getText().isEmpty())){
             Account acct = new Account();
-            if(acct.checkPassword(libacct_id, password.getText())){
-                acct.editName(libacct_id, firstName.getText(), lastName.getText());
+            c_user.setPassword(password.getText());
+            if(acct.checkPassword(c_user)){
+                c_user.setFirstname(firstName.getText());
+                c_user.setLastname(lastName.getText());
+                acct.editName(c_user);
                 super.dispose();
             } else {
                 Popups.passwordNotMatch();

@@ -2,18 +2,20 @@ package GUI;
 
 import Display.Popups;
 import Account.Account;
+import Models.User;
 
 public class ChangeAcctPassword extends javax.swing.JFrame {
     private int libacct_id;
+    User c_user = new User();
     /**
      * Creates new form Acct_ChangePasswordGUI
      */
     public ChangeAcctPassword() {
         initComponents();
     }
-    public ChangeAcctPassword(int id) {
+    public ChangeAcctPassword(User user) {
         initComponents();
-        this.libacct_id = id;
+        c_user = user;
     }
 
     /**
@@ -132,8 +134,10 @@ public class ChangeAcctPassword extends javax.swing.JFrame {
         if (!(currentPassword.getText().isEmpty() || newPassword.getText().isEmpty() || confirmNewPassword.getText().isEmpty())){
             if (newPassword.getText().equals(confirmNewPassword.getText())){
                 Account acct = new Account();
-                if (acct.checkPassword(libacct_id, currentPassword.getText())){
-                    acct.editPassword(libacct_id, newPassword.getText());
+                c_user.setPassword(currentPassword.getText());
+                if (acct.checkPassword(c_user)){
+                    c_user.setPassword(newPassword.getText());
+                    acct.editPassword(c_user);
                     super.dispose();
                 } else {
                     Popups.passwordNotMatch();

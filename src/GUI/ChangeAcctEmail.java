@@ -2,20 +2,22 @@ package GUI;
 
 import Account.Account;
 import Display.Popups;
+import Models.User;
 
 public class ChangeAcctEmail extends javax.swing.JFrame {
     private int libacct_id;
+    User c_user = new User();
     /**
      * Creates new form ChangeEmailGUI
      */
     public ChangeAcctEmail() {
         initComponents();
     }
-    public ChangeAcctEmail(int id) {
+    public ChangeAcctEmail(User user) {
         initComponents();
-        this.libacct_id = id;
+        c_user = user;
         Account acct = new Account();
-        email.setText(acct.getEmail(id));
+        email.setText(acct.getEmail(c_user));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,8 +113,10 @@ public class ChangeAcctEmail extends javax.swing.JFrame {
     private void confirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmActionPerformed
         if (!(email.getText().isEmpty())){
             Account acct = new Account();
-            if(acct.checkPassword(libacct_id, password.getText())){
-                acct.editEmail(libacct_id, email.getText());
+            c_user.setPassword(password.getText());
+            if(acct.checkPassword(c_user)){
+                c_user.setEmail(email.getText());
+                acct.editEmail(c_user);
                 super.dispose();
             } else {
                 Popups.passwordNotMatch();

@@ -148,7 +148,7 @@ public class Login extends javax.swing.JFrame {
             Account acct = new Account();
             if(acct.login(user)){
                 super.dispose();
-                new LibraryGUI(acct.returnLibacctIdOf(user.getEmail())).setVisible(true);
+                new LibraryGUI(acct.returnLibacctIdOf(user)).setVisible(true);
             }
         } else {
             Popups.insufficientDetails();

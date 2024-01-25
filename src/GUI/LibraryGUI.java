@@ -2,10 +2,11 @@ package GUI;
 
 import Account.Account;
 import Library.Library;
+import Models.User;
 import Display.Popups;
 
 public class LibraryGUI extends javax.swing.JFrame {
-    private int libacct_id = 1; // must be set with no value in actual use
+    User c_user = new User();
     private String[][] bookTable;
     /**
      * Creates new form LibraryGUI
@@ -14,19 +15,20 @@ public class LibraryGUI extends javax.swing.JFrame {
     // gui initializer for testing (running this file directly)
     public LibraryGUI() {
         initComponents();
+        c_user.setUserId(1);
         Account acct = new Account();
         Library lib = new Library();
-        String[] name = acct.getAccountName(libacct_id);
+        String[] name = acct.getAccountName(c_user);
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
         initBookTable("");
     }
     // gui initializer for actual use (to be access from Login.java
     public LibraryGUI(int id){
         initComponents();
-        this.libacct_id = id;
+        c_user.setUserId(id);
         Account acct = new Account();
         Library lib = new Library();
-        String[] name = acct.getAccountName(id);
+        String[] name = acct.getAccountName(c_user);
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
         initBookTable("");
     }
@@ -410,15 +412,15 @@ public class LibraryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteGenreActionPerformed
 
     private void changeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameActionPerformed
-        new ChangeAcctName(libacct_id).setVisible(true);
+        new ChangeAcctName(c_user).setVisible(true);
     }//GEN-LAST:event_changeNameActionPerformed
 
     private void changeEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeEmailActionPerformed
-        new ChangeAcctEmail(libacct_id).setVisible(true);
+        new ChangeAcctEmail(c_user).setVisible(true);
     }//GEN-LAST:event_changeEmailActionPerformed
 
     private void changePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordActionPerformed
-        new ChangeAcctPassword(libacct_id).setVisible(true);
+        new ChangeAcctPassword(c_user).setVisible(true);
     }//GEN-LAST:event_changePasswordActionPerformed
 
     private void registerStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerStudentActionPerformed
@@ -431,7 +433,7 @@ public class LibraryGUI extends javax.swing.JFrame {
 
     private void refreshLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshLibraryActionPerformed
         Account acct = new Account();
-        String[] name = acct.getAccountName(libacct_id);
+        String[] name = acct.getAccountName(c_user);
         currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
         
         Library lib = new Library();
@@ -466,7 +468,7 @@ public class LibraryGUI extends javax.swing.JFrame {
 
     private void appointmentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsButtonActionPerformed
         super.dispose();
-        new Appointments(this.libacct_id).setVisible(true);
+        new Appointments(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_appointmentsButtonActionPerformed
 
     private void editBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBookButtonActionPerformed
@@ -504,7 +506,7 @@ public class LibraryGUI extends javax.swing.JFrame {
 
     private void recordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordsButtonActionPerformed
         super.dispose();
-        new Records(this.libacct_id).setVisible(true);
+        new Records(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_recordsButtonActionPerformed
 
     /**
