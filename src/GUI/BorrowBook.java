@@ -7,11 +7,13 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import javax.swing.Timer;
 import Display.Popups;
+import Models.Book;
+import Models.Student;
 
 public class BorrowBook extends javax.swing.JFrame {
-    private String[][] books;
     private int book_id;
     private String book_title;
+    Book book = new Book();
     public BorrowBook() {
         initComponents();
         // Date and Time 
@@ -25,9 +27,9 @@ public class BorrowBook extends javax.swing.JFrame {
     }
     public BorrowBook(int book_id, String book_title){
         initComponents();
-        this.book_id = book_id;
-        this.book_title = book_title;
-        selectBookLabel.setText("Selected Book: " + book_title );
+        book.setBook_id(book_id);
+        book.setTitle(book_title);
+        selectBookLabel.setText("Selected Book: " + book.getTitle());
         // Date and Time 
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
@@ -159,9 +161,10 @@ public class BorrowBook extends javax.swing.JFrame {
     private void borrowBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowBookButtonActionPerformed
         if(!(year.getText().isEmpty() || number.getText().isEmpty())){
             Library lib = new Library();
-            String studentId = year.getText() + "-" + number.getText();
-            if(lib.borrowBook(book_id, studentId)){
-                Popups.bookBorrowedSuccessfully(this.book_title);
+            Student stu = new Student();
+            stu.setStudentId(year.getText() + "-" + number.getText());
+            if(lib.borrowBook(book, stu)){
+                Popups.bookBorrowedSuccessfully(book.getTitle());
                 super.dispose();
             }
         } else {

@@ -361,16 +361,16 @@ public class Library extends DBConn {
             Popups.sqlError(e.getMessage());
         }
     }
-    public boolean borrowBook(int bookId, String studentId){
+    public boolean borrowBook(Book book, Student stu){
         try {
-            if (checkStudentIfExisting(studentId)){
-                if(!checkIfApptExisting(bookId, studentId)){
+            if (checkStudentIfExisting(stu.getStudentId())){
+                if(!checkIfApptExisting(book.getBook_id(), stu.getStudentId())){
                     Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
                     PreparedStatement borrowBook = conn.prepareStatement("INSERT INTO appointments (book_id, student_id, appt_date_borrow) VALUES (?, ?, DEFAULT)");
-                    borrowBook.setInt(1, bookId);
-                    borrowBook.setString(2, studentId);
+                    borrowBook.setInt(1, book.getBook_id());
+                    borrowBook.setString(2, stu.getStudentId());
                     borrowBook.executeUpdate();
-                    reduceBookCount(bookId);
+                    reduceBookCount(book.getBook_id());
                     conn.close();
                     return true;
                 } else {
