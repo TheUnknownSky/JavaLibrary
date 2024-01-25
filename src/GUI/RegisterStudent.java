@@ -123,12 +123,18 @@ public class RegisterStudent extends javax.swing.JFrame {
 
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         if (!(year.getText().isEmpty() || number.getText().isEmpty() || name.getText().isEmpty())){
-            Library lib = new Library();
-            Student stu = new Student();
-            stu.setStudentId(year.getText() + "-" + number.getText());
-            stu.setStudentName(name.getText());
-            lib.registerStudent(stu);
-            super.dispose();
+            try {
+                int a = Integer.parseInt(year.getText());
+                int b = Integer.parseInt(number.getText());
+                Library lib = new Library();
+                Student stu = new Student();
+                stu.setStudentId(year.getText() + "-" + number.getText());
+                stu.setStudentName(name.getText());
+                lib.registerStudent(stu);
+                super.dispose();
+            } catch (Exception e){
+                Popups.sqlError("Year/Number is not an integer!");
+            }
         } else {
             Popups.insufficientDetails();
         }

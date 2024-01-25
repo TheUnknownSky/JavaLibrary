@@ -104,11 +104,17 @@ public class DeleteStudent extends javax.swing.JFrame {
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         if(!(year.getText().isEmpty() || number.getText().isEmpty())){
-            Library lib = new Library();
-            Student stu = new Student();
-            stu.setStudentId(year.getText() + "-" + number.getText());
-            if (lib.deleteStudent(stu)){
-                super.dispose();
+            try {
+                int a = Integer.parseInt(year.getText());
+                int b = Integer.parseInt(number.getText());
+                Library lib = new Library();
+                Student stu = new Student();
+                stu.setStudentId(year.getText() + "-" + number.getText());
+                if (lib.deleteStudent(stu)){
+                    super.dispose();
+                }
+            } catch (Exception e){
+                Popups.sqlError("Year/Number is not an integer!");
             }
         } else {
             Popups.insufficientDetails();
