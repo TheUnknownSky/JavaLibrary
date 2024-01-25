@@ -10,41 +10,42 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import Models.Book;
 
 public class Library extends DBConn {
-    public void addGenre(String genre_name){
+    public void addGenre(Book book){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement checkGenreIfExisting = conn.prepareStatement("SELECT bg_id, enabled FROM book_genre WHERE bg_name=?");
-            checkGenreIfExisting.setString(1, genre_name.toLowerCase());
+            checkGenreIfExisting.setString(1, book.getGenre_name().toLowerCase());
             ResultSet resultSet = checkGenreIfExisting.executeQuery();
             if (!resultSet.next()){
                 PreparedStatement addGenre = conn.prepareStatement("INSERT INTO book_genre (bg_name, enabled) VALUES (?, DEFAULT);");
-                addGenre.setString(1, genre_name.toLowerCase());
+                addGenre.setString(1, book.getGenre_name().toLowerCase());
                 addGenre.executeUpdate();
-                Popups.addGenreSuccessful(genre_name);
+                Popups.addGenreSuccessful(book.getGenre_name());
                 conn.close();
             } else if (resultSet.getInt("enabled") == 0){
                 PreparedStatement enable = conn.prepareStatement("UPDATE book_genre SET enabled=1 WHERE bg_id=?");
                 enable.setInt(1, resultSet.getInt("bg_id"));
                 enable.executeUpdate();
-                Popups.addGenreSuccessful(genre_name);
+                Popups.addGenreSuccessful(book.getGenre_name());
                 conn.close();
             } else {
                 conn.close();
-                Popups.addGenreNotSuccessfu(genre_name);
+                Popups.addGenreNotSuccessfu(book.getGenre_name());
             } 
         } catch (SQLException e){
             Popups.sqlError(e.getMessage());
         }
     }
-    public void deleteGenre(int genre_id, String genre_name){
+    public void deleteGenre(Book book){
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement deleteGenre = conn.prepareStatement("UPDATE book_genre SET enabled=0 WHERE bg_id=?");
-            deleteGenre.setInt(1, genre_id);
+            deleteGenre.setInt(1, book.getGenre_id());
             deleteGenre.executeUpdate();
-            Popups.deleteGenreSuccessful(genre_name); 
+            Popups.deleteGenreSuccessful(book.getGenre_name()); 
             conn.close();
         } catch (SQLException e){
             Popups.sqlError(e.getMessage());

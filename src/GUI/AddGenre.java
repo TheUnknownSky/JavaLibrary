@@ -1,6 +1,7 @@
 package GUI;
 
 import Library.Library;
+import Models.Book;
 
 public class AddGenre extends javax.swing.JFrame {
 
@@ -90,7 +91,9 @@ public class AddGenre extends javax.swing.JFrame {
 
     private void addGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreButtonActionPerformed
         Library lib = new Library();
-        lib.addGenre(genreToAdd.getText());
+        Book book = new Book();
+        book.setGenre_name(genreToAdd.getText());
+        lib.addGenre(book);
         //super.dispose();
     }//GEN-LAST:event_addGenreButtonActionPerformed
 

@@ -1,6 +1,7 @@
 package GUI;
 
 import Library.Library;
+import Models.Book;
 
 public class DeleteGenre extends javax.swing.JFrame {
     private String[][] genres;
@@ -94,10 +95,11 @@ public class DeleteGenre extends javax.swing.JFrame {
 
     private void deleteGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteGenreButtonActionPerformed
         Library lib = new Library();
+        Book book = new Book();
         int genreIndex = genreToDelete.getSelectedIndex();
-        int genreId = Integer.parseInt(genres[0][genreIndex]);
-        String genreName = (String) genreToDelete.getSelectedItem();
-        lib.deleteGenre(genreId, genreName);
+        book.setGenre_id(Integer.parseInt(genres[0][genreIndex]));
+        book.setGenre_name((String) genreToDelete.getSelectedItem());
+        lib.deleteGenre(book);
         super.dispose();
     }//GEN-LAST:event_deleteGenreButtonActionPerformed
 
