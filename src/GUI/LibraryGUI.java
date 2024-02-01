@@ -54,7 +54,7 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
         timer.start();
-        // working on initButtons();
+        initButtons();
     }
     private void updateCurrentTime() {
         // Format the current date and time
@@ -67,7 +67,7 @@ public class LibraryGUI extends javax.swing.JFrame {
     }
     public void initBookTable(String toSearch){
         Library lib = new Library();
-        bookTable = lib.getBookListForTable(toSearch);
+        bookTable = lib.getBookList(toSearch);
         tableOfBooks.setModel(new javax.swing.table.DefaultTableModel(
             bookTable,
             new String [] {
@@ -79,9 +79,17 @@ public class LibraryGUI extends javax.swing.JFrame {
     public void initButtons(){
         // still in progress before implementation
         Library lib = new Library();
-        
-        if (lib.getBookGenres().length == 0){
+        if (lib.getRowCountOf("book_genre") == 0){
             addBookButton.setEnabled(false);
+            addBookButton.setForeground(new java.awt.Color(0, 0, 0));
+        }
+        if (lib.getRowCountOf("books") == 0){
+            editBookButton.setEnabled(false);
+            editBookButton.setForeground(new java.awt.Color(0, 0, 0));
+            deleteBookButton.setEnabled(false);
+            deleteBookButton.setForeground(new java.awt.Color(0, 0, 0));
+            borrowBook.setEnabled(false);
+            borrowBook.setForeground(new java.awt.Color(0, 0, 0));
         }
     }
     
@@ -305,16 +313,16 @@ public class LibraryGUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(currentUser)
-                .addGap(477, 477, 477)
-                .addComponent(logOutButton, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                .addGap(75, 75, 75))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 488, Short.MAX_VALUE)
+                .addComponent(logOutButton)
+                .addGap(94, 94, 94))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(currentUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(currentUser)
                     .addComponent(logOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -521,13 +529,8 @@ public class LibraryGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteStudentActionPerformed
 
     private void refreshLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshLibraryActionPerformed
-        Account acct = new Account();
-        String[] name = acct.getAccountName(c_user);
-        currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
-        
-        Library lib = new Library();
-        searchBook.setText("");
-        initBookTable("");
+        super.dispose();
+        new LibraryGUI(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_refreshLibraryActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed

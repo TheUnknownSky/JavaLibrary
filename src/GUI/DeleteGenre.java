@@ -11,7 +11,7 @@ public class DeleteGenre extends javax.swing.JFrame {
     public DeleteGenre() {
         initComponents();
         Library lib = new Library();
-        this.genres = lib.getBookGenres();
+        this.genres = lib.getBookGenreList();
         genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
     }
 

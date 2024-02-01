@@ -139,25 +139,36 @@ public class Library extends DBConn {
             return "";
         }
     }
-    public String[][] getBookGenres(){
+    public int getRowCountOf(String table){
+        int rowCount = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement count = conn.prepareStatement("SELECT COUNT(*) AS rowCount FROM " + table + " WHERE enabled=1");
+            ResultSet resultSet = count.executeQuery();
+            resultSet.next();
+            rowCount = resultSet.getInt("rowCount");
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return rowCount;
+    }
+    public String[][] getBookGenreList(){
         String[][] genres = new String[2][];
-        String[] genre_names = {};
-        String[] genre_ids = {};
+        String[] genre_names = new String[getRowCountOf("book_genre")];
+        String[] genre_ids = new String[getRowCountOf("book_genre")];
+        System.out.println(getRowCountOf("book_genre"));
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement getGenres = conn.prepareStatement("SELECT * FROM book_genre WHERE enabled=1 ORDER BY bg_name");
             ResultSet resultSet = getGenres.executeQuery();
-            int i = 1;
-            while (resultSet.next()){
-                genre_ids = Arrays.copyOf(genre_ids, i);
-                genre_names = Arrays.copyOf(genre_names, i);
-                genre_ids[genre_ids.length - 1] = Integer.toString(resultSet.getInt("bg_id"));
+            for (int i = 1; resultSet.next(); i++){
+                genre_ids[i - 1] = Integer.toString(resultSet.getInt("bg_id"));
                 String genre_name = resultSet.getString("bg_name");
-                genre_names[genre_names.length - 1] = genre_name.substring(0, 1).toUpperCase() + genre_name.substring(1);
-                i++;
+                genre_names[i - 1] = genre_name.substring(0, 1).toUpperCase() + genre_name.substring(1);
             }
             genres[0] = genre_ids;
             genres[1] = genre_names;
+            
             conn.close();
         } catch (SQLException e){
             Popups.sqlError(e.getMessage());
@@ -263,6 +274,43 @@ public class Library extends DBConn {
                 bookDetails[5] = Integer.toString(resultSet.getInt("book_id"));
                 booklist = Arrays.copyOf(booklist, i);
                 booklist[booklist.length - 1] = bookDetails;
+            }
+            conn.close();
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return booklist;
+    }
+    public String[][] getBookList(String toSearch){
+        String[][] booklist = new String[getRowCountOf("books")][];
+        try {
+            String query;
+            if (!toSearch.isEmpty()){
+                query = "SELECT * FROM books WHERE enabled=1 AND book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ORDER BY book_title ASC";
+            } else {
+                query = "SELECT * FROM books WHERE enabled=1 ORDER BY book_title ASC";
+            }
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement returnBookList = conn.prepareStatement(query);
+            ResultSet resultSet = returnBookList.executeQuery();
+            for(int i = 1; resultSet.next(); i++){
+                String[] bookDetails = new String[6]; // title, author, genre, count, availability, id
+                bookDetails[0] = resultSet.getString("book_title");
+                bookDetails[1] = resultSet.getString("book_author");
+                PreparedStatement returnGenreName = conn.prepareStatement("SELECT bg_name FROM book_genre WHERE bg_id=?");
+                returnGenreName.setInt(1, resultSet.getInt("book_genre"));
+                ResultSet genre_name = returnGenreName.executeQuery();
+                genre_name.next();
+                String genre = genre_name.getString("bg_name");
+                bookDetails[2] = genre.substring(0, 1).toUpperCase() + genre.substring(1);
+                bookDetails[3] = Integer.toString(resultSet.getInt("book_count"));
+                if(resultSet.getInt("book_count") > 0){
+                    bookDetails[4] = "Available";
+                } else {
+                    bookDetails[4] = "Unavailable";;
+                }
+                bookDetails[5] = Integer.toString(resultSet.getInt("book_id"));
+                booklist[i - 1] = bookDetails;
             }
             conn.close();
         } catch (SQLException e){

@@ -22,7 +22,7 @@ public class EditBook extends javax.swing.JFrame {
         Library lib = new Library();
         book.setBook_id(book_id);
         this.bookDetails = lib.getBookDetails(book.getBook_id());
-        this.genres = lib.getBookGenres();
+        this.genres = lib.getBookGenreList();
         bookGenre.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
         bookName.setText(this.bookDetails[0]);
         bookAuthor.setText(this.bookDetails[1]);

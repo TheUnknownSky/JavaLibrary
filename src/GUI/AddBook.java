@@ -12,7 +12,7 @@ public class AddBook extends javax.swing.JFrame {
     public AddBook() {
         initComponents();
         Library lib = new Library();
-        this.genres = lib.getBookGenres();
+        this.genres = lib.getBookGenreList();
         bookGenre.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
     }
 
