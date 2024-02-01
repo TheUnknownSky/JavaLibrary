@@ -37,6 +37,7 @@ public class Records extends javax.swing.JFrame {
     public Records(int id) {
         this.id = id;
         initComponents();
+        initButton();
         c_user.setUserId(1);
         Account acct = new Account();
         Library lib = new Library();
@@ -71,6 +72,12 @@ public class Records extends javax.swing.JFrame {
             }
         ));
         jScrollPane2.setViewportView(finApptTable);
+    }
+    public void initButton(){
+        Library lib = new Library();
+        if (lib.getRowCountOfAppts() == 0){
+            apptButton.setEnabled(false);
+        }
     }
 
     /**

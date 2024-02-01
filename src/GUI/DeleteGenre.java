@@ -13,6 +13,13 @@ public class DeleteGenre extends javax.swing.JFrame {
         Library lib = new Library();
         this.genres = lib.getBookGenreList();
         genreToDelete.setModel(new javax.swing.DefaultComboBoxModel<>(this.genres[1]));
+        initButton();
+    }
+    public void initButton(){
+        Library lib = new Library();
+        if (lib.getRowCountOfGenres() == 0){
+            deleteGenreButton.setEnabled(false);
+        }
     }
 
     /**

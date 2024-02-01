@@ -91,6 +91,18 @@ public class LibraryGUI extends javax.swing.JFrame {
             borrowBook.setEnabled(false);
             borrowBook.setForeground(new java.awt.Color(0, 0, 0));
         }
+        if (lib.getRowCountOfStudents() == 0){
+            borrowBook.setEnabled(false);
+            borrowBook.setForeground(new java.awt.Color(0, 0, 0));
+        }
+        if (lib.getRowCountOfAppts() == 0){
+            appointmentsButton.setEnabled(false);
+            appointmentsButton.setForeground(new java.awt.Color(0, 0, 0));
+        }
+        if (lib.getRowCountOfFinAppts() == 0){
+            recordsButton.setEnabled(false);
+            recordsButton.setForeground(new java.awt.Color(0, 0, 0));
+        }
     }
     
     

@@ -19,6 +19,7 @@ public class Appointments extends javax.swing.JFrame {
      */
     public Appointments() {
         initComponents();
+        initButton();
         c_user.setUserId(1);
         Account acct = new Account();
         Library lib = new Library();
@@ -37,6 +38,7 @@ public class Appointments extends javax.swing.JFrame {
     public Appointments(int id) {
         this.id = id;
         initComponents();
+        initButton();
         c_user.setUserId(1);
         Account acct = new Account();
         Library lib = new Library();
@@ -79,6 +81,12 @@ public class Appointments extends javax.swing.JFrame {
             }
         });
     }
+    public void initButton(){
+        Library lib = new Library();
+        if (lib.getRowCountOfFinAppts() == 0){
+            recordsButton.setEnabled(false);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -103,6 +111,7 @@ public class Appointments extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         logOutButton = new javax.swing.JButton();
         currentUser = new javax.swing.JLabel();
+        refreshLibrary = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Appointments");
@@ -258,6 +267,16 @@ public class Appointments extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        refreshLibrary.setBackground(new java.awt.Color(60, 110, 113));
+        refreshLibrary.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        refreshLibrary.setForeground(new java.awt.Color(255, 255, 255));
+        refreshLibrary.setText("Refresh");
+        refreshLibrary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshLibraryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -268,12 +287,13 @@ public class Appointments extends javax.swing.JFrame {
                 .addGap(57, 57, 57)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dateAndTime1)
+                    .addComponent(dateAndTime, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(refreshLibrary, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(libButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                         .addComponent(recordsButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(deleteApptButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(finishApptButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(dateAndTime, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(finishApptButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(36, Short.MAX_VALUE))
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -291,11 +311,13 @@ public class Appointments extends javax.swing.JFrame {
                         .addComponent(recordsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(libButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
+                        .addGap(18, 18, 18)
+                        .addComponent(refreshLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(dateAndTime1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dateAndTime)
-                        .addGap(119, 119, 119))
+                        .addGap(89, 89, 89))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -359,6 +381,11 @@ public class Appointments extends javax.swing.JFrame {
         new Login().setVisible(true);
     }//GEN-LAST:event_logOutButtonActionPerformed
 
+    private void refreshLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshLibraryActionPerformed
+        super.dispose();
+        new Appointments(c_user.getUserId()).setVisible(true);
+    }//GEN-LAST:event_refreshLibraryActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -410,5 +437,6 @@ public class Appointments extends javax.swing.JFrame {
     private javax.swing.JButton libButton;
     private javax.swing.JButton logOutButton;
     private javax.swing.JButton recordsButton;
+    private javax.swing.JButton refreshLibrary;
     // End of variables declaration//GEN-END:variables
 }

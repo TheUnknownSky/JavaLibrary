@@ -171,6 +171,19 @@ public class Library extends DBConn {
         }
         return rowCount;
     }
+    public int getRowCountOfStudents(){
+        int rowCount = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement count = conn.prepareStatement("SELECT COUNT(*) AS rowCount FROM students WHERE enabled=1");
+            ResultSet resultSet = count.executeQuery();
+            resultSet.next();
+            rowCount = resultSet.getInt("rowCount");
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return rowCount;
+    }
     public int getRowCountOfAppts(){
         int rowCount = 0;
         try {
@@ -547,7 +560,16 @@ public class Library extends DBConn {
             setFinAppt.setString(2, resultSet.getString("student_id"));
             setFinAppt.setTimestamp(3, resultSet.getTimestamp("appt_date_borrow"));
             setFinAppt.executeUpdate();
-            deleteAppointment(appt_id);
+            PreparedStatement getBookId = conn.prepareStatement("SELECT book_id FROM appointments WHERE appt_id=?");
+            getBookId.setInt(1, appt_id);
+            ResultSet result = getBookId.executeQuery();
+            result.next();
+            System.out.println("3");
+            addBookCount(result.getInt("book_id"));
+            PreparedStatement deleteAppt = conn.prepareStatement("DELETE FROM appointments WHERE appt_id=?");
+            deleteAppt.setInt(1, appt_id);
+            deleteAppt.executeUpdate();
+            Popups.apptDeleteSuccess();
             conn.close();
             return true;
         } catch (SQLException e){
