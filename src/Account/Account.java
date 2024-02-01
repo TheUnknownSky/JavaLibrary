@@ -57,15 +57,19 @@ public class Account extends DBConn{
             PreparedStatement checkAcct = conn.prepareStatement("SELECT libacct_id FROM lib_accounts WHERE libacct_email=?");
             checkAcct.setString(1, user.getEmail());
             ResultSet resultSet = checkAcct.executeQuery();
-            resultSet.next();
-            user.setUserId(resultSet.getInt("libacct_id"));
-            if (this.checkPassword(user)){
-                conn.close();
-                return true;
+            if(resultSet.next()){
+                user.setUserId(resultSet.getInt("libacct_id"));
+                if (this.checkPassword(user)){
+                    conn.close();
+                    return true;
+                } else {
+                    conn.close();
+                    return false;
+                }
             } else {
-                conn.close();
                 return false;
             }
+            
         } catch (SQLException e){
             Popups.sqlError(e.getMessage());
             return false;
@@ -186,5 +190,18 @@ public class Account extends DBConn{
             Popups.sqlError(e.getMessage());
             return false;
         }
+    }
+    public int getRowCountOfUsers(){
+        int rowCount = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement count = conn.prepareStatement("SELECT COUNT(*) AS rowCount FROM lib_accounts");
+            ResultSet resultSet = count.executeQuery();
+            resultSet.next();
+            rowCount = resultSet.getInt("rowCount");
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return rowCount;
     }
 }

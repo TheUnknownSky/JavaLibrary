@@ -143,17 +143,23 @@ public class AddBook extends javax.swing.JFrame {
 
     private void addBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookButtonActionPerformed
         if (!(bookName.getText().isEmpty() || bookAuthor.getText().isEmpty() || bookCount.getText().isEmpty())){
-            Library lib = new Library();
-            Book book = new Book();
-            int genreIndex = bookGenre.getSelectedIndex();
-            int genreId = Integer.parseInt(genres[0][genreIndex]);
-            book.setTitle(bookName.getText());
-            book.setAuthor(bookAuthor.getText());
-            book.setGenre_id(genreId);
-            book.setQuantity(Integer.parseInt(bookCount.getText()));
-            if(lib.addBook(book)){
-                super.dispose();
+            try {
+                int quantity = Integer.parseInt(bookCount.getText());
+                Library lib = new Library();
+                Book book = new Book();
+                int genreIndex = bookGenre.getSelectedIndex();
+                int genreId = Integer.parseInt(genres[0][genreIndex]);
+                book.setTitle(bookName.getText());
+                book.setAuthor(bookAuthor.getText());
+                book.setGenre_id(genreId);
+                book.setQuantity(quantity);
+                if(lib.addBook(book)){
+                    super.dispose();
+                }
+            } catch (Exception e){
+                Popups.sqlError("Quantity is not an integer!");
             }
+            
         } else {
             Popups.insufficientDetails();
         }

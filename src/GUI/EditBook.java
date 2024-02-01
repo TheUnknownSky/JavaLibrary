@@ -1,5 +1,6 @@
 package GUI;
 
+import Display.Popups;
 import Library.Library;
 import Models.Book;
 
@@ -156,16 +157,19 @@ public class EditBook extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void editBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBookButtonActionPerformed
-        Library lib = new Library();
-        int genreIndex = bookGenre.getSelectedIndex();
-        int genreId = Integer.parseInt(genres[0][genreIndex]);
-        
-        book.setTitle(bookName.getText());
-        book.setAuthor(bookAuthor.getText());
-        book.setGenre_id(Integer.parseInt(genres[0][genreIndex]));
-        book.setQuantity(Integer.parseInt(bookCount.getText()));
-        lib.editBook(book);
-        super.dispose();
+        try {
+            Library lib = new Library();
+            int quantity = Integer.parseInt(bookCount.getText());
+            int genreIndex = bookGenre.getSelectedIndex();
+            book.setTitle(bookName.getText());
+            book.setAuthor(bookAuthor.getText());
+            book.setGenre_id(Integer.parseInt(genres[0][genreIndex]));
+            book.setQuantity(quantity);
+            lib.editBook(book);
+            super.dispose();
+        } catch (Exception e){
+            Popups.sqlError("Quantity not an integer!");
+        }
     }//GEN-LAST:event_editBookButtonActionPerformed
 
     private int findIndex(String[] array, String targetValue){

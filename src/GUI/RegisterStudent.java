@@ -124,11 +124,11 @@ public class RegisterStudent extends javax.swing.JFrame {
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
         if (!(year.getText().isEmpty() || number.getText().isEmpty() || name.getText().isEmpty())){
             try {
-                int a = Integer.parseInt(year.getText());
-                int b = Integer.parseInt(number.getText());
+                int yearNum = Integer.parseInt(year.getText());
+                int numberNum = Integer.parseInt(number.getText());
                 Library lib = new Library();
                 Student stu = new Student();
-                stu.setStudentId(year.getText() + "-" + number.getText());
+                stu.setStudentId(yearNum + "-" + numberNum);
                 stu.setStudentName(name.getText());
                 lib.registerStudent(stu);
                 super.dispose();

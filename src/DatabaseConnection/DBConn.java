@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 
 public class DBConn {
     // change the value of database_name to the desired name of your database
-    private static String database_name = "testlibdb2";
+    private static String database_name = "library_DB";
     
     // change the value of user, and password if needed (the values below are xampp mysql default credentials except for the database_name which you need to replace)
     public static String url = "jdbc:mysql://localhost:3306/" + database_name;
