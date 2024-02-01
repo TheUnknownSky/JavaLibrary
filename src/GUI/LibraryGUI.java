@@ -5,6 +5,11 @@ import Library.Library;
 import Models.User;
 import Display.Popups;
 import Models.Book;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.Timer;
 
 public class LibraryGUI extends javax.swing.JFrame {
     User c_user = new User();
@@ -20,8 +25,17 @@ public class LibraryGUI extends javax.swing.JFrame {
         Account acct = new Account();
         Library lib = new Library();
         String[] name = acct.getAccountName(c_user);
-        currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
+        currentUser.setText("Welcome, " + name[0] + " " + name[1] + "!");
         initBookTable("");
+        // Date and Time 
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateCurrentTime();
+            }
+        });
+        timer.start();
+        initButtons();
     }
     // gui initializer for actual use (to be access from Login.java
     public LibraryGUI(int id){
@@ -30,8 +44,26 @@ public class LibraryGUI extends javax.swing.JFrame {
         Account acct = new Account();
         Library lib = new Library();
         String[] name = acct.getAccountName(c_user);
-        currentUser.setText("Current Library Admin: " + name[0] + " " + name[1]);
+        currentUser.setText("Welcome, " + name[0] + " " + name[1] + "!");
         initBookTable("");
+        // Date and Time 
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateCurrentTime();
+            }
+        });
+        timer.start();
+        // working on initButtons();
+    }
+    private void updateCurrentTime() {
+        // Format the current date and time
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
+
+        // Update the text of the JLabel
+        dateAndTime.setText(formattedDateTime);
     }
     public void initBookTable(String toSearch){
         Library lib = new Library();
@@ -43,6 +75,14 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(tableOfBooks);
+    }
+    public void initButtons(){
+        // still in progress before implementation
+        Library lib = new Library();
+        
+        if (lib.getBookGenres().length == 0){
+            addBookButton.setEnabled(false);
+        }
     }
     
     
@@ -62,7 +102,6 @@ public class LibraryGUI extends javax.swing.JFrame {
         refreshLibrary = new javax.swing.JButton();
         borrowBook = new javax.swing.JButton();
         appointmentsButton = new javax.swing.JButton();
-        currentUser = new javax.swing.JLabel();
         searchBook = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
         editBookButton = new javax.swing.JButton();
@@ -71,12 +110,16 @@ public class LibraryGUI extends javax.swing.JFrame {
         addBookButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         recordsButton = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        logOutButton = new javax.swing.JButton();
+        currentUser = new javax.swing.JLabel();
+        dateAndTime1 = new javax.swing.JLabel();
+        dateAndTime = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         accountMenu = new javax.swing.JMenu();
         changeName = new javax.swing.JMenuItem();
         changeEmail = new javax.swing.JMenuItem();
         changePassword = new javax.swing.JMenuItem();
-        logOut = new javax.swing.JMenuItem();
         genreMenu = new javax.swing.JMenu();
         addGenre = new javax.swing.JMenuItem();
         deleteGenre = new javax.swing.JMenuItem();
@@ -85,7 +128,7 @@ public class LibraryGUI extends javax.swing.JFrame {
         deleteStudent = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Library Management System - Books");
+        setTitle("Dashboard");
         setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(217, 217, 217));
@@ -169,10 +212,6 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
 
-        currentUser.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
-        currentUser.setForeground(new java.awt.Color(0, 0, 0));
-        currentUser.setText("Current Library Admin: ");
-
         searchBook.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
 
         searchButton.setBackground(new java.awt.Color(60, 110, 113));
@@ -231,46 +270,100 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(60, 110, 113));
+
+        logOutButton.setBackground(new java.awt.Color(60, 110, 113));
+        logOutButton.setFont(new java.awt.Font("Yu Gothic UI", 1, 14)); // NOI18N
+        logOutButton.setForeground(new java.awt.Color(255, 255, 255));
+        logOutButton.setText("Log Out");
+        logOutButton.setBorderPainted(false);
+        logOutButton.setContentAreaFilled(false);
+        logOutButton.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                logOutButtonMouseMoved(evt);
+            }
+        });
+        logOutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logOutButtonMouseExited(evt);
+            }
+        });
+        logOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logOutButtonActionPerformed(evt);
+            }
+        });
+
+        currentUser.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 18)); // NOI18N
+        currentUser.setForeground(new java.awt.Color(255, 255, 255));
+        currentUser.setText("Welcome, First Name Last Name");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(currentUser)
+                .addGap(477, 477, 477)
+                .addComponent(logOutButton, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                .addGap(75, 75, 75))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(currentUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(logOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
+        dateAndTime1.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        dateAndTime1.setForeground(new java.awt.Color(0, 0, 0));
+        dateAndTime1.setText("Date & Time: ");
+
+        dateAndTime.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+        dateAndTime.setForeground(new java.awt.Color(0, 0, 0));
+        dateAndTime.setText(" ");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54)
+                        .addComponent(searchBook, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(53, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(54, 54, 54)
-                                .addComponent(searchBook, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(53, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(searchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(borrowBook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(refreshLibrary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(editBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(deleteBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(addBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(recordsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                                    .addComponent(appointmentsButton, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(80, 80, 80))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(currentUser)
-                        .addContainerGap())))
+                            .addComponent(dateAndTime1)
+                            .addComponent(dateAndTime, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(searchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(borrowBook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(refreshLibrary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(editBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(deleteBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addBookButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(recordsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                                .addComponent(appointmentsButton, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(55, 55, 55))))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(currentUser, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(105, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(searchBook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -292,8 +385,17 @@ public class LibraryGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(recordsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(refreshLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addComponent(refreshLibrary, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(dateAndTime1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dateAndTime))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32))
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 559, Short.MAX_VALUE)))
         );
 
         accountMenu.setText("Account");
@@ -325,15 +427,6 @@ public class LibraryGUI extends javax.swing.JFrame {
             }
         });
         accountMenu.add(changePassword);
-
-        logOut.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 12)); // NOI18N
-        logOut.setText("Log Out");
-        logOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logOutActionPerformed(evt);
-            }
-        });
-        accountMenu.add(logOut);
 
         jMenuBar1.add(accountMenu);
 
@@ -398,11 +491,6 @@ public class LibraryGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
-        super.dispose();
-        new Login().setVisible(true);
-    }//GEN-LAST:event_logOutActionPerformed
 
     private void addGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreActionPerformed
         new AddGenre().setVisible(true);
@@ -510,6 +598,19 @@ public class LibraryGUI extends javax.swing.JFrame {
         new Records(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_recordsButtonActionPerformed
 
+    private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
+        super.dispose();
+        new Login().setVisible(true);
+    }//GEN-LAST:event_logOutButtonActionPerformed
+
+    private void logOutButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutButtonMouseExited
+        logOutButton.setForeground(new java.awt.Color(255, 255, 255));
+    }//GEN-LAST:event_logOutButtonMouseExited
+
+    private void logOutButtonMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutButtonMouseMoved
+        logOutButton.setForeground(new java.awt.Color(204, 204, 204));
+    }//GEN-LAST:event_logOutButtonMouseMoved
+
     /**
      * @param args the command line arguments
      */
@@ -556,6 +657,8 @@ public class LibraryGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem changeName;
     private javax.swing.JMenuItem changePassword;
     private javax.swing.JLabel currentUser;
+    private javax.swing.JLabel dateAndTime;
+    private javax.swing.JLabel dateAndTime1;
     private javax.swing.JButton deleteBookButton;
     private javax.swing.JMenuItem deleteGenre;
     private javax.swing.JMenuItem deleteStudent;
@@ -565,9 +668,10 @@ public class LibraryGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JMenuItem logOut;
+    private javax.swing.JButton logOutButton;
     private javax.swing.JButton recordsButton;
     private javax.swing.JButton refreshLibrary;
     private javax.swing.JMenuItem registerStudent;

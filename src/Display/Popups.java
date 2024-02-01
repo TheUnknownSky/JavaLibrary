@@ -40,7 +40,7 @@ public class Popups {
     public static void loginSuccess(){
         JOptionPane.showMessageDialog(
             null,
-            "Welcome to Library Managemenet System",
+            "Welcome to Library Management System",
             "Login Successful",
             JOptionPane.INFORMATION_MESSAGE
         );
