@@ -79,11 +79,11 @@ public class LibraryGUI extends javax.swing.JFrame {
     public void initButtons(){
         // still in progress before implementation
         Library lib = new Library();
-        if (lib.getRowCountOf("book_genre") == 0){
+        if (lib.getRowCountOfGenres() == 0){
             addBookButton.setEnabled(false);
             addBookButton.setForeground(new java.awt.Color(0, 0, 0));
         }
-        if (lib.getRowCountOf("books") == 0){
+        if (lib.getRowCountOfBooks("") == 0){
             editBookButton.setEnabled(false);
             editBookButton.setForeground(new java.awt.Color(0, 0, 0));
             deleteBookButton.setEnabled(false);

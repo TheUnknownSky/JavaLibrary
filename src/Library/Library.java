@@ -139,11 +139,56 @@ public class Library extends DBConn {
             return "";
         }
     }
-    public int getRowCountOf(String table){
+    public int getRowCountOfBooks(String toSearch){
+        int rowCount = 0;
+        String query = "";
+        if (!toSearch.isEmpty()){
+            query = "SELECT COUNT(*) AS rowCount FROM books WHERE enabled=1 AND book_title LIKE '%" + toSearch + "%' OR book_author LIKE '%" + toSearch + "%' ";
+        } else {
+            query = "SELECT COUNT(*) AS rowCount FROM books WHERE enabled=1";
+        }
+        try {
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement count = conn.prepareStatement(query);
+            ResultSet resultSet = count.executeQuery();
+            resultSet.next();
+            rowCount = resultSet.getInt("rowCount");
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return rowCount;
+    }
+    public int getRowCountOfGenres(){
         int rowCount = 0;
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement count = conn.prepareStatement("SELECT COUNT(*) AS rowCount FROM " + table + " WHERE enabled=1");
+            PreparedStatement count = conn.prepareStatement("SELECT COUNT(*) AS rowCount FROM book_genre WHERE enabled=1");
+            ResultSet resultSet = count.executeQuery();
+            resultSet.next();
+            rowCount = resultSet.getInt("rowCount");
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return rowCount;
+    }
+    public int getRowCountOfAppts(){
+        int rowCount = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement count = conn.prepareStatement("SELECT COUNT(*) AS rowCount FROM appointments");
+            ResultSet resultSet = count.executeQuery();
+            resultSet.next();
+            rowCount = resultSet.getInt("rowCount");
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return rowCount;
+    }
+    public int getRowCountOfFinAppts(){
+        int rowCount = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement count = conn.prepareStatement("SELECT COUNT(*) AS rowCount FROM finished_appointments WHERE enabled=1");
             ResultSet resultSet = count.executeQuery();
             resultSet.next();
             rowCount = resultSet.getInt("rowCount");
@@ -154,9 +199,8 @@ public class Library extends DBConn {
     }
     public String[][] getBookGenreList(){
         String[][] genres = new String[2][];
-        String[] genre_names = new String[getRowCountOf("book_genre")];
-        String[] genre_ids = new String[getRowCountOf("book_genre")];
-        System.out.println(getRowCountOf("book_genre"));
+        String[] genre_names = new String[getRowCountOfGenres()];
+        String[] genre_ids = new String[getRowCountOfGenres()];
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement getGenres = conn.prepareStatement("SELECT * FROM book_genre WHERE enabled=1 ORDER BY bg_name");
@@ -282,7 +326,7 @@ public class Library extends DBConn {
         return booklist;
     }
     public String[][] getBookList(String toSearch){
-        String[][] booklist = new String[getRowCountOf("books")][];
+        String[][] booklist = new String[getRowCountOfBooks(toSearch)][];
         try {
             String query;
             if (!toSearch.isEmpty()){
@@ -434,7 +478,7 @@ public class Library extends DBConn {
         }
     }
     public String[][] getAppointmentsDetails(String orderBy){
-        String[][] appointments = {};
+        String[][] appointments = new String[getRowCountOfAppts()][];
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
             PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
@@ -445,8 +489,7 @@ public class Library extends DBConn {
                 appt[1] = getStudentName(resultSet.getString("student_id"));
                 appt[2] = formatTimestampAsString(resultSet.getTimestamp("appt_date_borrow"));
                 appt[3] = Integer.toString(resultSet.getInt("appt_id"));
-                appointments = Arrays.copyOf(appointments, i);
-                appointments[appointments.length - 1] = appt;
+                appointments[i - 1] = appt;
             }
             conn.close();
         } catch(SQLException e){
@@ -454,27 +497,7 @@ public class Library extends DBConn {
         }
         return appointments;
     }
-    public String[][] getAppointmentsById(String orderBy){
-        String[][] appointments = {};
-        try {
-            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password);  
-            PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM appointments ORDER BY " + orderBy);
-            ResultSet resultSet = getAppt.executeQuery();
-            for (int i = 1; resultSet.next(); i++){
-                String[] appt = new String[4];
-                appt[0] = getBookName(resultSet.getInt("book_id"));
-                appt[1] = getStudentName(resultSet.getString("student_id"));
-                appt[2] = formatTimestampAsString(resultSet.getTimestamp("appt_date_borrow"));
-                appt[3] = Integer.toString(resultSet.getInt("appt_id"));
-                appointments = Arrays.copyOf(appointments, i);
-                appointments[appointments.length - 1] = appt;
-            }
-            conn.close();
-        } catch(SQLException e){
-            Popups.sqlError(e.getMessage());
-        }
-        return appointments;
-    }
+    
     private static String formatTimestampAsString(Timestamp timestamp) {
         // Use SimpleDateFormat to format the timestamp as a String
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -533,7 +556,7 @@ public class Library extends DBConn {
         }
     }
     public String[][] getFinAppointmentsDetails(String orderBy){
-        String[][] appointments = {};
+        String[][] appointments = new String[getRowCountOfFinAppts()][];
         try {
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password);  
             PreparedStatement getAppt = conn.prepareStatement("SELECT * FROM finished_appointments WHERE enabled=1 ORDER BY " + orderBy);
@@ -545,8 +568,7 @@ public class Library extends DBConn {
                 appt[2] = formatTimestampAsString(resultSet.getTimestamp("appt_date_borrow"));
                 appt[3] = formatTimestampAsString(resultSet.getTimestamp("appt_date_return"));
                 appt[4] = Integer.toString(resultSet.getInt("finappt_id"));
-                appointments = Arrays.copyOf(appointments, i);
-                appointments[appointments.length - 1] = appt;
+                appointments[i - 1] = appt;
             }
             conn.close();
         } catch(SQLException e){
