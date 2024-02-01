@@ -35,7 +35,6 @@ To run the system properly, follow the following:
   3. Read the comment (directions) inside DBConn class and follow it.
   4. Run the DBConn.java file (by pressing Shift + F6) to initialize the database and its tables
   5. Check in phpMyAdmin if the database was properly initiated. If database initiation has succeeded, proceed to the next direction.
-  6. Run the RegistrationGUI.java (by pressing Shift + F6) to start the program.
-  7. You can either run RegistrationGUI.java or LoginGUI.java to start the program again after registering an account.
-  8. Before adding books, you must add genres to choose first.
-  9. Before borrowing books, you must register students first.
+  6. Run the Runner.java (by pressing Shift + F6) to start the program.
+  7. Before adding books, you must add genres to choose first.
+  8. Before borrowing books, you must register students first.
