@@ -65,9 +65,21 @@ public class Login extends javax.swing.JFrame {
 
         registerButton.setBackground(new java.awt.Color(56, 193, 114));
         registerButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
-        registerButton.setForeground(new java.awt.Color(51, 51, 51));
-        registerButton.setText("Register");
+        registerButton.setForeground(new java.awt.Color(0, 0, 255));
+        registerButton.setText("Here");
         registerButton.setBorder(null);
+        registerButton.setBorderPainted(false);
+        registerButton.setContentAreaFilled(false);
+        registerButton.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                registerButtonMouseMoved(evt);
+            }
+        });
+        registerButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                registerButtonMouseExited(evt);
+            }
+        });
         registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 registerButtonActionPerformed(evt);
@@ -76,7 +88,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(53, 53, 53));
-        jLabel4.setText("Don't have an account? Click here:");
+        jLabel4.setText("Don't have an account? Click");
 
         jLabel5.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 30)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(60, 110, 113));
@@ -95,7 +107,7 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(registerButton))
                     .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
                     .addComponent(email))
                 .addGap(66, 66, 66))
@@ -159,6 +171,14 @@ public class Login extends javax.swing.JFrame {
         super.dispose();
         new Registration().setVisible(true);
     }//GEN-LAST:event_registerButtonActionPerformed
+
+    private void registerButtonMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerButtonMouseMoved
+        registerButton.setForeground(new java.awt.Color(0, 100, 255));
+    }//GEN-LAST:event_registerButtonMouseMoved
+
+    private void registerButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerButtonMouseExited
+        registerButton.setForeground(new java.awt.Color(0, 0, 255));
+    }//GEN-LAST:event_registerButtonMouseExited
 
     /**
      * @param args the command line arguments

@@ -84,8 +84,8 @@ public class Registration extends javax.swing.JFrame {
         registerButton.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
         registerButton.setForeground(new java.awt.Color(255, 255, 255));
         registerButton.setText("Register");
+        registerButton.setToolTipText("");
         registerButton.setBorder(null);
-        registerButton.setBorderPainted(false);
         registerButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         registerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,13 +97,25 @@ public class Registration extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(53, 53, 53));
-        jLabel1.setText("Already have an account? Click this: ");
+        jLabel1.setText("Already have an account? Click");
 
         loginExistingAcct.setBackground(new java.awt.Color(56, 193, 114));
         loginExistingAcct.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
-        loginExistingAcct.setForeground(new java.awt.Color(51, 51, 51));
-        loginExistingAcct.setText("Login");
+        loginExistingAcct.setForeground(new java.awt.Color(0, 0, 255));
+        loginExistingAcct.setText("Here");
         loginExistingAcct.setBorder(null);
+        loginExistingAcct.setBorderPainted(false);
+        loginExistingAcct.setContentAreaFilled(false);
+        loginExistingAcct.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                loginExistingAcctMouseMoved(evt);
+            }
+        });
+        loginExistingAcct.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                loginExistingAcctMouseExited(evt);
+            }
+        });
         loginExistingAcct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginExistingAcctActionPerformed(evt);
@@ -126,7 +138,7 @@ public class Registration extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(loginExistingAcct, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(loginExistingAcct, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel6)
                                 .addComponent(jLabel4)
@@ -295,6 +307,14 @@ public class Registration extends javax.swing.JFrame {
         super.dispose();
         new Login().setVisible(true);
     }//GEN-LAST:event_loginExistingAcctActionPerformed
+
+    private void loginExistingAcctMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginExistingAcctMouseMoved
+        loginExistingAcct.setForeground(new java.awt.Color(0, 110, 255));
+    }//GEN-LAST:event_loginExistingAcctMouseMoved
+
+    private void loginExistingAcctMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginExistingAcctMouseExited
+        loginExistingAcct.setForeground(new java.awt.Color(0, 0, 255));
+    }//GEN-LAST:event_loginExistingAcctMouseExited
 
     /**
      * @param args the command line arguments

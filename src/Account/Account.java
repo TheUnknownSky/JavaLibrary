@@ -54,13 +54,18 @@ public class Account extends DBConn{
     private boolean checkForAcctFromDB(User user){
         try { 
             Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-            PreparedStatement checkAcct = conn.prepareStatement("SELECT libacct_email, libacct_pword FROM lib_accounts WHERE libacct_email=? AND libacct_pword=?");
+            PreparedStatement checkAcct = conn.prepareStatement("SELECT libacct_id FROM lib_accounts WHERE libacct_email=?");
             checkAcct.setString(1, user.getEmail());
-            checkAcct.setString(2, user.getPassword());
             ResultSet resultSet = checkAcct.executeQuery();
-            boolean result = resultSet.next();
-            conn.close();
-            return result;
+            resultSet.next();
+            user.setUserId(resultSet.getInt("libacct_id"));
+            if (this.checkPassword(user)){
+                conn.close();
+                return true;
+            } else {
+                conn.close();
+                return false;
+            }
         } catch (SQLException e){
             Popups.sqlError(e.getMessage());
             return false;
