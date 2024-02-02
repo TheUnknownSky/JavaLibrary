@@ -466,18 +466,37 @@ public class Library extends DBConn {
             Popups.sqlError(e.getMessage());
         }
     }
+    public int checkBookCount(int bookId){
+        int count = 0;
+        try {
+            Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+            PreparedStatement bookCount = conn.prepareStatement("SELECT book_count FROM books WHERE book_id=?");
+            bookCount.setInt(1, bookId);
+            ResultSet resultSet = bookCount.executeQuery();
+            resultSet.next();
+            count = resultSet.getInt("book_count");
+        } catch (SQLException e){
+            Popups.sqlError(e.getMessage());
+        }
+        return count;
+    }
     public boolean borrowBook(Book book, Student stu){
         try {
             if (checkStudentIfExisting(stu.getStudentId())){
                 if(!checkIfApptExisting(book.getBook_id(), stu.getStudentId())){
-                    Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
-                    PreparedStatement borrowBook = conn.prepareStatement("INSERT INTO appointments (book_id, student_id, appt_date_borrow) VALUES (?, ?, DEFAULT)");
-                    borrowBook.setInt(1, book.getBook_id());
-                    borrowBook.setString(2, stu.getStudentId());
-                    borrowBook.executeUpdate();
-                    reduceBookCount(book.getBook_id());
-                    conn.close();
-                    return true;
+                    if(checkBookCount(book.getBook_id()) > 0){
+                        Connection conn = DriverManager.getConnection(DBConn.url, DBConn.user, DBConn.password); 
+                        PreparedStatement borrowBook = conn.prepareStatement("INSERT INTO appointments (book_id, student_id, appt_date_borrow) VALUES (?, ?, DEFAULT)");
+                        borrowBook.setInt(1, book.getBook_id());
+                        borrowBook.setString(2, stu.getStudentId());
+                        borrowBook.executeUpdate();
+                        reduceBookCount(book.getBook_id());
+                        conn.close();
+                        return true;
+                    } else {
+                        Popups.bookNotAvailable();
+                        return false;
+                    }
                 } else {
                     Popups.apptAlreadyExists();
                     return false;
