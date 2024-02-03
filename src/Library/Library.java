@@ -542,18 +542,15 @@ public class Library extends DBConn {
             getAppt.setInt(1, appt_id);
             ResultSet resultSet = getAppt.executeQuery();
             resultSet.next();
-            System.out.println("1");
             PreparedStatement setFinAppt = conn.prepareStatement("INSERT INTO finished_appointments (book_id, student_id, appt_date_borrow, appt_date_return, enabled) VALUES (?, ?, ?, DEFAULT, 0)");
             setFinAppt.setInt(1, resultSet.getInt("book_id"));
             setFinAppt.setString(2, resultSet.getString("student_id"));
             setFinAppt.setTimestamp(3, resultSet.getTimestamp("appt_date_borrow"));
             setFinAppt.executeUpdate();
-            System.out.println("2");
             PreparedStatement getBookId = conn.prepareStatement("SELECT book_id FROM appointments WHERE appt_id=?");
             getBookId.setInt(1, appt_id);
             ResultSet result = getBookId.executeQuery();
             result.next();
-            System.out.println("3");
             addBookCount(result.getInt("book_id"));
             PreparedStatement deleteAppt = conn.prepareStatement("DELETE FROM appointments WHERE appt_id=?");
             deleteAppt.setInt(1, appt_id);
@@ -583,7 +580,6 @@ public class Library extends DBConn {
             getBookId.setInt(1, appt_id);
             ResultSet result = getBookId.executeQuery();
             result.next();
-            System.out.println("3");
             addBookCount(result.getInt("book_id"));
             PreparedStatement deleteAppt = conn.prepareStatement("DELETE FROM appointments WHERE appt_id=?");
             deleteAppt.setInt(1, appt_id);
