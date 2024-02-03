@@ -38,7 +38,7 @@ public class Records extends javax.swing.JFrame {
         this.id = id;
         initComponents();
         initButton();
-        c_user.setUserId(1);
+        c_user.setUserId(id);
         Account acct = new Account();
         Library lib = new Library();
         String[] name = acct.getAccountName(c_user);
@@ -280,12 +280,12 @@ public class Records extends javax.swing.JFrame {
 
     private void apptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apptButtonActionPerformed
         super.dispose();
-        new Appointments(this.id).setVisible(true);
+        new Appointments(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_apptButtonActionPerformed
 
     private void libButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libButtonActionPerformed
         super.dispose();
-        new LibraryGUI(this.id).setVisible(true);
+        new LibraryGUI(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_libButtonActionPerformed
 
     private void logOutButtonMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutButtonMouseMoved

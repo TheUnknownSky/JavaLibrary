@@ -39,7 +39,7 @@ public class Appointments extends javax.swing.JFrame {
         this.id = id;
         initComponents();
         initButton();
-        c_user.setUserId(1);
+        c_user.setUserId(id);
         Account acct = new Account();
         Library lib = new Library();
         String[] name = acct.getAccountName(c_user);
@@ -360,12 +360,12 @@ public class Appointments extends javax.swing.JFrame {
 
     private void recordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordsButtonActionPerformed
         super.dispose();
-        new Records(this.id).setVisible(true);
+        new Records(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_recordsButtonActionPerformed
 
     private void libButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libButtonActionPerformed
         super.dispose();
-        new LibraryGUI(this.id).setVisible(true);
+        new LibraryGUI(c_user.getUserId()).setVisible(true);
     }//GEN-LAST:event_libButtonActionPerformed
 
     private void logOutButtonMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutButtonMouseMoved
